@@ -10,26 +10,28 @@ import {
 } from "react-native";
 
 import Colors from "../constants/Colors.js";
-import ImageSlider from "react-native-image-slider";
 import appStyles from "./appStyles";
+import ImageSlider from "react-native-image-slider";
 
 export default class HomeScreen extends React.Component<any> {
+    
     render() {
         const sliderImages = [];
         Object.keys(this.props.screenProps.stocks).map(item=>{
             sliderImages.push(this.props.screenProps.stocks[item].img);
         });
-        const products = this.props.screenProps.products ? Object.keys(this.props.screenProps.products).slice(0 , 6).map(key=>{
+        const products = this.props.screenProps.products ? Object.keys(this.props.screenProps.products).slice(6 , 16).map(key=>{
             const item = this.props.screenProps.products[key];
             return(
-                <View key={item.name}>
+                <TouchableOpacity key={item.name}
+                onPress={()=>{this.props.navigation.navigate( 'CategorySlider' , { id: item.id} )}}>
                      <Image
                         style={{width: 130, height: 130}}
                                 source={ {uri : 'https://subexpress.ru' + item.img} }
                     />
                     <Text>{item.name}</Text>
                     <Text>{item.price} руб.</Text>
-                </View>
+                </TouchableOpacity>
             )
         }) : null;
        

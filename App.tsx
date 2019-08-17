@@ -6,13 +6,14 @@ import {
     createAppContainer,
     createDrawerNavigator
 } from "react-navigation";
-import { fromLeft } from "react-navigation-transitions";
+import { fromRight , fromBottom } from "react-navigation-transitions";
 import * as Font from "expo-font";
 import HomeScreen from "./Components/HomeScreen";
 import Catalog from "./Components/Catalog";
 import News from "./Components/News";
 import Order from "./Components/Order";
 import CategorySlider from "./Components/CategorySlider";
+import Sidebar from "./Components/Sidebar";
 
 interface State {
     user: object;
@@ -78,7 +79,7 @@ export default class App extends React.Component<any, State> {
     openProduct() {}
     getCatalog() {}
     getData() {
-        console.log("getData");
+        // console.log("getData");
         const req = {
             log: "admin",
             pas: "ie1f32sq"
@@ -97,7 +98,9 @@ export default class App extends React.Component<any, State> {
                         user: res.user,
                         stocks: res.stocks
                     },
-                    function() {}
+                    function() {
+
+                    }
                 );
 
                 // console.log('res' , responseJson.user);
@@ -107,13 +110,14 @@ export default class App extends React.Component<any, State> {
             });
     }
     makeOrder(obj) {
-        console.log("makeOrder", obj);
+        // console.log("makeOrder", obj);
     }
     addToFavorive(id) {
         let favorite: Array<number> = this.state.favorite;
         favorite.push(id);
         this.setState({ favorite: favorite });
         // console.log("addToFavorive", this.state.favorite);
+        
     }
     render() {
         return this.state.fontLoaded ? (
@@ -136,46 +140,45 @@ export default class App extends React.Component<any, State> {
     }
 }
 
-const CatalogNav = createDrawerNavigator(
-    {
-        cat1: {
-            screen: Catalog,
-            path: "catalog1"
-        },
-        cat2: {
-            screen: Catalog,
-            path: "catalog2"
-        },
-        cat3: {
-            screen: Catalog,
-            path: "catalog3"
-        }
-    },
-    {
-        drawerPosition: "right"
+
+
+const handleCustomTransition = ({ scenes }) => {
+    const prevScene = scenes[scenes.length - 2];
+    const nextScene = scenes[scenes.length - 1];
+   
+    // Custom transitions go there
+    if (nextScene.route.routeName === 'CategorySlider') {
+      return fromBottom();
+    } else{
+        return fromRight();
     }
-);
-
-// console.log('CatalogNav' ,CatalogNav);
-
-const AppNavigator = createDrawerNavigator(
+  }
+const Home = createStackNavigator(
     {
-        /*
-         * Rather than being rendered by a screen component, the
-         * AuthenticationNavigator is a screen component
-         */
+       
         Home: HomeScreen,
+        CategorySlider: CategorySlider,
         Order: Order,
         Catalog: {
-            screen: CatalogNav,
+            screen: Catalog,
             path: "catalog"
         },
         News: News
     },
     {
-        initialRouteName: "Order"
+        initialRouteName: "Home",
+        transitionConfig: (nav) => handleCustomTransition(nav)
     }
 );
+const AppNavigator = createDrawerNavigator(
+    {
+        Home: Home,
+    },
+    {
+        contentComponent: Sidebar
+    }
+);
+
 
 const AppContainer = createAppContainer(AppNavigator);
 

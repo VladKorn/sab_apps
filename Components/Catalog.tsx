@@ -15,6 +15,7 @@ export default class Catalog extends React.Component<any, State> {
             data: []
         };
     }
+
     componentDidMount() {
         this.props.screenProps.getCatalog();
     }
@@ -53,9 +54,7 @@ export default class Catalog extends React.Component<any, State> {
                       : [];
                   return (
                       <View key={cat.id}>
-                          <Text style={[appStyles.sectTitle, {marginLeft: 25 }]} >{cat.name.replace('_' , '')
-                          .replace('1' , '').replace('2' , '').replace('3' , '').replace('4' , '').replace('5' , '')
-                          .replace('6' , '').replace('6' , '').replace('7' , '').replace('8' , '').replace('9' , '')}</Text>
+                          <Text style={[appStyles.sectTitle, {marginLeft: 25 }]} >{cat.name}</Text>
                           {items}
                       </View>
                   );
@@ -69,6 +68,7 @@ export default class Catalog extends React.Component<any, State> {
                    
                 }}>
                     {cats}
+
 
                 </ScrollView>
             </SafeAreaView>

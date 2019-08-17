@@ -71,7 +71,7 @@ export default class ProductItem extends React.Component<any, State> {
                                 maxWidth: 150
                             }}
                         >
-                            {this.props.name}
+                            {this.props.name.replace('&quot;' , "\"").replace('&quot;' , "\"") }
                         </Text>
                         <TouchableHighlight
                             onPress={this.addToFavorite}

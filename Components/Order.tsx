@@ -100,7 +100,7 @@ export default class Order extends React.Component<any, State> {
         headers.set("Accept", "application/json");
         let formData = new FormData();
         formData.append("json", JSON.stringify(data));
-        console.log("order sended-", data);
+        // console.log("order sended-", data);
         fetch(`https://subexpress.ru/apps_api/order.php`, {
             method: "POST",
             headers,
@@ -108,7 +108,7 @@ export default class Order extends React.Component<any, State> {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("order fetch res-", res);
+                // console.log("order fetch res-", res);
                 if (res.sucsess) {
                     alert('ok')
                     // if(Swal){

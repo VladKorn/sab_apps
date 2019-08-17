@@ -24,8 +24,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vladkorn.subexpress"
     },
-    "description": ""
+    "description": "123"
   }
 }
