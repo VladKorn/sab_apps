@@ -17,7 +17,19 @@ export default class Catalog extends React.Component<any, State> {
     }
 
     componentDidMount() {
-        this.props.screenProps.getCatalog();
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+
+        }, 1000)
+    }
+    shouldComponentUpdate(nextProps, nextState){
+        // console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
+        // if(nextProps.screenProps.favorite.length !== this.props.screenProps.favorite.length){
+        //     return true
+        // } else{
+        //     return this.state.isLoading
+        // }
+        return this.state.isLoading 
     }
     static navigationOptions = {
         title: "Меню"
@@ -29,15 +41,15 @@ export default class Catalog extends React.Component<any, State> {
         let cats = catalog
             ? Object.keys(catalog).map(key => {
                   let cat = catalog[key];
-                  // console.log('cat' , cat);
-                  // let products = cat.products;
                   let items = cat.products
                       ? cat.products.map(pkey => {
                             let item = products[pkey];
                             // console.log('item' , item);
                         
                             const isFavorite = this.props.screenProps.favorite.includes(parseInt(item.id) )
+                            console.log('render' , item.id);
                             return (
+
                                 <ProductItem
                                     key={item.id}
                                     id={item.id}
@@ -46,7 +58,7 @@ export default class Catalog extends React.Component<any, State> {
                                     price={item.price}
                                     basketApi={this.props.screenProps.basketApi}
                                     addToFavorive={this.props.screenProps.addToFavorive}
-                                    
+                                    navigation={this.props.navigation}
                                     isFavorite={isFavorite}
                                 />
                             );

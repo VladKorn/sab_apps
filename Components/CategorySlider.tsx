@@ -58,6 +58,13 @@ export default class CategorySlider extends React.Component<any, State> {
 
         this.setState({ currentIndex: index });
     }
+    _renderItem ({item, index}) {
+        return (
+            <View style={styles.slide}>
+                <Text style={styles.title}>{ item.title }</Text>
+            </View>
+        );
+    }
     componentDidMount() {
         const catId = this.props.screenProps.products[this.state.currentProduct]
             .categoryId;

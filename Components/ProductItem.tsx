@@ -5,6 +5,7 @@ import {
     Button,
     Image,
     AppRegistry,
+    TouchableOpacity,
     TouchableHighlight,
     StyleSheet
 } from "react-native";
@@ -13,19 +14,22 @@ import Colors from "../constants/Colors.js";
 
 interface State {
     count: number;
+    isFavorite: boolean;
 }
 
 export default class ProductItem extends React.Component<any, State> {
     constructor(props) {
         super(props);
         this.state = {
-            count: 0
+            count: 0,
+            isFavorite: this.props.isFavorite
         };
         this.onChange = this.onChange.bind(this);
         this.addToFavorite = this.addToFavorite.bind(this);
     }
 
     addToFavorite = () => {
+        this.setState({isFavorite : !this.state.isFavorite});
         this.props.addToFavorive(parseInt(this.props.id) )
     };
     onChange(number, type) {
@@ -41,10 +45,13 @@ export default class ProductItem extends React.Component<any, State> {
     render() {
         return (
             <View style={styles.box}>
+                <TouchableOpacity
+                    onPress={()=>{this.props.navigation.navigate( 'CategorySlider' , { id: this.props.id} )}}>
                 <Image
                     style={styles.img}
                     source={{ uri: "https://subexpress.ru/" + this.props.img }}
                 />
+                </TouchableOpacity>
                 <View
                     style={{
                         flex: 1,
@@ -88,7 +95,7 @@ export default class ProductItem extends React.Component<any, State> {
                         >
                             <Image
                                 style={{ width: 20, height: 17.67 }}
-                                source={this.props.isFavorite ? require("../img/favorite-active.png"):require("../img/favorite.png")}
+                                source={this.state.isFavorite ? require("../img/favorite-active.png"):require("../img/favorite.png")}
                             />
                         </TouchableHighlight>
                     </View>
