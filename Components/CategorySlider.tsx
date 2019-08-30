@@ -7,20 +7,25 @@ import {
     SafeAreaView,
     TouchableHighlight,
     TouchableOpacity,
+    Dimensions,
     StyleSheet
 } from "react-native";
 import Counter from "./Counter";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
 import ImageSlider from "react-native-image-slider";
+import Carousel from "react-native-looped-carousel";
 
 interface State {
     currentProduct: number;
     currentIndex: number;
+    catId: number;
+    
     slides: Array<object>;
     catName: string;
+    size: object;
 }
-
+const { width, height } = Dimensions.get("window");
 export default class CategorySlider extends React.Component<any, State> {
     static navigationOptions = {
         header: null
@@ -29,15 +34,21 @@ export default class CategorySlider extends React.Component<any, State> {
     constructor(props) {
         super(props);
         this.state = {
-            currentProduct: this.props.navigation.state.params.id,
+            currentProduct: parseInt(this.props.navigation.state.params.id),
             currentIndex: 0,
+            catId: 0,
             slides: [],
-            catName: ""
+            catName: "",
+            size: { width, height }
         };
         this.onChange = this.onChange.bind(this);
         this.onPositionChanged = this.onPositionChanged.bind(this);
+        this._renderSlides = this._renderSlides.bind(this);
     }
-
+    _onLayoutDidChange = e => {
+        const layout = e.nativeEvent.layout;
+        this.setState({ size: { width: layout.width, height: layout.height } });
+    };
     addToFavorite = () => {
         this.setState({
             // count: this.state.count + 1
@@ -54,20 +65,16 @@ export default class CategorySlider extends React.Component<any, State> {
         });
     }
     onPositionChanged(index) {
-        console.log("onPositionChanged", index);
 
-        this.setState({ currentIndex: index });
+
+        // this.setState({ currentIndex: index });
     }
-    _renderItem ({item, index}) {
-        return (
-            <View style={styles.slide}>
-                <Text style={styles.title}>{ item.title }</Text>
-            </View>
-        );
-    }
-    componentDidMount() {
+    componentWillMount(){
         const catId = this.props.screenProps.products[this.state.currentProduct]
             .categoryId;
+        const productIndex = this.props.screenProps.catalog[catId].products.indexOf(this.state.currentProduct);
+        // .indexOf(this.state.currentProduct)
+        this.setState({ currentIndex: productIndex , catId : catId});
         const catName = this.props.screenProps.catalog[catId].name;
         const slides = [];
 
@@ -78,14 +85,80 @@ export default class CategorySlider extends React.Component<any, State> {
         });
         this.setState({ slides: slides, catName: catName });
     }
+    componentDidMount() {
+    }
+    _renderSlides() {
+        return this.state.slides.map((item, index) => {
+            return (
+                <View key={index} style={this.state.size}>
+                    <Image
+                        source={{
+                            uri: "https://subexpress.ru" + item.img
+                        }}
+                        style={styles.customImage}
+                    />
+                    <View style={{ flex: 1, width: "100%" }}>
+                        <View style={[appStyles.shadow, styles.box]}>
+                            <Text
+                                style={{
+                                    fontFamily: "Neuron-Heavy",
+                                    fontSize: 26,
+                                    color: Colors.gray
+                                }}
+                            >
+                                {item.name
+                                    .replace("&quot;", '"')
+                                    .replace("&quot;", '"')}
+                            </Text>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    paddingTop: 7
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontFamily: "Neuron-Heavy",
+                                        fontSize: 28,
+                                        color: Colors.assent
+                                    }}
+                                >
+                                    {item.price} руб.
+                                </Text>
+                                <Counter onChange={this.onChange} value={0} />
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                                width: "70%",
+                                alignSelf: "center",
+                                marginTop: 20
+                            }}
+                        >
+                            <Text>
+                                Состав:{" "}
+                                {item.text
+                                    .replace("&quot;", '"')
+                                    .replace("&quot;", '"')
+                                    .replace("<br />", "")}
+                            </Text>
+                            <Text>Вес НЕТТО: {item.weight} (+/- 5 гр.)</Text>
+                        </View>
+                    </View>
+                </View>
+            );
+        });
+    }
+
     render() {
         // console.log('navigation' ,JSON.stringify( this.props.navigation  ))
         // console.log(this.props.screenProps.catalog.cats[this.props.screenProps.products[this.state.currentProduct].categoryId] )
-
+        console.log('render')
         const isFavorite = true;
         return (
             <SafeAreaView>
-                <View style={styles.topBar}>
+                {/* <View style={styles.topBar}>
                     <TouchableOpacity
                         onPress={() => {
                             this.props.navigation.goBack();
@@ -120,70 +193,28 @@ export default class CategorySlider extends React.Component<any, State> {
                             }
                         />
                     </TouchableHighlight>
-                </View>
+                </View> */}
                 <View style={styles.sliderWrap}>
-                    <ImageSlider
-                        images={this.state.slides}
-                        // position={4}
-                        onPositionChanged={this.onPositionChanged}
-                        customSlide={({ index, item, style, width }) => (
-                            // It's important to put style here because it's got offset inside
-                            <View
-                                key={index}
-                                style={[style, styles.customSlide]}
+                    <View
+                        style={{ flex: 1 }}
+                        onLayout={this._onLayoutDidChange}
+                    >
+                        {this.state.slides ? (
+                            <Carousel
+                                //   delay={2000}
+                                style={this.state.size}
+                                autoplay={false}
+                                pageInfo={true}
+                                isLooped={false}
+                                // currentPage={this.state.currentIndex}
+                                // onAnimateNextPage={p => this.onPositionChanged(p)}
                             >
-                                <Image
-                                    source={{
-                                        uri: "https://subexpress.ru" + item.img
-                                    }}
-                                    style={styles.customImage}
-                                />
-                                <View style={{ flex: 1, width: "100%" }}>
-                                    <View
-                                        style={[appStyles.shadow, styles.box]}
-                                    >
-                                        <Text
-                                            style={{
-                                                fontFamily: "Neuron-Heavy",
-                                                fontSize: 26,
-                                                color: Colors.gray
-                                            }}
-                                        >
-                                            {item.name.replace('&quot;' , "\"").replace('&quot;' , "\"")}
-                                        </Text>
-                                        <View
-                                            style={{
-                                                flexDirection: "row",
-                                                justifyContent: "space-between",
-                                                paddingTop: 7
-                                            }}
-                                        >
-                                            <Text
-                                                style={{
-                                                    fontFamily: "Neuron-Heavy",
-                                                    fontSize: 28,
-                                                    color: Colors.assent
-                                                }}
-                                            >
-                                                {item.price} руб.
-                                            </Text>
-                                            <Counter
-                                                onChange={this.onChange}
-                                                value={0}
-                                            />
-                                        </View>
-                                    </View>
-                                    <View style={{width: '70%' , alignSelf: 'center',marginTop: 20}}>
-                                        <Text>Состав: {item.text.replace('&quot;' , "\"").replace('&quot;' , "\"").replace('<br />' , "")}</Text> 
-                                        <Text>Вес НЕТТО: {item.weight} (+/- 5 гр.)</Text>
-                                    </View>
-                                    
-                                </View>
-                            </View>  
-                        )}
-                        customButtons={(position, move) => <View />}
-                    />
-                </View> 
+                                {this._renderSlides()}
+                                {/* <View></View> */}
+                            </Carousel>
+                        ) : null}
+                    </View>
+                </View>
             </SafeAreaView>
         );
     }
