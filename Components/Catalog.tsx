@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import ProductItem from "./ProductItem";
 import appStyles from "./appStyles";
 
@@ -19,8 +19,7 @@ export default class Catalog extends React.Component<any, State> {
     componentDidMount() {
         setTimeout(()=>{
             this.setState({isLoading: false});
-
-        }, 1000)
+        }, 500)
     }
     shouldComponentUpdate(nextProps, nextState){
         // console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
@@ -35,6 +34,10 @@ export default class Catalog extends React.Component<any, State> {
         title: "Меню"
     };
     render() {
+        if (this.state.isLoading) {
+            return( <Text>Loading...</Text>);
+        }
+
         const catalog = this.props.screenProps.catalog;
         const products = this.props.screenProps.products;
         // console.log('products' , products);

@@ -32,7 +32,7 @@ export default class App extends React.Component<any, State> {
         this.state = {
             user: {},
             catalog: {},
-            favorite: [1343, 1343, 1344, 1346, 1239, 1243, 1245, 1354],
+            favorite: [1206, 1343, 1344, 1346, 1239, 1243, 1245, 1354],
             products: {},
             stocks: {},
             basket: {
@@ -49,7 +49,7 @@ export default class App extends React.Component<any, State> {
         this.basketApi = this.basketApi.bind(this);
         this.getData = this.getData.bind(this);
         this.openProduct = this.openProduct.bind(this);
-        this.addToFavorive = this.addToFavorive.bind(this);
+        this.addToFavorite = this.addToFavorite.bind(this);
     }
     componentDidMount() {
         this.loadAssetsAsync();
@@ -114,12 +114,13 @@ export default class App extends React.Component<any, State> {
     makeOrder(obj) {
         // console.log("makeOrder", obj);
     }
-    addToFavorive(id) {
+    addToFavorite(id) {
         let favorite: Array<number> = this.state.favorite;
-        if (favorite.includes(id)) {
-            favorite = favorite.filter(item=>{return item !== id});
+        let prodId = parseInt(id);
+        if (favorite.includes(prodId)) {
+            favorite = favorite.filter(item=>{return item !== prodId});
         }else{
-            favorite.push(id);
+            favorite.push(prodId);
         }
         
         this.setState({ favorite: favorite });
@@ -139,7 +140,7 @@ export default class App extends React.Component<any, State> {
                     user: this.state.user,
                     stocks: this.state.stocks,
                     favorite: this.state.favorite,
-                    addToFavorive: this.addToFavorive
+                    addToFavorite: this.addToFavorite
                 }}
             />
         ) : null;

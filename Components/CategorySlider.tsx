@@ -7,7 +7,10 @@ import {
     SafeAreaView,
     TouchableHighlight,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     Dimensions,
+    Animated,
+    Easing,
     StyleSheet
 } from "react-native";
 import Counter from "./Counter";
@@ -15,17 +18,18 @@ import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
 import ImageSlider from "react-native-image-slider";
 import Carousel from "react-native-looped-carousel";
+import SwiperComponent from "./SwiperComponent";
+import CategorySliderItem from "./CategorySliderItem";
 
 interface State {
-    currentProduct: number;
+    currentProductId: number;
     currentIndex: number;
     catId: number;
-    
+    isLoading: boolean;
     slides: Array<object>;
     catName: string;
-    size: object;
+    isFavorite: boolean;
 }
-const { width, height } = Dimensions.get("window");
 export default class CategorySlider extends React.Component<any, State> {
     static navigationOptions = {
         header: null
@@ -34,24 +38,24 @@ export default class CategorySlider extends React.Component<any, State> {
     constructor(props) {
         super(props);
         this.state = {
-            currentProduct: parseInt(this.props.navigation.state.params.id),
+            isLoading: true,
+            currentProductId: parseInt(this.props.navigation.state.params.id),
             currentIndex: 0,
+            isFavorite: false,
             catId: 0,
             slides: [],
             catName: "",
-            size: { width, height }
         };
         this.onChange = this.onChange.bind(this);
         this.onPositionChanged = this.onPositionChanged.bind(this);
-        this._renderSlides = this._renderSlides.bind(this);
+        this.setFvorite = this.setFvorite.bind(this);
+        
     }
-    _onLayoutDidChange = e => {
-        const layout = e.nativeEvent.layout;
-        this.setState({ size: { width: layout.width, height: layout.height } });
-    };
-    addToFavorite = () => {
+    
+
+    setFvorite = () => {
         this.setState({
-            // count: this.state.count + 1
+            isFavorite: !this.state.isFavorite
         });
     };
     onChange(number, type) {
@@ -59,26 +63,30 @@ export default class CategorySlider extends React.Component<any, State> {
         this.props.screenProps.basketApi({
             action: "setProduct",
             params: {
-                productId: this.state.currentProduct,
+                productId: this.state.currentProductId,
                 count: number
             }
         });
     }
     onPositionChanged(index) {
-
-
-        // this.setState({ currentIndex: index });
+        // const id = this.props.screenProps.products[this.state.currentProductId].id;
+        console.log('onPositionChanged' , this.state.slides[index].id);
+        this.setState({ currentIndex: index ,
+             currentProductId: parseInt(this.state.slides[index].id )
+            });
     }
-    componentWillMount(){
-        const catId = this.props.screenProps.products[this.state.currentProduct]
+    componentWillMount() {
+        const catId = this.props.screenProps.products[this.state.currentProductId]
             .categoryId;
-        const productIndex = this.props.screenProps.catalog[catId].products.indexOf(this.state.currentProduct);
-        // .indexOf(this.state.currentProduct)
-        this.setState({ currentIndex: productIndex , catId : catId});
+        const productIndex = this.props.screenProps.catalog[
+            catId
+        ].products.indexOf(this.state.currentProductId);
+        // .indexOf(this.state.currentProductId)
+        this.setState({ currentIndex: productIndex, catId: catId });
         const catName = this.props.screenProps.catalog[catId].name;
         const slides = [];
 
-        console.log("this.props.screenProps.products", catId);
+        // console.log("this.props.screenProps.products", catId);
         this.props.screenProps.catalog[catId].products.map(key => {
             const item = this.props.screenProps.products[key];
             slides.push(item);
@@ -86,79 +94,29 @@ export default class CategorySlider extends React.Component<any, State> {
         this.setState({ slides: slides, catName: catName });
     }
     componentDidMount() {
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+        }, 500)
     }
-    _renderSlides() {
-        return this.state.slides.map((item, index) => {
-            return (
-                <View key={index} style={this.state.size}>
-                    <Image
-                        source={{
-                            uri: "https://subexpress.ru" + item.img
-                        }}
-                        style={styles.customImage}
-                    />
-                    <View style={{ flex: 1, width: "100%" }}>
-                        <View style={[appStyles.shadow, styles.box]}>
-                            <Text
-                                style={{
-                                    fontFamily: "Neuron-Heavy",
-                                    fontSize: 26,
-                                    color: Colors.gray
-                                }}
-                            >
-                                {item.name
-                                    .replace("&quot;", '"')
-                                    .replace("&quot;", '"')}
-                            </Text>
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    justifyContent: "space-between",
-                                    paddingTop: 7
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontFamily: "Neuron-Heavy",
-                                        fontSize: 28,
-                                        color: Colors.assent
-                                    }}
-                                >
-                                    {item.price} руб.
-                                </Text>
-                                <Counter onChange={this.onChange} value={0} />
-                            </View>
-                        </View>
-                        <View
-                            style={{
-                                width: "70%",
-                                alignSelf: "center",
-                                marginTop: 20
-                            }}
-                        >
-                            <Text>
-                                Состав:{" "}
-                                {item.text
-                                    .replace("&quot;", '"')
-                                    .replace("&quot;", '"')
-                                    .replace("<br />", "")}
-                            </Text>
-                            <Text>Вес НЕТТО: {item.weight} (+/- 5 гр.)</Text>
-                        </View>
-                    </View>
-                </View>
-            );
-        });
-    }
+    
 
     render() {
+        if (this.state.isLoading) {
+            return( <Text>Loading...</Text>);
+        }
         // console.log('navigation' ,JSON.stringify( this.props.navigation  ))
         // console.log(this.props.screenProps.catalog.cats[this.props.screenProps.products[this.state.currentProduct].categoryId] )
-        console.log('render')
-        const isFavorite = true;
+        console.log("render");
+        // const isFavorite = this.state.isFavorite;
+        const isFavorite = this.props.screenProps.favorite.includes( this.state.currentProductId );
         return (
-            <SafeAreaView>
-                {/* <View style={styles.topBar}>
+            <SafeAreaView
+                style={[
+                    appStyles.page,
+                    // this.state.isZoom ? { backgroundColor: "#F2F2F2" } : {}
+                ]}
+            >
+                <View style={styles.topBar}>
                     <TouchableOpacity
                         onPress={() => {
                             this.props.navigation.goBack();
@@ -166,16 +124,19 @@ export default class CategorySlider extends React.Component<any, State> {
                     >
                         <Image
                             source={require("../img/ico-close.png")}
-                            style={{ width: 20.91, height: 18.98 }}
+                            style={{
+                                width: 20.91,
+                                height: 18.98,
+                                marginRight: 30
+                            }}
                         />
                     </TouchableOpacity>
                     <Text style={{ fontFamily: "Neuron", fontSize: 24 }}>
                         {this.state.catName} {this.state.currentIndex + 1} /
-                        {this.state.slides.length + 1}
+                        {this.state.slides.length}
                     </Text>
-                    <TouchableHighlight
-                        onPress={this.addToFavorite}
-                        underlayColor="white"
+                    <TouchableOpacity
+                        onPress={()=>{this.props.screenProps.addToFavorite(this.state.currentProductId) }}
                         style={{
                             alignItems: "center",
                             justifyContent: "center",
@@ -192,50 +153,34 @@ export default class CategorySlider extends React.Component<any, State> {
                                     : require("../img/favorite.png")
                             }
                         />
-                    </TouchableHighlight>
-                </View> */}
-                <View style={styles.sliderWrap}>
-                    <View
-                        style={{ flex: 1 }}
-                        onLayout={this._onLayoutDidChange}
-                    >
-                        {this.state.slides ? (
-                            <Carousel
-                                //   delay={2000}
-                                style={this.state.size}
-                                autoplay={false}
-                                pageInfo={true}
-                                isLooped={false}
-                                // currentPage={this.state.currentIndex}
-                                // onAnimateNextPage={p => this.onPositionChanged(p)}
-                            >
-                                {this._renderSlides()}
-                                {/* <View></View> */}
-                            </Carousel>
-                        ) : null}
-                    </View>
+                    </TouchableOpacity>
                 </View>
+                <SwiperComponent
+                    slides={this.state.slides}
+                    index={this.state.currentIndex}
+                    navigation={this.props.navigation}
+                    onIndexChanged={this.onPositionChanged}
+                    basketApi={this.props.screenProps.basketApi}
+                />
             </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    customSlide: {
-        backgroundColor: "white",
-        alignItems: "flex-start",
-        justifyContent: "center"
-    },
-    customImage: {
-        width: "100%",
-        height: 270
-    },
+
     topBar: {
         // flex: 1,
         // justifyContent: 'center',
-        marginLeft: 15,
-        marginRight: 15,
+        position: "absolute",
+        width: "100%",
+        zIndex: 3,
+        top: 25,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 20,
         alignItems: "center",
+        // justifyContent: 'center',
         height: 72,
         flexDirection: "row",
         borderBottomWidth: 1,

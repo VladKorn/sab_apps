@@ -14,7 +14,9 @@ import appStyles from "./appStyles";
 import ImageSlider from "react-native-image-slider";
 
 export default class HomeScreen extends React.Component<any> {
-    
+    static navigationOptions = {
+        header: null
+    };
     render() {
         const sliderImages = [];
         Object.keys(this.props.screenProps.stocks).map(item=>{
