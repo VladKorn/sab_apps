@@ -14,6 +14,8 @@ import News from "./Components/News";
 import Order from "./Components/Order";
 import CategorySlider from "./Components/CategorySlider";
 import Sidebar from "./Components/Sidebar";
+import SidebarCatalog from "./Components/SidebarCatalog";
+
 
 interface State {
     user: object;
@@ -124,7 +126,7 @@ export default class App extends React.Component<any, State> {
         }
         
         this.setState({ favorite: favorite });
-        // console.log("addToFavorive", this.state.favorite);
+        // console.log("addToFavorite", this.state.favorite);
     }
     render() {
         return this.state.fontLoaded ? (
@@ -182,12 +184,24 @@ const Home = createStackNavigator(
         transitionConfig: nav => handleCustomTransition(nav)
     }
 );
-const AppNavigator = createDrawerNavigator(
+const AppNavigator2 = createDrawerNavigator(
     {
         Home: Home
     },
     {
-        contentComponent: Sidebar
+        contentComponent: Sidebar,
+
+    }
+);
+const AppNavigator = createDrawerNavigator(
+    {
+        Home: AppNavigator2
+    },
+    {
+        contentComponent: SidebarCatalog,
+        drawerPosition: 'right'
+
+
     }
 );
 

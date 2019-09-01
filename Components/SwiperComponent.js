@@ -35,7 +35,7 @@ export default class SwiperComponent extends Component {
         // this.setState({ currentIndex: index });
     }
     _renderSlides() {
-        console.log("_renderSlides");
+        // console.log("_renderSlides");
         return this.props.slides.map((item, index) => {
             // const isCurrentSlide = this.state.currentIndex === index;
             return (

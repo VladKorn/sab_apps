@@ -30,7 +30,7 @@ export default class ProductItem extends React.Component<any, State> {
 
     addToFavorite = () => {
         this.setState({isFavorite : !this.state.isFavorite});
-        this.props.addToFavorive(parseInt(this.props.id) )
+        this.props.addToFavorite(parseInt(this.props.id) )
     };
     onChange(number, type) {
         // console.log('number, type' ,number, type)
