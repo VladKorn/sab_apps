@@ -16,10 +16,42 @@ const appStyles = StyleSheet.create({
         marginBottom: 5,
     },
     input:{
-        borderBottomWidth: 1,
         borderBottomColor: '#E2E2E2',
         paddingTop: 10,
         paddingBottom: 10,
+        width: '100%',
+        height: 40,
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#666774',
+        borderColor: Colors.assent,
+        // borderBottomWidth: 5,
+        borderBottomWidth: 3
+    },
+    inputFocus:{
+        borderBottomColor: Colors.assent,
+        borderBottomWidth: 5
+
+    },
+    inputError:{
+        borderBottomColor: 'red',
+
+    },
+    hr:{
+
+    },
+    button:{
+        backgroundColor: Colors.assent,
+        height: 60, 
+        minWidth: 290,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+
+    },
+    buttonText:{
+        color: "#666774",
+        fontSize: 20,
     },
     buttonBottom:{
         backgroundColor: Colors.assent,

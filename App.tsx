@@ -8,6 +8,7 @@ import {
 } from "react-navigation";
 import { fromRight, fromBottom } from "react-navigation-transitions";
 import * as Font from "expo-font";
+import LoginForm from "./Components/LoginForm";
 import HomeScreen from "./Components/HomeScreen";
 import Catalog from "./Components/Catalog";
 import News from "./Components/News";
@@ -26,6 +27,7 @@ interface State {
     fontLoaded: boolean;
     stocks: object;
     favorite: Array<number>;
+    userError: object;
     // productId: number;
 }
 export default class App extends React.Component<any, State> {
@@ -43,7 +45,8 @@ export default class App extends React.Component<any, State> {
                 "1247": { count: 1 }
             },
             isLoading: false,
-            fontLoaded: false
+            fontLoaded: false,
+            userError: {},
         };
 
         // bind functions..
@@ -52,6 +55,8 @@ export default class App extends React.Component<any, State> {
         this.getData = this.getData.bind(this);
         this.openProduct = this.openProduct.bind(this);
         this.addToFavorite = this.addToFavorite.bind(this);
+        this.login = this.login.bind(this);
+        
     }
     componentDidMount() {
         this.loadAssetsAsync();
@@ -72,7 +77,6 @@ export default class App extends React.Component<any, State> {
     basketApi(obj) {
         let basket = this.state.basket;
         if (obj.action === "setProduct") {
-            // console.log('params' , obj.action , obj.params);
             if (obj.params.count === 0) {
                 delete basket[obj.params.productId];
             } else {
@@ -80,25 +84,28 @@ export default class App extends React.Component<any, State> {
             }
             this.setState({ basket: basket });
         }
-        // console.log('basket' , this.state.basket);
     }
     openProduct() {}
     getCatalog() {}
-    getData() {
-        // console.log("getData");
+    getData(log = '' , pas = '') {
         const req = {
-            log: "admin",
-            pas: "ie1f32sq"
+            // log: "admin",
+            // pas: "ie1f32sq"
+            log,
+            pas,
         };
+        
         return fetch("https://subexpress.ru/apps_api/", {
             method: "post",
             body: JSON.stringify(req)
         })
             .then(res => res.json())
             .then(res => {
+                console.log('res.user' , res.userError);
                 this.setState(
                     {
                         isLoading: false,
+                        userError: res.userError,
                         catalog: res.catalog.cats,
                         products: res.catalog.products,
                         user: res.user,
@@ -128,8 +135,15 @@ export default class App extends React.Component<any, State> {
         this.setState({ favorite: favorite });
         // console.log("addToFavorite", this.state.favorite);
     }
+    login(log , pas){
+        this.getData(log , pas);
+    }
     render() {
-        return this.state.fontLoaded ? (
+        console.log('user' , this.state.user);
+        if(this.state.user && Object.keys(this.state.user).length === 0 || !this.state.user){
+            return( <LoginForm login={this.login}  userError={this.state.userError}/> )
+        }
+        return ( this.state.fontLoaded ?
             <AppContainer
                 key="app"
                 screenProps={{
@@ -144,8 +158,9 @@ export default class App extends React.Component<any, State> {
                     favorite: this.state.favorite,
                     addToFavorite: this.addToFavorite
                 }}
-            />
-        ) : null;
+            /> 
+        : null
+        );
     }
 }
 
@@ -162,6 +177,7 @@ const handleCustomTransition = ({ scenes }) => {
 };
 const Home = createStackNavigator(
     {
+        // LoginForm: LoginForm,
         Home: HomeScreen,
         CategorySlider: CategorySlider,
         Catalog: {
