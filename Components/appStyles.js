@@ -7,6 +7,11 @@ const appStyles = StyleSheet.create({
         flex: 1,
         paddingTop: Platform.OS === 'android' ? 25 : 0
     },
+    text:{
+        fontSize: 20,
+        fontFamily: 'Neuron',
+        color: "#666774"
+    },
     sectTitle:{
         fontFamily: 'Neuron-Heavy',
         fontSize: 22,
@@ -20,10 +25,13 @@ const appStyles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         width: '100%',
+        maxWidth: 230,
         height: 40,
         fontSize: 20,
         fontWeight: 'bold',
         color: '#666774',
+        marginTop: 5,
+        marginBottom: 15,
         borderColor: Colors.assent,
         // borderBottomWidth: 5,
         borderBottomWidth: 3
@@ -38,6 +46,12 @@ const appStyles = StyleSheet.create({
 
     },
     hr:{
+        borderBottomColor: '#E2E2E2',
+        borderBottomWidth: 1,
+        width: '100%',
+        maxWidth: 336,
+        marginTop: 15,
+        marginBottom: 15
 
     },
     button:{
@@ -52,6 +66,7 @@ const appStyles = StyleSheet.create({
     buttonText:{
         color: "#666774",
         fontSize: 20,
+        fontFamily: 'Segoe'
     },
     buttonBottom:{
         backgroundColor: Colors.assent,

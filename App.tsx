@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ShadowPropTypesIOS } from "react-native";
+import { View, ShadowPropTypesIOS ,Text} from "react-native";
 import {
     createStackNavigator,
     createSwitchNavigator,
@@ -68,10 +68,18 @@ export default class App extends React.Component<any, State> {
     }
     loadAssetsAsync = async () => {
         await Font.loadAsync({
-            Neuron: require("./assets/fonts/Neuron.otf"),
+            "Neuron": require("./assets/fonts/Neuron.otf"),
             "Neuron-Bold": require("./assets/fonts/Neuron-Bold.otf"),
-            "Neuron-Heavy": require("./assets/fonts/Neuron-Heavy.otf")
+            "Neuron-Heavy": require("./assets/fonts/Neuron-Heavy.otf"),
+            "Segoe": require("./assets/fonts/segoe-ui.ttf")
         });
+        // await Font.loadAsync({
+        //     Neuron: require("./assets/fonts/Neuron.otf"),
+        //     "Neuron-Bold": require("./assets/fonts/Neuron-Bold.otf"),
+        //     "Neuron-Heavy": require("./assets/fonts/Neuron-Heavy.otf"),
+        //     "Segoe-UI": require("./assets/fonts/segoe-ui.ttf")
+        // });
+        
         this.setState({ fontLoaded: true });
     };
     basketApi(obj) {
@@ -140,6 +148,8 @@ export default class App extends React.Component<any, State> {
     }
     render() {
         console.log('user' , this.state.user);
+        if(!this.state.fontLoaded){return (<Text>Loaging Font</Text>)}
+        
         if(this.state.user && Object.keys(this.state.user).length === 0 || !this.state.user){
             return( <LoginForm login={this.login}  userError={this.state.userError}/> )
         }
@@ -224,3 +234,12 @@ const AppNavigator = createDrawerNavigator(
 const AppContainer = createAppContainer(AppNavigator);
 
 // export default ()=><View style={{flex: 1}}><AppContainer/></View>;
+
+
+
+// Keystore credentials
+//   Keystore password: 0f45834b5f014368a158de89bbf34ca1
+//   Key alias:         QHZsYWRrb3JuL3N1YmV4cHJlc3M=
+//   Key password:      6183fb8ef6ed47ac98e168eb30ec9062
+
+//   Path to Keystore:  /work/sub_apps/subexpress/subexpress.jks

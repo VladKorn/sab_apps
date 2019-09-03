@@ -13,9 +13,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash.jpg",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f5c934"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -26,6 +26,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.vladkorn.subexpress"
+    },
+    "android": {
+        "package": "com.vladkorn.subexpress"
     },
     "description": ""
   }

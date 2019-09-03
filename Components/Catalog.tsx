@@ -15,9 +15,9 @@ export default class Catalog extends React.Component<any, State> {
         this.state = {
             isLoading: true,
             data: [],
-            search: 's',
-            // searchRes: [], 
-            searchRes: [1949 ,1946 ,1355], 
+            search: '',
+            searchRes: [], 
+            // searchRes: [1949 ,1946 ,1355], 
         };
         this.onSearch = this.onSearch.bind(this);
 
@@ -52,7 +52,7 @@ export default class Catalog extends React.Component<any, State> {
 
             fetch(`https://subexpress.ru/apps_api/search.php/?search=${text}`).then(res=>res.json()).then(res=>{
                 this.setState({searchRes: res.products.map(item=>{return parseInt(item)})});
-                console.log('searchRes' ,this.state.searchRes);
+                // console.log('searchRes' ,this.state.searchRes);
             });
         }
     }
@@ -86,7 +86,10 @@ export default class Catalog extends React.Component<any, State> {
                       ? cat.products.map(pkey => {
                             let item = products[pkey];
                             // console.log('item' , this.state.searchRes ,pkey);
-                            if(!this.state.searchRes.includes(parseInt (pkey)) ){return false}
+                            if(this.state.search.length > 2){
+
+                                if(!this.state.searchRes.includes(parseInt (pkey)) ){return false}
+                            }
                             const isFavorite = this.props.screenProps.favorite.includes(parseInt(item.id) )
                             // console.log('render' , item.id);
                             return (
