@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ShadowPropTypesIOS ,Text} from "react-native";
+import { View, ShadowPropTypesIOS, Text } from "react-native";
 import {
     createStackNavigator,
     createSwitchNavigator,
@@ -12,12 +12,14 @@ import LoginForm from "./Components/LoginForm";
 import HomeScreen from "./Components/HomeScreen";
 import Catalog from "./Components/Catalog";
 import News from "./Components/News";
+import Stocks from "./Components/Stocks";
 import Order from "./Components/Order";
 import CategorySlider from "./Components/CategorySlider";
 import Sidebar from "./Components/Sidebar";
 import SidebarCatalog from "./Components/SidebarCatalog";
 // import AsyncStorage from '@react-native-community/async-storage';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from "react-native";
+import CryptoJS from "crypto-js";
 
 interface State {
     user: object;
@@ -37,7 +39,7 @@ export default class App extends React.Component<any, State> {
         this.state = {
             user: {},
             catalog: {},
-            favorite: [1206, 1343, 1344, 1346, 1239, 1243, 1245, 1354],
+            favorite: [],
             products: {},
             stocks: {},
             basket: {
@@ -47,7 +49,7 @@ export default class App extends React.Component<any, State> {
             },
             isLoading: false,
             fontLoaded: false,
-            userError: {},
+            userError: {}
         };
 
         // bind functions..
@@ -57,7 +59,6 @@ export default class App extends React.Component<any, State> {
         this.openProduct = this.openProduct.bind(this);
         this.addToFavorite = this.addToFavorite.bind(this);
         this.login = this.login.bind(this);
-        
     }
     componentDidMount() {
         this.loadAssetsAsync();
@@ -69,18 +70,12 @@ export default class App extends React.Component<any, State> {
     }
     loadAssetsAsync = async () => {
         await Font.loadAsync({
-            "Neuron": require("./assets/fonts/Neuron.otf"),
+            Neuron: require("./assets/fonts/Neuron.otf"),
             "Neuron-Bold": require("./assets/fonts/Neuron-Bold.otf"),
             "Neuron-Heavy": require("./assets/fonts/Neuron-Heavy.otf"),
-            "Segoe": require("./assets/fonts/segoe-ui.ttf")
+            Segoe: require("./assets/fonts/segoe-ui.ttf")
         });
-        // await Font.loadAsync({
-        //     Neuron: require("./assets/fonts/Neuron.otf"),
-        //     "Neuron-Bold": require("./assets/fonts/Neuron-Bold.otf"),
-        //     "Neuron-Heavy": require("./assets/fonts/Neuron-Heavy.otf"),
-        //     "Segoe-UI": require("./assets/fonts/segoe-ui.ttf")
-        // });
-        
+
         this.setState({ fontLoaded: true });
     };
     basketApi(obj) {
@@ -96,38 +91,60 @@ export default class App extends React.Component<any, State> {
     }
     openProduct() {}
     getCatalog() {}
-    getData(log = '' , pas = '') {
-        const req = {
-            // log: "admin",
-            // pas: "ie1f32sq"
-            log,
-            pas,
-        };
-        
-        return fetch("https://subexpress.ru/apps_api/", {
-            method: "post",
-            body: JSON.stringify(req)
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log('res.user' , res.userError);
-                this.setState(
-                    {
-                        isLoading: false,
-                        userError: res.userError,
-                        catalog: res.catalog.cats,
-                        products: res.catalog.products,
-                        user: res.user,
-                        stocks: res.stocks
-                    },
-                    function() {}
-                );
+    getData(log = "", pas = "") {
+        const getData = async () => {
+            try {
+                const value = await AsyncStorage.getItem("@log");
+                const value2 = await AsyncStorage.getItem("@pas");
+                const decryptedLog = CryptoJS.AES.decrypt(value, "F24czi3II092Xnrhc").toString(CryptoJS.enc.Utf8);
+                const decryptedPas = CryptoJS.AES.decrypt(value2, "F24czi3II092Xnrhc").toString(CryptoJS.enc.Utf8);
+                // console.log('decryptedLog' , decryptedLog);
+                if (value !== null) {
+                    log = decryptedLog;
+                    pas = decryptedPas;
+                    // console.log("@log", log);
+                    // console.log("@pas", pas);
+                    // value previously stored
+                    // 
 
-                // console.log('res' , responseJson.user);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                    const req = {
+                        // log: "admin",
+                        // pas: "ie1f32sq"
+                        log,
+                        pas
+                    };
+
+                    return fetch("https://subexpress.ru/apps_api/", {
+                        method: "post",
+                        body: JSON.stringify(req)
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            // console.log('res.user' , res.userError);
+                            this.setState(
+                                {
+                                    isLoading: false,
+                                    userError: res.userError,
+                                    catalog: res.catalog.cats,
+                                    products: res.catalog.products,
+                                    user: res.user,
+                                    stocks: res.stocks,
+                                    favorite: res.favorite,
+                                },
+                                function() {}
+                            );
+
+                            console.log('favorite' , res.favorite);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+            } catch (e) {
+                // error reading value
+            }
+        };
+        getData();
     }
     makeOrder(obj) {
         // console.log("makeOrder", obj);
@@ -136,47 +153,54 @@ export default class App extends React.Component<any, State> {
         let favorite: Array<number> = this.state.favorite;
         let prodId = parseInt(id);
         if (favorite.includes(prodId)) {
-            favorite = favorite.filter(item=>{return item !== prodId});
-        }else{
+            favorite = favorite.filter(item => {
+                return item !== prodId;
+            });
+        } else {
             favorite.push(prodId);
         }
-        
+
         this.setState({ favorite: favorite });
         // console.log("addToFavorite", this.state.favorite);
     }
-    login(log , pas , save){
-        this.getData(log , pas);
-        if(save){
-            // const storeData = async () => {
-            //     try {
-            //       await AsyncStorage.setItem('@login', log)
-            //     } catch (e) {
-            //       // saving error
-            //     }
-
-            // }
+    // vladkorn
+    // afihso323nc1
+    login(log, pas, save) {
+        this.getData(log, pas);
+        if (save) {
+            const storeData = async () => {
+                try {
+                    const encryptedLog = CryptoJS.AES.encrypt(log, "F24czi3II092Xnrhc").toString();
+                    const encryptedPas = CryptoJS.AES.encrypt(pas, "F24czi3II092Xnrhc").toString();
+                    // console.log('encryptedLog' , encryptedLog)
+                    await AsyncStorage.setItem("@log", encryptedLog);
+                    await AsyncStorage.setItem("@pas", encryptedPas);
+                } catch (e) {
+                    // saving error
+                }
+            };
+            storeData();
             // console.log('storeData' , storeData);
-
         }
-        //   getData = async () => {
-        //   try {
-        //     const value = await AsyncStorage.getItem('@storage_Key')
-        //     if(value !== null) {
-        //       // value previously stored
-        //     }
-        //   } catch(e) {
-        //     // error reading value
-        //   }
-        // }
     }
     render() {
-        console.log('user' , this.state.user);
-        if(!this.state.fontLoaded){return (<Text>Loaging Font</Text>)}
-        
-        if(this.state.user && Object.keys(this.state.user).length === 0 || !this.state.user){
-            return( <LoginForm login={this.login}  userError={this.state.userError}/> )
+        // console.log("user", this.state.user);
+        if (!this.state.fontLoaded) {
+            return <Text>Loaging Font</Text>;
         }
-        return ( this.state.fontLoaded ?
+
+        if (
+            (this.state.user && Object.keys(this.state.user).length === 0) ||
+            !this.state.user
+        ) {
+            return (
+                <LoginForm
+                    login={this.login}
+                    userError={this.state.userError}
+                />
+            );
+        }
+        return this.state.fontLoaded ? (
             <AppContainer
                 key="app"
                 screenProps={{
@@ -191,9 +215,8 @@ export default class App extends React.Component<any, State> {
                     favorite: this.state.favorite,
                     addToFavorite: this.addToFavorite
                 }}
-            /> 
-        : null
-        );
+            />
+        ) : null;
     }
 }
 
@@ -217,7 +240,7 @@ const Home = createStackNavigator(
             screen: Catalog
         },
         News: News,
-        Stocks: News,
+        Stocks: Stocks,
         Favorites: News,
         OrderHistory: News,
         Addresses: News,
@@ -238,8 +261,7 @@ const AppNavigator2 = createDrawerNavigator(
         Home: Home
     },
     {
-        contentComponent: Sidebar,
-
+        contentComponent: Sidebar
     }
 );
 const AppNavigator = createDrawerNavigator(
@@ -248,17 +270,13 @@ const AppNavigator = createDrawerNavigator(
     },
     {
         contentComponent: SidebarCatalog,
-        drawerPosition: 'right'
-
-
+        drawerPosition: "right"
     }
 );
 
 const AppContainer = createAppContainer(AppNavigator);
 
 // export default ()=><View style={{flex: 1}}><AppContainer/></View>;
-
-
 
 // Keystore credentials
 //   Keystore password: 0f45834b5f014368a158de89bbf34ca1

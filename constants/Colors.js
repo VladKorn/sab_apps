@@ -3,8 +3,8 @@ const assent2 = '#FFD600';
 const assentSecond = '#FF6138';
 const black = '#31353D';
 const gray = '#707070';
+const text = '#666774';
 // F2F2F2
-// const gray = '#666774';
 
 export default {
     assent,
@@ -12,4 +12,5 @@ export default {
     assentSecond,
     black,
     gray,
+    text,
 };

@@ -3,6 +3,9 @@ import Colors from "../constants/Colors.js";
 
 
 const appStyles = StyleSheet.create({
+    borderRadius:{
+        borderRadius: 10
+    },
     page:{
         flex: 1,
         paddingTop: Platform.OS === 'android' ? 25 : 0

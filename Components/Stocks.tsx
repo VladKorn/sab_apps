@@ -5,7 +5,7 @@ interface State {
     items: object;
     openedIndex: number;
 }
-export default class News extends React.Component<any, State> {
+export default class Stocks extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -16,15 +16,15 @@ export default class News extends React.Component<any, State> {
 	}
 
 	componentDidMount() {
-		fetch(`https://subexpress.ru/apps_api/?get=news`)
+		fetch(`https://subexpress.ru/apps_api/?get=stocks`)
 			.then(res => res.json())
 			.then(res => {
-				this.setState({ items: res.news });
+				this.setState({ items: res.stocks });
 				// console.log('news' , res)
 			});
 	}
 	static navigationOptions = {
-		title: "Новости"
+		title: "Акции"
 	};
 	renderItems() {
 		if (Object.keys(this.state.items).length > 0) {
