@@ -14,9 +14,11 @@ import Input from "./Input";
 import CheckBox from "./CheckBox";
 
 
+
 interface State {
     log: string;
     pas: string;
+    save: boolean;
 }
 export default class LoginForm extends React.Component<any, State> {
     constructor(props) {
@@ -25,12 +27,19 @@ export default class LoginForm extends React.Component<any, State> {
             // log: "webvladkorn@gmail.com",
             // pas: "jFpidj"
             log: "admin",
-            pas: "ie1f32sq"
+            pas: "ie1f32sq",
+            save: true,
         };
         this.login = this.login.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
     login() {
-        this.props.login(this.state.log, this.state.pas);
+        this.props.login(this.state.log, this.state.pas , this.state.save);
+    }
+    onChange(isChecked){
+        console.log(isChecked);
+        this.setState({save: !this.state.save});
+        
     }
     // userError
     render() {
@@ -51,7 +60,6 @@ export default class LoginForm extends React.Component<any, State> {
                     onChangeText={log => this.setState({ log })}
                     value={this.state.log}
                 />
-                {/* placeholder="Пароль" */}
                 <Input 
                     placeholder="Пароль"
                     center={true}
@@ -62,6 +70,7 @@ export default class LoginForm extends React.Component<any, State> {
                 
                 <CheckBox 
                     style={{margin: 20}}
+                    onChange={this.onChange}
                     >
                     <Text style={[appStyles.text,{marginLeft: 20}]}>Запомнить меня</Text>
                 </CheckBox>

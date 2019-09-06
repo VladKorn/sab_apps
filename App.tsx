@@ -16,7 +16,8 @@ import Order from "./Components/Order";
 import CategorySlider from "./Components/CategorySlider";
 import Sidebar from "./Components/Sidebar";
 import SidebarCatalog from "./Components/SidebarCatalog";
-
+// import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 
 interface State {
     user: object;
@@ -143,8 +144,30 @@ export default class App extends React.Component<any, State> {
         this.setState({ favorite: favorite });
         // console.log("addToFavorite", this.state.favorite);
     }
-    login(log , pas){
+    login(log , pas , save){
         this.getData(log , pas);
+        if(save){
+            // const storeData = async () => {
+            //     try {
+            //       await AsyncStorage.setItem('@login', log)
+            //     } catch (e) {
+            //       // saving error
+            //     }
+
+            // }
+            // console.log('storeData' , storeData);
+
+        }
+        //   getData = async () => {
+        //   try {
+        //     const value = await AsyncStorage.getItem('@storage_Key')
+        //     if(value !== null) {
+        //       // value previously stored
+        //     }
+        //   } catch(e) {
+        //     // error reading value
+        //   }
+        // }
     }
     render() {
         console.log('user' , this.state.user);

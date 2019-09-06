@@ -12,11 +12,16 @@ export default class Input extends React.Component<any, State> {
         this.state = {
             ischecked: true
         };
+        this.toggleChecked = this.toggleChecked.bind(this);
+    }
+    toggleChecked(){
+        this.setState({ischecked: !this.state.ischecked});
+        this.props.onChange(this.state.ischecked);
     }
     render() {
         return (
             <TouchableOpacity 
-                onPress={()=>{this.setState({ischecked: !this.state.ischecked})}}
+                onPress={()=>{this.toggleChecked() }}
                 style={[{flexDirection: 'row' , alignItems: 'center'} , {...this.props.style}]}
                 >
                 <Image 
