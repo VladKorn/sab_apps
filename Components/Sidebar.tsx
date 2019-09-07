@@ -103,7 +103,11 @@ export default class Sidebar extends React.Component<any, State> {
                     ) : null}
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.navigate(route);
+                            if(route === 'Favorites'){
+                                this.props.navigation.navigate(route , {isFavorite: true});
+                            } else{
+                                this.props.navigation.navigate(route);
+                            }
                         }}
                         style={{
                             flexDirection: "row",

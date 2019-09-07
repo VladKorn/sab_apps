@@ -198,11 +198,11 @@ export default class HomeScreen extends React.Component<any> {
 						customButtons={(position, move) => <View></View>}
 					/>
 				</View>
-				<View style={{ paddingLeft: 15, paddingRight: 15 }}>
-					<Text style={appStyles.sectTitle}>Новинки</Text>
-					<ScrollView horizontal={true}>{products}</ScrollView>
-					<Text style={appStyles.sectTitle}>Меню</Text>
-					<ScrollView horizontal={true}>{catalog}</ScrollView>
+				<View >
+					<Text style={{...appStyles.sectTitle , paddingLeft: 15}}>Новинки</Text>
+					<ScrollView style={{paddingLeft: 15}} horizontal={true}>{products}</ScrollView>
+					<Text style={{...appStyles.sectTitle , paddingLeft: 15}}>Меню</Text>
+					<ScrollView style={{paddingLeft: 15}}  horizontal={true}>{catalog}</ScrollView>
 				</View>
 			</SafeAreaView>
 		);

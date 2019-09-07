@@ -134,7 +134,7 @@ export default class App extends React.Component<any, State> {
                                 function() {}
                             );
 
-                            console.log('favorite' , res.favorite);
+                            // console.log('favorite' , res);
                         })
                         .catch(error => {
                             console.error(error);
@@ -153,6 +153,7 @@ export default class App extends React.Component<any, State> {
         let favorite: Array<number> = this.state.favorite;
         let prodId = parseInt(id);
         if (favorite.includes(prodId)) {
+            // console.log('favorite125' , typeof favorite);
             favorite = favorite.filter(item => {
                 return item !== prodId;
             });
@@ -161,6 +162,24 @@ export default class App extends React.Component<any, State> {
         }
 
         this.setState({ favorite: favorite });
+            let data:any = {};
+            data.products = favorite;
+            data.userId = this.state.user.id;
+            
+            let headers = new Headers();
+            headers.set('Accept', 'application/json');
+            let formData = new FormData();
+            formData.append( 'json', JSON.stringify(data) );
+            let fetchOptions = { method: 'POST', headers, body: formData };
+            // console.log('sended-', data)
+            fetch(`https://subexpress.ru/apps_api/favorites.php` , fetchOptions).then(res=> res.json()).then(res=>{ 
+                // console.log('fetch res-', res);
+                if(res.sucsess){
+                    // if(prod.count === 0){delete state.inBasket[prod.id]}
+
+            }
+        });
+    
         // console.log("addToFavorite", this.state.favorite);
     }
     // vladkorn
@@ -236,12 +255,10 @@ const Home = createStackNavigator(
         // LoginForm: LoginForm,
         Home: HomeScreen,
         CategorySlider: CategorySlider,
-        Catalog: {
-            screen: Catalog
-        },
+        Catalog: Catalog,
         News: News,
         Stocks: Stocks,
-        Favorites: News,
+        Favorites: Catalog,
         OrderHistory: News,
         Addresses: News,
         User: News,
