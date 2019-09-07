@@ -63,11 +63,11 @@ const appStyles = StyleSheet.create({
         minWidth: 290,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 5,
+        borderRadius: 10,
 
     },
     buttonText:{
-        color: "#666774",
+        color: "#353539",
         fontSize: 20,
         fontFamily: 'Segoe'
     },

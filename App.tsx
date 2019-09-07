@@ -17,6 +17,7 @@ import Order from "./Components/Order";
 import CategorySlider from "./Components/CategorySlider";
 import Sidebar from "./Components/Sidebar";
 import SidebarCatalog from "./Components/SidebarCatalog";
+import Contacts from "./Components/Contacts";
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
@@ -263,13 +264,13 @@ const Home = createStackNavigator(
         Addresses: News,
         User: News,
         Info: News,
-        Contacts: News,
+        Contacts: Contacts,
         OrderByPhone: News,
 
         Order: Order
     },
     {
-        initialRouteName: "Home",
+        initialRouteName: "Contacts",
         transitionConfig: nav => handleCustomTransition(nav)
     }
 );
