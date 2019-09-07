@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
+import Images from "../constants/Images";
 import { DrawerActions } from "react-navigation-drawer";
 
 interface State {
@@ -19,70 +20,78 @@ export default class SidebarCatalog extends React.Component<any, State> {
 	render() {
 		// console.log(JSON.stringify(this.props.navigation ) );
 
-		const obj = {
-			Catalog: {
-				title: "Меню",
-				img: require("../img/ico-menu1.png"),
-				style: { width: 14, height: 18 }
-			},
-			News: {
-				title: "Новости",
-				img: require("../img/ico-menu2.png"),
-				style: { width: 20, height: 18 }
-			},
-			Stocks: {
-				title: "Акции",
-				img: require("../img/ico-menu3.png"),
-				style: { width: 14, height: 18 }
-			},
-			Favorites: {
-				title: "Моя подборка",
-				img: require("../img/ico-menu4.png"),
-				style: { width: 20, height: 18 }
-			},
-			OrderHistory: {
-				title: "История заказов",
-				img: require("../img/ico-menu5.png"),
-				style: { width: 18, height: 18 }
-			},
-			Addresses: {
-				title: "Адреса доставок",
-				img: require("../img/ico-menu6.png"),
-				style: { width: 13, height: 18 }
-			},
-			User: {
-				title: "Учётная запись",
-				img: require("../img/ico-menu7.png"),
-				style: { width: 20, height: 18 }
-			},
-			Info: {
-				title: "Информация",
-				img: require("../img/ico-menu8.png"),
-				style: { width: 6, height: 18 }
-			},
-			Contacts: {
-				title: "Контакты",
-				img: require("../img/ico-menu9.png"),
-				style: { width: 18, height: 18 }
-			},
-			OrderByPhone: {
-				title: "Заказ по телефону",
-				img: require("../img/ico-menu10.png"),
-				style: { width: 16, height: 18 }
+		const routes = Object.keys(this.props.screenProps.catalog).filter(
+			item => {
+				return (
+					item !== "Home" &&
+					item !== "Order" &&
+					item !== "CategorySlider"
+				);
 			}
-		};
-
-		const routes = Object.keys(
-			this.props.screenProps.catalog
-		).filter(item => {
+		);
+		const menu = routes.map((key, index) => {
+			const item = this.props.screenProps.catalog[key];
+			// console.log(item.cats);
 			return (
-				item !== "Home" && item !== "Order" && item !== "CategorySlider"
-			);
-		});
-		const menu = routes.map((route, index) => {
+				<View key={key}>
+                    <TouchableOpacity 
+                    onPress={()=>{
+                        this.props.navigation.navigate("Catalog", {
+                            catId: key,
+                        });
+                    }}
+                    style={{ flexDirection: "row" , paddingLeft: 10}}>
+                        <View style={{justifyContent: 'center' , alignItems: 'center' ,width: 20  , height: 45}}>
+                        {Images[key]}
+                        </View>
+                        <View style={{borderBottomWidth: 1, borderBottomColor: Colors.gray , marginLeft: 30, height: 45, marginBottom: 15 , width: 120 , justifyContent: 'center'}}>
+                            <Text style={{fontFamily: 'Neuron-Heavy' , fontSize: 18, color: Colors.text  }}>{item.name}</Text>
+                        </View>
+						<Text style={{ marginLeft: "auto" , fontFamily: 'Segoe', color: '#DCDCDC' , fontSize: 18 }}>
+							{item.products.length}
+						</Text>
+					</TouchableOpacity>
+                    <View style={{flexWrap: 'wrap' , flexDirection: 'row'}}>
+					{item.cats
+						? Object.keys(item.cats).map(key2 => {
+                            // console.log(item.cats[key2]);
 
-			return (
-				<TouchableOpacity><Text>{route}</Text></TouchableOpacity>
+								return (
+                                    <TouchableOpacity 
+                                    onPress={()=>{
+                                        this.props.navigation.navigate("Catalog", {
+                                            catId: key,
+                                            innerCatId: key2
+                                        });
+                                    }}
+                                    key={key2}
+                                    style={{width: 'auto'}}>
+										<Text
+											style={{
+												fontFamily: "Neuron-Bold",
+												fontSize: 16,
+												color: Colors.text,
+												borderWidth: 2,
+                                                borderColor: "#DCDCDC",
+                                                borderRadius: 15,
+                                                margin: 2,
+                                                // justifyContent: 'center',
+                                                lineHeight: 27,
+                                                marginBottom: 10,
+                                                paddingLeft: 5,
+                                                paddingRight: 5,
+                                                height: 30
+                                                
+											}}
+										>
+											{item.cats[key2].name.toUpperCase()}
+										</Text>
+									</TouchableOpacity>
+								);
+						  })
+                        : null}
+                    </View>
+				</View>
 			);
 		});
 
@@ -90,12 +99,14 @@ export default class SidebarCatalog extends React.Component<any, State> {
 			<SafeAreaView style={appStyles.page}>
 				<View
 					style={{
-						paddingLeft: 30,
-						paddingRight: 30,
-						paddingTop: 30
+						paddingLeft: 25,
+						paddingRight: 25,
+                        paddingTop: 30,
+                       
 					}}
 				>
 					<TouchableOpacity
+                        style={{ marginLeft: 'auto' , marginBottom: 30}}
 						onPress={() => {
 							this.props.navigation.dispatch(
 								DrawerActions.closeDrawer()
@@ -107,17 +118,18 @@ export default class SidebarCatalog extends React.Component<any, State> {
 							source={require("../img/ico-menu-close.png")}
 						/>
 					</TouchableOpacity>
-					
+
 					<TouchableOpacity
 						onPress={() => {
 							this.props.navigation.navigate("Catalog", {
 								catId: 123
 							});
 						}}
-					>
-					</TouchableOpacity>
-					{/*  */}
-					{menu}
+					></TouchableOpacity>
+                    {/*  */}
+                    <ScrollView>
+                    {menu}
+                    </ScrollView>
 				</View>
 			</SafeAreaView>
 		);

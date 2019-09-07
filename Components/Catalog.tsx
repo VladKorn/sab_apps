@@ -4,8 +4,8 @@ import {
 	Text,
 	ScrollView,
 	SafeAreaView,
-    TextInput,
-    Button,
+	TextInput,
+	Button,
 	TouchableOpacity,
 	Image
 } from "react-native";
@@ -52,16 +52,18 @@ export default class Catalog extends React.Component<any, State> {
 		}
 	}
 	static navigationOptions = {
-        // header: <Header 
-        // title="Меню"
-        // titleasd="Меню"
-        // />,
-      
-        title: 'Меню'
+		// header: <Header
+		// title="Меню"
+		// titleasd="Меню"
+		// />,
+
+		title: "Меню"
 	};
 	search() {
-        console.log('search' , this.state.search);
-		fetch(`https://subexpress.ru/apps_api/search.php/?search=${this.state.search}`)
+		console.log("search", this.state.search);
+		fetch(
+			`https://subexpress.ru/apps_api/search.php/?search=${this.state.search}`
+		)
 			.then(res => res.json())
 			.then(res => {
 				this.setState({
@@ -80,6 +82,9 @@ export default class Catalog extends React.Component<any, State> {
 		}
 		const catId = this.props.navigation.state.params
 			? this.props.navigation.state.params.catId
+			: false;
+		const innerCatId = this.props.navigation.state.params
+			? this.props.navigation.state.params.innerCatId
 			: false;
 		// console.log('nav',this.props.screenProps.catalog[123]);
 
@@ -108,6 +113,8 @@ export default class Catalog extends React.Component<any, State> {
 						? cat.products.map(pkey => {
 								let item = products[pkey];
 								// console.log('item' , this.state.searchRes ,pkey);
+
+								// is in search
 								if (this.state.searchRes.length > 0) {
 									if (
 										!this.state.searchRes.includes(
@@ -117,6 +124,7 @@ export default class Catalog extends React.Component<any, State> {
 										return false;
 									}
 								}
+								// is in favorites
 								if (
 									isFavorites &&
 									!this.props.screenProps.favorite.includes(
@@ -125,6 +133,22 @@ export default class Catalog extends React.Component<any, State> {
 								) {
 									return false;
 								}
+
+								// is in inner category
+								// console.log('cat' , cat.cats[innerCatId]);
+								if (innerCatId) {
+									if (
+										innerCatId &&
+										cat.cats[innerCatId] &&
+										cat.cats[innerCatId].products &&
+										!cat.cats[innerCatId].products.includes(
+											parseInt(item.id)
+										)
+									) {
+										return false;
+									}
+								}
+								//
 								const isFavorite = this.props.screenProps.favorite.includes(
 									parseInt(item.id)
 								);
@@ -178,10 +202,10 @@ export default class Catalog extends React.Component<any, State> {
 								position: "relative"
 							}}
 						>
-							<Text>
-							{this.state.search}
-							{this.state.searchRes.length}
-						</Text>
+							{/* <Text>
+								{this.state.search}
+								{this.state.searchRes.length}
+							</Text> */}
 							<TextInput
 								style={{
 									height: 40,
@@ -201,9 +225,17 @@ export default class Catalog extends React.Component<any, State> {
 								// value={this.state.text}
 							/>
 							<TouchableOpacity
-								style={{ position: "absolute",  zIndex: 3,right: 0 , height: 40 , width: 40 , justifyContent: 'center' , alignItems: 'center'}}
-                                onPress={this.search}
-                            >
+								style={{
+									position: "absolute",
+									zIndex: 3,
+									right: 0,
+									height: 40,
+									width: 40,
+									justifyContent: "center",
+									alignItems: "center"
+								}}
+								onPress={this.search}
+							>
 								<Image
 									style={{ width: 18, height: 18 }}
 									source={require("../img/ico-search.png")}

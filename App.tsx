@@ -278,7 +278,9 @@ const AppNavigator2 = createDrawerNavigator(
         Home: Home
     },
     {
-        contentComponent: Sidebar
+        contentComponent: Sidebar,
+        drawerWidth: 310
+
     }
 );
 const AppNavigator = createDrawerNavigator(
@@ -287,7 +289,8 @@ const AppNavigator = createDrawerNavigator(
     },
     {
         contentComponent: SidebarCatalog,
-        drawerPosition: "right"
+        drawerPosition: "right",
+        drawerWidth: 310
     }
 );
 

@@ -47,10 +47,12 @@ export default class ProductItem extends React.Component<any, State> {
             <View style={styles.box}>
                 <TouchableOpacity
                     onPress={()=>{this.props.navigation.navigate( 'CategorySlider' , { id: this.props.id} )}}>
-                <Image
-                    style={styles.img}
-                    source={{ uri: "https://subexpress.ru/" + this.props.img }}
-                />
+                <View style={styles.imgWrap}>
+                    <Image
+                        style={styles.img}
+                        source={{ uri: "https://subexpress.ru/" + this.props.img }}
+                    />
+                </View>
                 </TouchableOpacity>
                 <View
                     style={{
@@ -163,6 +165,12 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     img: {
+        width: 100,
+        borderRadius: 10,
+        height: 100,
+    },
+    imgWrap:{
+        backgroundColor: Colors.lightgray,
         width: 100,
         borderRadius: 10,
         height: 100,
