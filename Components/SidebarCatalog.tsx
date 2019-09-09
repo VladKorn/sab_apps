@@ -39,17 +39,22 @@ export default class SidebarCatalog extends React.Component<any, State> {
                         this.props.navigation.navigate("Catalog", {
                             catId: key,
                         });
+                        this.props.navigation.dispatch(
+                            DrawerActions.closeDrawer()
+                        );
                     }}
                     style={{ flexDirection: "row" , paddingLeft: 10}}>
                         <View style={{justifyContent: 'center' , alignItems: 'center' ,width: 20  , height: 45}}>
                         {Images[key]}
                         </View>
-                        <View style={{borderBottomWidth: 1, borderBottomColor: Colors.gray , marginLeft: 30, height: 45, marginBottom: 15 , width: 120 , justifyContent: 'center'}}>
+                        <View style={{borderBottomWidth: 1, borderBottomColor: Colors.gray , marginLeft: 35, height: 45, marginBottom: 15 , width: 120 , justifyContent: 'center'}}>
                             <Text style={{fontFamily: 'Neuron-Heavy' , fontSize: 18, color: Colors.text  }}>{item.name}</Text>
                         </View>
-						<Text style={{ marginLeft: "auto" , fontFamily: 'Segoe', color: '#DCDCDC' , fontSize: 18 }}>
+                        <View style={{marginLeft: "auto" , height: 45, justifyContent: 'center'}}>
+						<Text style={{ fontFamily: 'Segoe', color: '#DCDCDC' , fontSize: 18  , }}>
 							{item.products.length}
 						</Text>
+                        </View>
 					</TouchableOpacity>
                     <View style={{flexWrap: 'wrap' , flexDirection: 'row'}}>
 					{item.cats
@@ -63,6 +68,9 @@ export default class SidebarCatalog extends React.Component<any, State> {
                                             catId: key,
                                             innerCatId: key2
                                         });
+                                        this.props.navigation.dispatch(
+                                            DrawerActions.closeDrawer()
+                                        );
                                     }}
                                     key={key2}
                                     style={{width: 'auto'}}>
@@ -106,7 +114,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 					}}
 				>
 					<TouchableOpacity
-                        style={{ marginLeft: 'auto' , marginBottom: 30}}
+                        style={{ marginLeft: 'auto' , paddingBottom: 10}}
 						onPress={() => {
 							this.props.navigation.dispatch(
 								DrawerActions.closeDrawer()
@@ -119,15 +127,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 						/>
 					</TouchableOpacity>
 
-					<TouchableOpacity
-						onPress={() => {
-							this.props.navigation.navigate("Catalog", {
-								catId: 123
-							});
-						}}
-					></TouchableOpacity>
-                    {/*  */}
-                    <ScrollView>
+                    <ScrollView style={{paddingTop: 20}}>
                     {menu}
                     </ScrollView>
 				</View>

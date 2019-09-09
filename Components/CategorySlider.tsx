@@ -20,6 +20,8 @@ import ImageSlider from "react-native-image-slider";
 import Carousel from "react-native-looped-carousel";
 import SwiperComponent from "./SwiperComponent";
 import CategorySliderItem from "./CategorySliderItem";
+import Basket from "./Basket";
+
 
 interface State {
     currentProductId: number;
@@ -161,6 +163,11 @@ export default class CategorySlider extends React.Component<any, State> {
                     navigation={this.props.navigation}
                     onIndexChanged={this.onPositionChanged}
                     basketApi={this.props.screenProps.basketApi}
+                />
+                <Basket 
+                    basket={this.props.screenProps.basket}
+                    products={this.props.screenProps.products}
+                    navigation={this.props.navigation}
                 />
             </SafeAreaView>
         );

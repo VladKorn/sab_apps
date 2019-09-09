@@ -123,7 +123,7 @@ export default class ProductItemOrder extends React.Component<any, State> {
                         <Counter
                             mode="v"
                             onChange={this.onChange}
-                            value={this.props.count}
+                            InitialValue={this.props.count}
                         />
                     </View>
                 </View>

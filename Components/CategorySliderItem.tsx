@@ -177,7 +177,7 @@ export default class CategorySliderItem extends React.Component<any, State> {
                                 color: Colors.gray
                             }}
                         >
-                            {this.props.item.id}
+                            {/* {this.props.item.id} */}
                             {this.props.item.name
                                 .replace("&quot;", '"')
                                 .replace("&quot;", '"')}
@@ -200,7 +200,7 @@ export default class CategorySliderItem extends React.Component<any, State> {
                             </Text>
                                 <Counter
                                     onChange={this.onChange}
-                                    value={this.state.count}
+                                    InitialValue={this.state.count}
                                 />
                             
                         </View>
@@ -235,6 +235,8 @@ export default class CategorySliderItem extends React.Component<any, State> {
                 >
                     <Animated.View
                         style={{
+                            position: 'fixed',
+                            bottom: 50,
                             transform: [
                                 {
                                     translateY: this.state.isAnimationEnded ? this.props.isZoom ? 0 : 200: this.state.animTranslateY
@@ -242,7 +244,7 @@ export default class CategorySliderItem extends React.Component<any, State> {
                             ]
                         }}
                     >
-                        <Counter onChange={this.onChange} value={this.state.count} />
+                        <Counter onChange={this.onChange} InitialValue={this.state.count}  />
                     </Animated.View>
                 </View>
             </View>

@@ -8,7 +8,7 @@ export default class Counter extends Component {
         super(props);
 
         this.state = {
-            number: parseInt(this.props.value),
+            number: parseInt(this.props.InitialValue),
             isInitial: this.props.mode === 'v' ? false : true
             // isInitial: false 
         };
@@ -16,6 +16,10 @@ export default class Counter extends Component {
         // bind functions..
         this.onPressMinus = this.onPressMinus.bind(this);
         this.onPressPlus = this.onPressPlus.bind(this);
+        this.setValue = this.setValue.bind(this);
+    }
+    setValue(value){
+        this.setState({number: value});
     }
     onPressMinus() {
         const { number } = this.state;

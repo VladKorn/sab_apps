@@ -3,15 +3,13 @@ import {
     View,
     ScrollView,
     Text,
-    Animated,
+    Button,
     TextInput,
     Image,
     TouchableHighlight,
     TouchableOpacity,
-    SafeAreaView,
-    StyleSheet
+    SafeAreaView
 } from "react-native";
-import {BlurView} from 'expo-blur';
 import Colors from "../constants/Colors.js";
 
 import DatePicker from "react-native-datepicker";
@@ -25,10 +23,10 @@ interface State {
     date: string;
     comment: string;
     promo: string;
-    intensity: any;
+
     // data: any;
 }
-const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+
 export default class Order extends React.Component<any, State> {
     constructor(props) {
         super(props);
@@ -37,27 +35,19 @@ export default class Order extends React.Component<any, State> {
             address: "",
             date: "2019-08-11",
             comment: "",
-            promo: "",
-            intensity: new Animated.Value(0),
+            promo: ""
         };
         this.setAddress = this.setAddress.bind(this);
         this.setDate = this.setDate.bind(this);
         this.makeOrder = this.makeOrder.bind(this);
     }
     static navigationOptions = {
-        title: "Оформление заказа"
+        title: "Оформление заказа2"
     };
     componentDidMount() {
-        this._blur();
         this.props.screenProps.getCatalog();
-        
+        // console.log('this.props.navigation', this.props.navigation);
     }
-    _blur = () => {
-        let { intensity } = this.state;
-        Animated.timing(intensity, {duration: 800, toValue: 100}).start(() => {
-        //   Animated.timing(intensity, {duration: 2500, toValue: 0}).start(this._animate);
-        });
-      }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.screenProps !== this.props.screenProps) {
             let price = 0;
@@ -133,24 +123,7 @@ export default class Order extends React.Component<any, State> {
         const products = this.props.screenProps.products;
         const addresses = this.props.screenProps.user.addresses || [];
         // console.log("addresses", this.props.screenProps.user.addresses);
-        const items =
-            Object.entries(basket).length !== 0 &&
-            Object.entries(products).length !== 0
-                ? Object.keys(basket).map(key => {
-                      let item = products[key];
-                      return (
-                          <ProductItemOrder
-                              key={item.id}
-                              id={item.id}
-                              name={item.name}
-                              img={item.img}
-                              price={item.price}
-                              count={parseInt(basket[item.id].count)}
-                              basketApi={this.props.screenProps.basketApi}
-                          />
-                      );
-                  })
-                : [];
+       
         const addressesItems = addresses.map(item => {
             const isCurrent = item.address === this.state.address;
             return (
@@ -213,110 +186,66 @@ export default class Order extends React.Component<any, State> {
         });
         return (
             <SafeAreaView style={appStyles.page}>
-                
                 <ScrollView
                     style={{
                         paddingVertical: 0,
                         paddingLeft: 15,
                         // paddingTop: 25,
                         flex: 1,
-                        paddingRight: 15,
+                        paddingRight: 15
                         // marginTop: 35,
                     }}
                 >
-                    <Text style={appStyles.sectTitle}>Ваш заказ</Text>
-                    {items}
 
+                    
+
+                    <Text style={appStyles.sectTitle}>Адрес</Text>
+                    {addressesItems}
                     <Text style={appStyles.sectTitle}>
-                        Комментарий к заказу
+                        Дата и время доставки
                     </Text>
-                    <TextInput
-                        placeholder="Добавить комментарий к заказу"
-                        style={appStyles.input}
-                        onChangeText={comment =>
-                            this.setState({ comment: comment })
-                        }
-                    />
-                    <Text style={appStyles.sectTitle}>Промокод</Text>
-                    <TextInput
-                        placeholder="Ввести промокод"
-                        style={appStyles.input}
-                        onChangeText={promo => this.setState({ promo: promo })}
-                    />
-                    <Text style={appStyles.sectTitle}>Сумма для оплаты</Text>
-                    <View>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: "row",
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <Text>Сумма заказа</Text>
-                            <Text
-                                style={{
-                                    fontFamily: "Neuron-Heavy",
-                                    marginLeft: "auto",
-                                    color: Colors.gray
-                                }}
-                            >
-                                {this.state.priceTotal} руб
-                            </Text>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: "row",
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <Text>Доставка </Text>
-                            <Text
-                                style={{
-                                    fontFamily: "Neuron-Heavy",
-                                    marginLeft: "auto",
-                                    color: Colors.gray
-                                }}
-                            >
-                                {this.state.priceTotal < 1500 ? 150 : 0} руб
-                            </Text>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: "row",
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <Text>Общая сумма</Text>
-                            <Text
-                                style={{
-                                    fontFamily: "Neuron-Heavy",
-                                    marginLeft: "auto",
-                                    color: Colors.gray
-                                }}
-                            >
-                                {this.state.priceTotal < 1500 ? this.state.priceTotal+150 : this.state.priceTotal} руб
-                            </Text>
-                        </View>
-                    </View>
 
+                    <TouchableHighlight onPress={this.openDatePicker}>
+                        <Text>{this.state.date}</Text>
+                    </TouchableHighlight>
+                    <DatePicker
+                        style={{ width: 200 }}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        minDate={new Date()}
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        iconSource={require("../img/ico-date.png")}
+                        hideText="true"
+                        customStyles={{
+                            dateIcon: {
+                                position: "absolute",
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0,
+                                width: 18,
+                                height: 21
+                            },
+                            dateInput: {
+                                marginLeft: 36
+                            }
+                            // ... You can check the source to find the other keys.
+                        }}
+                        onDateChange={date => {
+                            this.setState({ date: date });
+                        }}
+                    />
                 </ScrollView>
                 <TouchableOpacity
-                    onPress={()=>{this.props.navigation.navigate('Delivery')}}
+                    onPress={this.makeOrder}
                     style={appStyles.buttonBottom}
                 >
                     <Text style={{ color: "white", fontSize: 20 }}>
-                        Перейти к доставке
+                        Оформить заказ
                     </Text>
                 </TouchableOpacity>
-                <AnimatedBlurView
-                    style={StyleSheet.absoluteFill}
-                    tint="light"
-                    intensity={this.state.intensity}
-                    blurRadius={0}
-                />
-                <Text>asdas</Text>
             </SafeAreaView>
         );
     }

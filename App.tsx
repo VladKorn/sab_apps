@@ -14,6 +14,8 @@ import Catalog from "./Components/Catalog";
 import News from "./Components/News";
 import Stocks from "./Components/Stocks";
 import Order from "./Components/Order";
+import Delivery from "./Components/Delivery";
+
 import CategorySlider from "./Components/CategorySlider";
 import Sidebar from "./Components/Sidebar";
 import SidebarCatalog from "./Components/SidebarCatalog";
@@ -251,6 +253,7 @@ const handleCustomTransition = ({ scenes }) => {
         return fromRight();
     }
 };
+
 const Home = createStackNavigator(
     {
         // LoginForm: LoginForm,
@@ -266,11 +269,12 @@ const Home = createStackNavigator(
         Info: News,
         Contacts: Contacts,
         OrderByPhone: News,
-
-        Order: Order
+        // Order: navOrder
+        Order: Order,
+        Delivery: Delivery
     },
     {
-        initialRouteName: "Contacts",
+        initialRouteName: "Home",
         transitionConfig: nav => handleCustomTransition(nav)
     }
 );

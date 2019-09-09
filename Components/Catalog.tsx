@@ -47,6 +47,16 @@ export default class Catalog extends React.Component<any, State> {
 		// }
 		if (nextState.searchRes.length !== this.state.searchRes.length) {
 			return true;
+		} else if (
+			this.props.navigation.state.params
+		) {
+            if(nextProps.navigation.state.params.innerCatId !==
+                this.props.navigation.state.params.innerCatId || 
+                nextProps.navigation.state.params.catId !==
+				this.props.navigation.state.params.catId ){
+
+            }
+			return true;
 		} else {
 			return this.state.isLoading;
 		}

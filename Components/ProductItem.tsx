@@ -125,7 +125,7 @@ export default class ProductItem extends React.Component<any, State> {
                         <Counter
                             
                             onChange={this.onChange}
-                            value={this.state.count}
+                            InitialValue={this.state.count}
                         />
                         </View>
                     </View>
