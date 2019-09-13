@@ -1,7 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
-const Basket = props => {
+interface Props{
+    basket: object;
+    products: object;
+    navigation: any;
+}
+const Basket: React.FC<Props> = props => {
     let price = 0
     Object.keys(props.basket).map(key=>{
         price = parseInt( props.products[key].price ) * props.basket[key].count+ price;

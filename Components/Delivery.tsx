@@ -83,7 +83,7 @@ export default class Order extends React.Component<any, State> {
         // });
         // ${this.selectedYear}-${formatnum(getmnum(this.selectedMonth))}-${formatnum(this.selectedDay)} 00:00:00
 
-        let data = {};
+        let data :any= {};
         data.fUserId = "1";
         data.userId = "1";
         data.siteName = "s1";

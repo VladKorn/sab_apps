@@ -6,9 +6,17 @@ const appStyles = StyleSheet.create({
     borderRadius:{
         borderRadius: 10
     },
+    SafeAreaView:{
+        flex: 1,
+        paddingTop: Platform.OS === 'android' ? 25 : 0
+    },
     page:{
         flex: 1,
         paddingTop: Platform.OS === 'android' ? 25 : 0
+    },
+    paddings:{
+        paddingLeft: 15,
+        paddingRight: 15
     },
     text:{
         fontSize: 20,
