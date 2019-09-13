@@ -291,7 +291,7 @@ const Home = createStackNavigator(
 		HistoryDetail: HistoryDetail
 	},
 	{
-		initialRouteName: "OrderHistory",
+		initialRouteName: "Order",
 		transitionConfig: nav => handleCustomTransition(nav)
 	}
 );

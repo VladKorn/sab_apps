@@ -28,7 +28,7 @@
       "bundleIdentifier": "com.vladkorn.subexpress"
     },
     "android": {
-        "package": "com.vladkorn.subexpress"
+      "package": "com.vladkorn.subexpress"
     },
     "description": ""
   }

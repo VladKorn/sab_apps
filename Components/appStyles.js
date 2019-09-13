@@ -1,4 +1,4 @@
-import { StyleSheet , Platform} from "react-native";
+import { StyleSheet , Platform, Modal} from "react-native";
 import Colors from "../constants/Colors.js";
 
 
@@ -103,6 +103,13 @@ const appStyles = StyleSheet.create({
     },
     breadCrumbs:{
 
+    },
+    modalText:{
+        fontFamily: 'Neuron-Heavy' , 
+        fontSize: 22, 
+        color: Colors.text , 
+        textAlign: 'center',
+        lineHeight: 27
     }
 });
 
