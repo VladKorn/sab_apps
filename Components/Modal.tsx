@@ -1,5 +1,5 @@
 import React from "react";
-import Modal, {
+import Modal ,{
 	ModalContent,
 	SlideAnimation,
 	ScaleAnimation
@@ -14,7 +14,7 @@ interface State {
 }
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-export default class Modalt extends React.Component<any, State> {
+export default class Modals extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -56,9 +56,9 @@ export default class Modalt extends React.Component<any, State> {
 			<View key={"modal"} style={{}}>
 				<Modal
 					overlayOpacity={0.1}
-                    // hasOverlay={false}
-                    width={300}
-                    height={this.props.height || 310}
+					// hasOverlay={false}
+					width={300}
+					height={this.props.height || 310}
 					onDismiss={() => {
 						setTimeout(() => {
 							this.setState({ visibleBlur: false });
@@ -89,13 +89,18 @@ export default class Modalt extends React.Component<any, State> {
 					}}
 				>
 					<ModalContent>
-                        <View style={{alignItems: 'center'}}>
-						<Image
-							style={{ width: 50, height: 50 ,marginBottom: 20, marginTop: 10}}
-							source={require("../img/ico-clock.png")}
-						/>
-                        {this.props.children}
-                        </View>
+						<View style={{ alignItems: "center" }}>
+							<Image
+								style={{
+									width: 50,
+									height: 50,
+									marginBottom: 20,
+									marginTop: 10
+								}}
+								source={require("../img/ico-clock.png")}
+							/>
+							{this.props.children}
+						</View>
 					</ModalContent>
 				</Modal>
 			</View>

@@ -6,23 +6,19 @@ import {
 	Animated,
 	TextInput,
 	Image,
-	TouchableHighlight,
 	TouchableOpacity,
 	SafeAreaView,
 	StyleSheet,
-	Button
 } from "react-native";
 import Colors from "../constants/Colors.js";
 
-import Modalt from "./Modal";
+import Modals from "./Modal";
 
 import ProductItemOrder from "./ProductItemOrder";
 import appStyles from "./appStyles";
 
 interface State {
 	priceTotal: number;
-	address: string;
-	date: string;
 	comment: string;
 	promo: string;
 	modalIsOpen: boolean;
@@ -33,12 +29,9 @@ export default class Order extends React.Component<any, State> {
 		super(props);
 		this.state = {
 			priceTotal: 0,
-			address: "",
-			date: "2019-08-11",
 			comment: "",
 			promo: "",
-			// modalIsOpen: false,
-			modalIsOpen: true
+			modalIsOpen: false,
 		};
 		this.setDate = this.setDate.bind(this);
 		this.makeOrder = this.makeOrder.bind(this);
@@ -47,74 +40,31 @@ export default class Order extends React.Component<any, State> {
 		title: "Оформление заказа"
 	};
 	componentDidMount() {
-		this.props.screenProps.getCatalog();
+        this._totalPrice();
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.screenProps !== this.props.screenProps) {
-			let price = 0;
-			const basket = this.props.screenProps.basket;
-			const products = this.props.screenProps.products;
-			Object.keys(basket).map(id => {
-				price =
-					price +
-					parseInt(products[id].price) * parseInt(basket[id].count);
-			});
-			this.setState({ priceTotal: price });
-		}
-		if (
-			this.state.address === "" &&
-			this.props.screenProps.user.addresses
-		) {
-			this.setState({
-				address: this.props.screenProps.user.addresses[0].address
-			});
-		}
+        this._totalPrice()
 	}
-
+    _totalPrice(){
+        let price = 0;
+        const basket = this.props.screenProps.basket;
+        const products = this.props.screenProps.products;
+        Object.keys(basket).map(id => {
+            price =
+                price +
+                parseInt(products[id].price) * parseInt(basket[id].count);
+        });
+        if(this.state.priceTotal !== price){
+            this.setState({ priceTotal: price });
+        }
+    }
 	setDate(newDate) {
 		// this.setState({chosenDate: newDate});
 		this.props.navigation.actions.goBack();
 	}
 	makeOrder() {
-		// this.props.screenProps.makeOrder({
 
-		// });
-		// ${this.selectedYear}-${formatnum(getmnum(this.selectedMonth))}-${formatnum(this.selectedDay)} 00:00:00
-
-		let data: any = {};
-		data.fUserId = "1";
-		data.userId = "1";
-		data.siteName = "s1";
-		data.comment = this.state.comment;
-		data.address = this.state.address;
-		data.deliveryDate = this.state.date;
-
-		data.products = this.props.screenProps.basket;
-
-		// const orderButton = document.querySelector(`.jsOrderButton`);
-		// if(orderButton){orderButton.disabled = true;}
-
-		let headers = new Headers();
-		headers.set("Accept", "application/json");
-		let formData = new FormData();
-		formData.append("json", JSON.stringify(data));
-		// console.log("order sended-", data);
-		fetch(`https://subexpress.ru/apps_api/order.php`, {
-			method: "POST",
-			headers,
-			body: formData
-		})
-			.then(res => res.json())
-			.then(res => {
-				// console.log("order fetch res-", res);
-				if (res.sucsess) {
-					alert("ok");
-					// if(Swal){
-					//     Swal.fire({title: 'Спасибо! Ваш заказ принят. ', text:'' , type: 'success'});
-					// }
-				}
-			});
 	}
 	render() {
 		const basket = this.props.screenProps.basket;
@@ -233,8 +183,9 @@ export default class Order extends React.Component<any, State> {
 				</ScrollView>
 				<TouchableOpacity
 					onPress={() => {
-						this.setState({ modalIsOpen: true });
-						// this.props.navigation.navigate('Delivery')
+
+                        this.props.screenProps.setOrderData({comment: this.state.comment, promo: this.state.promo});
+                        this.state.priceTotal < 1500 ? this.setState({ modalIsOpen: true }): this.props.navigation.navigate('Delivery');
 					}}
 					style={appStyles.buttonBottom}
 				>
@@ -243,18 +194,48 @@ export default class Order extends React.Component<any, State> {
 					</Text>
 				</TouchableOpacity>
 
-				<Modalt
-					// height={310}
+				<Modals
+					height={390}
 					isOpen={this.state.modalIsOpen}
 					isOpenHendler={isOpen => {
 						this.setState({ modalIsOpen: isOpen });
 					}}
 				>
-					<Text style={appStyles.modalText}>
-						Даю согласие{"\n"}на обработку заказа{"\n"}на следующий
-						{"\n"}рабочий день
+					<Text style={appStyles.modalText}>Ваш заказ менее {"\n"} 1500 рублей
 					</Text>
-				</Modalt>
+                    <Text style={appStyles.modalTextDesc}>
+                    Вы можете добавить позиции {"\n"}до нужной суммы или оформить заказ {"\n"}с доставкой 150 рублей
+                        </Text>
+                        <View style={{ flexDirection: "column" }}>
+						<TouchableOpacity
+							onPress={() => {
+								this.setState({ modalIsOpen: false });
+							}}
+							style={[
+								appStyles.modalButton,
+								{ backgroundColor: "white" }
+							]}
+						>
+							<Text style={appStyles.modalButtonText}>Продолжить покупки</Text>
+						</TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={() => {
+                            this.setState({ modalIsOpen: false });
+                            setTimeout(()=>{this.props.navigation.navigate('Delivery');},500)
+                            
+                        }}
+                         style={appStyles.modalButton}>
+							<Text
+								style={[
+									appStyles.modalButtonText,
+									{ color: "white" }
+								]}
+							>
+								Добавить доставку
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</Modals>
 			</SafeAreaView>
 		);
 	}

@@ -235,7 +235,7 @@ export default class CategorySliderItem extends React.Component<any, State> {
                 >
                     <Animated.View
                         style={{
-                            position: 'fixed',
+                            // position: 'fixed',
                             bottom: 50,
                             transform: [
                                 {

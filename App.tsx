@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ShadowPropTypesIOS, Text } from "react-native";
+import { View, ShadowPropTypesIOS, Text, Alert } from "react-native";
 import {
 	createStackNavigator,
 	createSwitchNavigator,
@@ -36,7 +36,8 @@ interface State {
 	stocks: object;
 	favorite: Array<number>;
 	userError: object;
-	// productId: number;
+    comment: string;
+    promo: string;
 }
 export default class App extends React.Component<any, State> {
 	constructor(props) {
@@ -47,14 +48,12 @@ export default class App extends React.Component<any, State> {
 			favorite: [],
 			products: {},
 			stocks: {},
-			basket: {
-				"1231": { count: 3 },
-				"1246": { count: 6 },
-				"1247": { count: 1 }
-			},
+            basket: {},
 			isLoading: false,
 			fontLoaded: false,
-			userError: {}
+            userError: {},
+            comment: '',
+            promo: '',
 		};
 
 		// bind functions..
@@ -62,16 +61,33 @@ export default class App extends React.Component<any, State> {
 		this.basketApi = this.basketApi.bind(this);
 		this.getData = this.getData.bind(this);
 		this.openProduct = this.openProduct.bind(this);
-		this.addToFavorite = this.addToFavorite.bind(this);
-		this.login = this.login.bind(this);
+        this.addToFavorite = this.addToFavorite.bind(this);
+        this.setOrderData = this.setOrderData.bind(this);
+        this.login = this.login.bind(this);
+        this.makeOrder = this.makeOrder.bind(this);
+        
 	}
 	componentDidMount() {
 		this.loadAssetsAsync();
 		this.getData();
-		// setTimeout(()=>{
-		//     this.setState({  });
 
-		// }, 5000)
+		const getBasket = async () => {
+			try {
+                const basket = await AsyncStorage.getItem("@basket");
+                // console.log('basket1' , basket);
+                if(basket){
+                    this.setState({ basket: JSON.parse( basket) });
+                }
+                return basket;
+                
+			} catch (e) {
+				Alert.alert(e);
+			}
+        };
+        getBasket();
+
+        
+        
 	}
 	loadAssetsAsync = async () => {
 		await Font.loadAsync({
@@ -92,6 +108,15 @@ export default class App extends React.Component<any, State> {
 				basket[obj.params.productId] = { count: obj.params.count };
 			}
 			this.setState({ basket: basket });
+
+			const storeBasket = async basket => {
+				try {
+					await AsyncStorage.setItem("@basket", JSON.stringify( basket));
+				} catch (e) {
+					Alert.alert(e);
+				}
+			};
+			storeBasket(basket);
 		}
 	}
 	openProduct() {}
@@ -156,9 +181,43 @@ export default class App extends React.Component<any, State> {
 			}
 		};
 		getData();
-	}
+    }
+    setOrderData(data){
+        console.log('setOrderData' , data)
+        this.setState({comment: data.comment , promo: data.promo});
+
+    }
 	makeOrder(obj) {
-		// console.log("makeOrder", obj);
+        console.log('makeOrder');
+		let data: any = {};
+		data.userId = "1";
+		data.promo = this.state.promo;
+		data.comment = `(from mobile app)`+this.state.comment;
+		data.address = obj.address;
+        data.deliveryDate = obj.date;
+
+
+		data.products = this.state.basket;
+
+		let headers = new Headers();
+		headers.set("Accept", "application/json");
+		let formData = new FormData();
+        formData.append("json", JSON.stringify(data));
+        
+		console.log("order sended-", JSON.stringify(data));
+		fetch(`https://subexpress.ru/apps_api/order.php`, {
+			method: "POST",
+			headers,
+			body: formData
+		})
+			.then(res => res.json())
+			.then(res => {
+				// console.log("order fetch res-", res);
+				if (res.sucsess) {
+					alert("ok");
+					
+				}
+			});
 	}
 	addToFavorite(id) {
 		let favorite: Array<number> = this.state.favorite;
@@ -249,7 +308,8 @@ export default class App extends React.Component<any, State> {
 					makeOrder: this.makeOrder,
 					user: this.state.user,
 					stocks: this.state.stocks,
-					favorite: this.state.favorite,
+                    favorite: this.state.favorite,
+                    setOrderData: this.setOrderData,
 					addToFavorite: this.addToFavorite
 				}}
 			/>
@@ -285,7 +345,6 @@ const Home = createStackNavigator(
 		Info: News,
 		Contacts: Contacts,
 		OrderByPhone: News,
-		// Order: navOrder
 		Order: Order,
 		Delivery: Delivery,
 		HistoryDetail: HistoryDetail

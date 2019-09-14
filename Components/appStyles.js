@@ -110,7 +110,32 @@ const appStyles = StyleSheet.create({
         color: Colors.text , 
         textAlign: 'center',
         lineHeight: 27
-    }
+    },
+    modalTextDesc:{
+        fontFamily: 'Neuron' , 
+        fontSize: 16, 
+        color: Colors.text , 
+        textAlign: 'center',
+        lineHeight: 19
+    },
+    modalButton:{
+        height: 48,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: 110,
+        paddingLeft: 10,
+        paddingRight: 10,
+        backgroundColor: Colors.assent,
+        margin: 5
+
+    },
+    modalButtonText:{
+        fontSize: 20,
+        fontFamily: 'Neuron',
+        color: Colors.text 
+    },
+ 
 });
 
 export default appStyles ;

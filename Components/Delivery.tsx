@@ -11,6 +11,7 @@ import {
     SafeAreaView
 } from "react-native";
 import Colors from "../constants/Colors.js";
+import Modals from "./Modal";
 
 import DatePicker from "react-native-datepicker";
 
@@ -21,8 +22,7 @@ interface State {
     priceTotal: number;
     address: string;
     date: string;
-    comment: string;
-    promo: string;
+    modalIsOpen: boolean;
 
     // data: any;
 }
@@ -32,10 +32,9 @@ export default class Order extends React.Component<any, State> {
         super(props);
         this.state = {
             priceTotal: 0,
-            address: "",
+            address: this.props.screenProps.user.addresses[0].address,
             date: "2019-08-11",
-            comment: "",
-            promo: ""
+            modalIsOpen: false,
         };
         this.setAddress = this.setAddress.bind(this);
         this.setDate = this.setDate.bind(this);
@@ -49,25 +48,7 @@ export default class Order extends React.Component<any, State> {
         // console.log('this.props.navigation', this.props.navigation);
     }
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.screenProps !== this.props.screenProps) {
-            let price = 0;
-            const basket = this.props.screenProps.basket;
-            const products = this.props.screenProps.products;
-            Object.keys(basket).map(id => {
-                price =
-                    price +
-                    parseInt(products[id].price) * parseInt(basket[id].count);
-            });
-            this.setState({ priceTotal: price });
-        }
-        if (
-            this.state.address === "" &&
-            this.props.screenProps.user.addresses
-        ) {
-            this.setState({
-                address: this.props.screenProps.user.addresses[0].address
-            });
-        }
+        
     }
     setAddress(address) {
         this.setState({ address: address });
@@ -75,49 +56,11 @@ export default class Order extends React.Component<any, State> {
     }
     setDate(newDate) {
         // this.setState({chosenDate: newDate});
-        this.props.navigation.actions.goBack();
+        // this.props.navigation.actions.goBack();
     }
-    makeOrder() {
-        // this.props.screenProps.makeOrder({
-
-        // });
-        // ${this.selectedYear}-${formatnum(getmnum(this.selectedMonth))}-${formatnum(this.selectedDay)} 00:00:00
-
-        let data :any= {};
-        data.fUserId = "1";
-        data.userId = "1";
-        data.siteName = "s1";
-        data.comment = this.state.comment;
-        data.address = this.state.address;
-        data.deliveryDate = this.state.date;
-
-        data.products = this.props.screenProps.basket;
-
-        // const orderButton = document.querySelector(`.jsOrderButton`);
-        // if(orderButton){orderButton.disabled = true;}
-
-        let headers = new Headers();
-        headers.set("Accept", "application/json");
-        let formData = new FormData();
-        formData.append("json", JSON.stringify(data));
-        // console.log("order sended-", data);
-        fetch(`https://subexpress.ru/apps_api/order.php`, {
-            method: "POST",
-            headers,
-            body: formData
-        })
-            .then(res => res.json())
-            .then(res => {
-                // console.log("order fetch res-", res);
-                if (res.sucsess) {
-                    alert('ok')
-                    // if(Swal){
-                    //     Swal.fire({title: 'Спасибо! Ваш заказ принят. ', text:'' , type: 'success'});
-                    // }
-                }
-            });
+    makeOrder(){
+        this.props.screenProps.makeOrder({address: this.state.address, date: this.state.date});
     }
-    openDatePicker() {}
     render() {
         const basket = this.props.screenProps.basket;
         const products = this.props.screenProps.products;
@@ -205,7 +148,7 @@ export default class Order extends React.Component<any, State> {
                         Дата и время доставки
                     </Text>
 
-                    <TouchableHighlight onPress={this.openDatePicker}>
+                    <TouchableHighlight >
                         <Text>{this.state.date}</Text>
                     </TouchableHighlight>
                     <DatePicker
@@ -246,6 +189,46 @@ export default class Order extends React.Component<any, State> {
                         Оформить заказ
                     </Text>
                 </TouchableOpacity>
+                {/*  */}
+                <Modals
+					// height={310}
+					isOpen={this.state.modalIsOpen}
+					isOpenHendler={isOpen => {
+						this.setState({ modalIsOpen: isOpen });
+					}}
+				>
+					<Text style={appStyles.modalText}>
+						Даю согласие{"\n"}на обработку заказа{"\n"}на следующий
+						{"\n"}рабочий день
+					</Text>
+					<View style={{ flexDirection: "row" }}>
+						<TouchableOpacity
+							onPress={() => {
+								this.setState({ modalIsOpen: false });
+							}}
+							style={[
+								appStyles.modalButton,
+								{ backgroundColor: "white" }
+							]}
+						>
+							<Text style={appStyles.modalButtonText}>Нет</Text>
+						</TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={() => {
+                            this.setState({ modalIsOpen: false });
+                        }}
+                         style={appStyles.modalButton}>
+							<Text
+								style={[
+									appStyles.modalButtonText,
+									{ color: "white" }
+								]}
+							>
+								Да
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</Modals>
             </SafeAreaView>
         );
     }
