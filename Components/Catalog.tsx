@@ -7,7 +7,8 @@ import {
 	TextInput,
 	Button,
 	TouchableOpacity,
-	Image
+    Image,
+    StyleSheet
 } from "react-native";
 import ProductItem from "./ProductItem";
 import Header from "./Header";
@@ -20,6 +21,17 @@ interface State {
 	search: string;
 	searchRes: Array<number>;
 }
+class MyCustomHeaderBackImage extends React.Component<any, any> {
+    render() {
+      const source = require("../img/ico-search.png");
+      return (
+        <Image
+          source={source}
+          style={[styles.myCustomHeaderBackImage, this.props.style]}
+        />
+      );
+    }
+  }
 export default class Catalog extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
@@ -62,12 +74,18 @@ export default class Catalog extends React.Component<any, State> {
 		}
 	}
 	static navigationOptions = {
-		// header: <Header
-		// title="Меню"
-		// titleasd="Меню"
-		// />,
-
-		title: "Меню"
+        // headerBackTitle: 'null',
+        // headerBackImage: MyCustomHeaderBackImage,
+        // headerStyle: appStyles.headerStyle,
+        // headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
+        // headerRight: (
+        //     <Button
+        //       onPress={() => alert('This is a button!')}
+        //       title="Info"
+        //       color="red"
+        //     />
+        //   ),
+        title: 'Меню'
 	};
 	search() {
 		console.log("search", this.state.search);
@@ -259,3 +277,17 @@ export default class Catalog extends React.Component<any, State> {
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+    myCustomHeaderBackImage: {
+      height: 14.5,
+      width: 24,
+      marginLeft: 9,
+      marginRight: 12,
+      marginVertical: 12,
+      resizeMode: 'contain',
+    },
+    myCustomHeaderBackImageAlt: {
+      tintColor: '#f00',
+    },
+  });

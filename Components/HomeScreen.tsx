@@ -133,7 +133,7 @@ export default class HomeScreen extends React.Component<any> {
 						/>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={() => this.props.navigation.navigate("Order")}
+						onPress={() => this.props.navigation.navigate("Stocks")}
 					>
 						<Image
 							style={{ width: 24, height: 24 }}

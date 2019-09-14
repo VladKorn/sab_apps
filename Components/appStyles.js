@@ -14,6 +14,20 @@ const appStyles = StyleSheet.create({
         flex: 1,
         paddingTop: Platform.OS === 'android' ? 25 : 0
     },
+    headerStyle:{
+        backgroundColor: 'white',
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowOpacity: 0,
+        shadowOffset: { height: 0,},
+        shadowRadius: 0,
+        elevation: 0
+    },
+    headerTitle:{
+        fontFamily: 'Neuron',
+        fontSize: 24,
+        color: Colors.text
+    },
     paddings:{
         paddingLeft: 15,
         paddingRight: 15

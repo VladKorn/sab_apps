@@ -183,16 +183,16 @@ export default class App extends React.Component<any, State> {
 		getData();
     }
     setOrderData(data){
-        console.log('setOrderData' , data)
+        // console.log('setOrderData' , data)
         this.setState({comment: data.comment , promo: data.promo});
 
     }
 	makeOrder(obj) {
         console.log('makeOrder');
 		let data: any = {};
-		data.userId = "1";
+		data.userId = this.state.user.id;
 		data.promo = this.state.promo;
-		data.comment = `(from mobile app)`+this.state.comment;
+		data.comment = `(from mobile app) `+this.state.comment;
 		data.address = obj.address;
         data.deliveryDate = obj.date;
 
@@ -350,8 +350,10 @@ const Home = createStackNavigator(
 		HistoryDetail: HistoryDetail
 	},
 	{
-		initialRouteName: "Order",
-		transitionConfig: nav => handleCustomTransition(nav)
+		initialRouteName: "Home",
+        transitionConfig: nav => handleCustomTransition(nav),
+        
+        
 	}
 );
 const AppNavigator2 = createDrawerNavigator(

@@ -75,7 +75,7 @@ export default class Sidebar extends React.Component<any, State> {
             this.props.navigation.router.childRouters.Home.childRouters
         ).filter(item => {
             return (
-                item !== "Home" && item !== "Order" && item !== "CategorySlider"
+                item !== "Home" && item !== "Order" && item !== "CategorySlider" && item !== "Delivery" && item !== "HistoryDetail"
             );
         });
         const menu = routes.map((route, index) => {
