@@ -15,13 +15,21 @@ const appStyles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? 25 : 0
     },
     headerStyle:{
+
         backgroundColor: 'white',
         shadowOpacity: 0,
-        borderBottomWidth: 0,
+        // borderBottomWidth: 0,
         shadowOpacity: 0,
         shadowOffset: { height: 0,},
         shadowRadius: 0,
-        elevation: 0
+        elevation: 0,
+
+        height: 70,
+        marginLeft: 15,
+        marginRight: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.lightgray
+
     },
     headerTitle:{
         fontFamily: 'Neuron',

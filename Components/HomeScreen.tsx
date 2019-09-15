@@ -16,7 +16,8 @@ import ImageSlider from "react-native-image-slider";
 
 export default class HomeScreen extends React.Component<any> {
 	static navigationOptions = {
-		header: null
+        header: null,
+        headerBackTitle: null,
 	};
 	render() {
 		const sliderImages = [];

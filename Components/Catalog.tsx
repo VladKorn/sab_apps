@@ -11,9 +11,9 @@ import {
     StyleSheet
 } from "react-native";
 import ProductItem from "./ProductItem";
-import Header from "./Header";
 
 import appStyles from "./appStyles";
+import customHeaderBackImage from "./customHeaderBackImage"
 
 interface State {
 	data: object;
@@ -21,17 +21,7 @@ interface State {
 	search: string;
 	searchRes: Array<number>;
 }
-class MyCustomHeaderBackImage extends React.Component<any, any> {
-    render() {
-      const source = require("../img/ico-search.png");
-      return (
-        <Image
-          source={source}
-          style={[styles.myCustomHeaderBackImage, this.props.style]}
-        />
-      );
-    }
-  }
+
 export default class Catalog extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
@@ -72,20 +62,25 @@ export default class Catalog extends React.Component<any, State> {
 		} else {
 			return this.state.isLoading;
 		}
-	}
+    }
+   
 	static navigationOptions = {
-        // headerBackTitle: 'null',
-        // headerBackImage: MyCustomHeaderBackImage,
-        // headerStyle: appStyles.headerStyle,
-        // headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
-        // headerRight: (
-        //     <Button
-        //       onPress={() => alert('This is a button!')}
-        //       title="Info"
-        //       color="red"
-        //     />
-        //   ),
-        title: 'Меню'
+        headerBackTitle: null,
+        headerBackImage: customHeaderBackImage,
+        headerStyle: appStyles.headerStyle,
+        headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
+        headerRight: (
+            <TouchableOpacity
+            onPress={()=>{
+                
+            }}>
+                <Image 
+                style={{width: 20 , height: 24}}
+                source={require('../img/ico-menu1.png')}
+                />
+            </TouchableOpacity>
+          ),
+        // title: 'Меню'
 	};
 	search() {
 		console.log("search", this.state.search);
@@ -218,9 +213,9 @@ export default class Catalog extends React.Component<any, State> {
 		// console.log('items' , this.state.data);
 		return (
 			// this.state.procunts.map
-			<SafeAreaView style={appStyles.page}>
+			<SafeAreaView style={appStyles.SafeAreaView}>
 				{/* <Text>{this.props.navigation}</Text> */}
-				<ScrollView style={{}}>
+				<ScrollView style={{paddingTop: 25}}>
 					<View style={{ alignItems: "center" }}>
 						<View
 							style={{
@@ -277,17 +272,3 @@ export default class Catalog extends React.Component<any, State> {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-    myCustomHeaderBackImage: {
-      height: 14.5,
-      width: 24,
-      marginLeft: 9,
-      marginRight: 12,
-      marginVertical: 12,
-      resizeMode: 'contain',
-    },
-    myCustomHeaderBackImageAlt: {
-      tintColor: '#f00',
-    },
-  });

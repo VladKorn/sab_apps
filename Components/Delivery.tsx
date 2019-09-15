@@ -21,6 +21,7 @@ interface State {
 	address: string;
 	date: string;
 	modalIsOpen: boolean;
+	modalOrderIsOpen: boolean;
 	DatePickerIsOpen: boolean;
 
 	// data: any;
@@ -33,7 +34,8 @@ export default class Order extends React.Component<any, State> {
 			priceTotal: 0,
 			address: this.props.screenProps.user.addresses[0].address,
 			date: "2019-08-11",
-			modalIsOpen: false,
+            modalIsOpen: false,
+            modalOrderIsOpen: false,
 			DatePickerIsOpen: false
 		};
 		this.setAddress = this.setAddress.bind(this);
@@ -68,7 +70,7 @@ export default class Order extends React.Component<any, State> {
 			parseInt(dateArr[0]) === date.getFullYear() &&
 			parseInt(dateArr[1]) === date.getMonth() + 1 &&
 			parseInt(dateArr[2]) === date.getDate() &&
-			date.getHours() > 11
+			date.getHours() > 17
 		) {
 			return false;
 		} else {
@@ -83,16 +85,20 @@ export default class Order extends React.Component<any, State> {
 		// this.setState({chosenDate: newDate});
 		// this.props.navigation.actions.goBack();
 	}
-	makeOrder() {
-		this.props.screenProps.makeOrder({
+	async makeOrder() {
+		const success = await this.props.screenProps.makeOrder({
 			address: this.state.address,
 			date: this.state.date
-		});
+        });
+        console.log('success' , success);
+        if(success){
+            this.setState({ modalOrderIsOpen: true });
+        } else{
+            alert('error');
+        }
 	}
 	render() {
 		const addresses = this.props.screenProps.user.addresses || [];
-		// console.log("addresses", this.props.screenProps.user.addresses);
-
 		const addressesItems = addresses.map(item => {
 			const isCurrent = item.address === this.state.address;
 			return (
@@ -258,7 +264,7 @@ export default class Order extends React.Component<any, State> {
 						<TouchableOpacity
 							onPress={() => {
 								this.setState({ modalIsOpen: false });
-								this.makeOrder();
+                                this.makeOrder();
 							}}
 							style={appStyles.modalButton}
 						>
@@ -273,6 +279,35 @@ export default class Order extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</Modals>
+                <Modals
+					height={250}
+					isOpen={this.state.modalOrderIsOpen}
+					isOpenHendler={isOpen => {}}
+				>
+					<Text style={appStyles.modalText}>
+                        Спасибо!{"\n"}Ваш заказ принят
+					</Text>
+					<View style={{ flexDirection: "row", marginTop: 10 }}>
+					
+						<TouchableOpacity
+							onPress={() => {
+                                this.setState({ modalOrderIsOpen: false });
+                                setTimeout(()=>{this.props.navigation.navigate('Home')},500);
+							}}
+							style={appStyles.modalButton}
+						>
+							<Text
+								style={[
+									appStyles.modalButtonText,
+									{ color: "white" }
+								]}
+							>
+								Ок
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</Modals>
+                
 			</SafeAreaView>
 		);
 	}

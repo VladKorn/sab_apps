@@ -1,11 +1,13 @@
 import React from "react";
 import { View, ShadowPropTypesIOS, Text, Alert } from "react-native";
 import {
-	createStackNavigator,
-	createSwitchNavigator,
 	createAppContainer,
-	createDrawerNavigator
+	
 } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import { createDrawerNavigator } from "react-navigation-drawer";
+
+
 import { fromRight, fromBottom } from "react-navigation-transitions";
 import * as Font from "expo-font";
 import LoginForm from "./Components/LoginForm";
@@ -100,6 +102,13 @@ export default class App extends React.Component<any, State> {
 		this.setState({ fontLoaded: true });
 	};
 	basketApi(obj) {
+        const storeBasket = async basket => {
+            try {
+                await AsyncStorage.setItem("@basket", JSON.stringify( basket));
+            } catch (e) {
+                Alert.alert(e);
+            }
+        };
 		let basket = this.state.basket;
 		if (obj.action === "setProduct") {
 			if (obj.params.count === 0) {
@@ -108,16 +117,13 @@ export default class App extends React.Component<any, State> {
 				basket[obj.params.productId] = { count: obj.params.count };
 			}
 			this.setState({ basket: basket });
-
-			const storeBasket = async basket => {
-				try {
-					await AsyncStorage.setItem("@basket", JSON.stringify( basket));
-				} catch (e) {
-					Alert.alert(e);
-				}
-			};
 			storeBasket(basket);
-		}
+        }
+		if (obj.action === "clear") {
+            this.setState({ basket: {} });
+			storeBasket({});
+            
+        }        
 	}
 	openProduct() {}
 	getCatalog() {}
@@ -187,7 +193,7 @@ export default class App extends React.Component<any, State> {
         this.setState({comment: data.comment , promo: data.promo});
 
     }
-	makeOrder(obj) {
+	async makeOrder(obj) {
         console.log('makeOrder');
 		let data: any = {};
 		data.userId = this.state.user.id;
@@ -205,7 +211,7 @@ export default class App extends React.Component<any, State> {
         formData.append("json", JSON.stringify(data));
         
 		console.log("order sended-", JSON.stringify(data));
-		fetch(`https://subexpress.ru/apps_api/order.php`, {
+		const success = await fetch(`https://subexpress.ru/apps_api/order.php`, {
 			method: "POST",
 			headers,
 			body: formData
@@ -214,10 +220,12 @@ export default class App extends React.Component<any, State> {
 			.then(res => {
 				// console.log("order fetch res-", res);
 				if (res.sucsess) {
-					alert("ok");
+                    return 'success';
+					// alert("ok");
 					
-				}
-			});
+				} else{ return 'error'}
+            });
+        return success;
 	}
 	addToFavorite(id) {
 		let favorite: Array<number> = this.state.favorite;
