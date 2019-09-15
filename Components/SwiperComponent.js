@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { AppRegistry, StyleSheet, Text, View } from 'react-native'
 import CategorySliderItem from "./CategorySliderItem";
+import Basket from "./Basket";
 
 import Swiper from 'react-native-swiper'
 
@@ -67,6 +68,11 @@ export default class SwiperComponent extends Component {
           {this._renderSlides()}
         
       </Swiper>
+     {!this.state.isZoom? <Basket 
+                    basket={this.props.basket}
+                    products={this.props.products}
+                    navigation={this.props.navigation}
+                />:null} 
       </View>
     )
   }
