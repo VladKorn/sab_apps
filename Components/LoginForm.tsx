@@ -24,10 +24,8 @@ export default class LoginForm extends React.Component<any, State> {
     constructor(props) {
         super(props);
         this.state = {
-            // log: "webvladkorn@gmail.com",
-            // pas: "jFpidj"
-            log: "admin",
-            pas: "ie1f32sq",
+            log: "",
+            pas: "",
             save: true,
         };
         this.login = this.login.bind(this);

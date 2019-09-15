@@ -127,8 +127,6 @@ export default class App extends React.Component<any, State> {
 					//
 
 					const req = {
-						// log: "admin",
-						// pas: "ie1f32sq"
 						log,
 						pas
 					};
