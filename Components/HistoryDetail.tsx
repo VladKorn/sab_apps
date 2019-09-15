@@ -268,7 +268,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 						</View>
 						<TouchableOpacity
 							onPress={() => {
-								Linking.openURL("tel:+84996775060");
+                                Linking.openURL(`tel:${phone}`);
 							}}
 							style={[
 								appStyles.button,

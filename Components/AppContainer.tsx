@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Text , StyleSheet} from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -18,6 +19,13 @@ import SidebarCatalog from "./SidebarCatalog";
 import Contacts from "./Contacts";
 import History from "./History";
 import HistoryDetail from "./HistoryDetail";
+import Addresses from "./Addresses";
+
+import { TouchableOpacity, Image } from "react-native";
+
+import customHeaderBackImage from "./customHeaderBackImage"
+import appStyles from "./appStyles";
+
 
 const handleCustomTransition = ({ scenes }) => {
 	const prevScene = scenes[scenes.length - 2];
@@ -37,16 +45,34 @@ const Home = createStackNavigator(
 		// LoginForm: LoginForm,
 		Home: HomeScreen,
 		CategorySlider: CategorySlider,
-		Catalog: Catalog,
+		Catalog: {
+			screen: Catalog,
+			navigationOptions: ({ navigation }) => ({
+                headerTitle: 'Меню',
+				headerRight: (
+					<TouchableOpacity
+						onPress={() => {
+                            // navigation.openDrawer();
+                            navigation.dangerouslyGetParent().dangerouslyGetParent().dangerouslyGetParent().openDrawer()
+						}}
+					>
+						<Image
+							style={{ width: 20, height: 24 , marginRight: 20}}
+							source={require("../img/ico-menu1.png")}
+						/>
+					</TouchableOpacity>
+				)
+			})
+		},
 		News: News,
 		Stocks: Stocks,
 		Favorites: Catalog,
 		OrderHistory: History,
-		Addresses: News,
+		Addresses: Addresses,
 		User: News,
-		Info: News,
+		Info: Contacts,
 		Contacts: Contacts,
-		OrderByPhone: News,
+		OrderByPhone: Contacts,
 		Order: Order,
 		Delivery: Delivery,
 		HistoryDetail: HistoryDetail
@@ -54,8 +80,12 @@ const Home = createStackNavigator(
 	{
 		initialRouteName: "Home",
         transitionConfig: nav => handleCustomTransition(nav),
-        
-        
+        defaultNavigationOptions: {
+            headerBackImage: customHeaderBackImage,
+            headerBackTitle: null,
+            headerStyle: appStyles.headerStyle,
+            headerTitleStyle: appStyles.headerTitle ,
+          },
 	}
 );
 const AppNavigator2 = createDrawerNavigator(

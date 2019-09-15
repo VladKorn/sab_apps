@@ -1,16 +1,17 @@
 import React from "react";
 import { View, ShadowPropTypesIOS, Text, Alert } from "react-native";
 
-
 import * as Font from "expo-font";
 import LoginForm from "./Components/LoginForm";
-import AppContainer from './Components/AppContainer'
+import AppContainer from "./Components/AppContainer";
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
-
+interface User {
+    id: number;
+}
 interface State {
-	user: object;
+	user: User;
 	catalog: object;
 	basket: object;
 	products: object;
@@ -26,7 +27,7 @@ export default class App extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: {},
+			user: {id: null},
 			catalog: {},
 			favorite: [],
 			products: {},
@@ -48,6 +49,7 @@ export default class App extends React.Component<any, State> {
 		this.setOrderData = this.setOrderData.bind(this);
 		this.login = this.login.bind(this);
 		this.makeOrder = this.makeOrder.bind(this);
+		this.sendMail = this.sendMail.bind(this);
 	}
 	componentDidMount() {
 		this.loadAssetsAsync();
@@ -225,9 +227,8 @@ export default class App extends React.Component<any, State> {
 		headers.set("Accept", "application/json");
 		let formData = new FormData();
 		formData.append("json", JSON.stringify(data));
-		let fetchOptions = { method: "POST", headers, body: formData };
 		// console.log('sended-', data)
-		fetch(`https://subexpress.ru/apps_api/favorites.php`, fetchOptions)
+		fetch(`https://subexpress.ru/apps_api/favorites.php`, { method: "POST", headers, body: formData })
 			.then(res => res.json())
 			.then(res => {
 				// console.log('fetch res-', res);
@@ -240,6 +241,32 @@ export default class App extends React.Component<any, State> {
 	}
 	// vladkorn
 	// afihso323nc1
+	async sendMail(data) {
+        let success:boolean = false;
+        data['userId'] = this.state.user.id;
+		console.log("sendMail", data);
+		await fetch(`https://subexpress.ru/apps_api/email.php`, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data)
+		})
+			.then(res => res.json())
+			.then(res => {
+                console.log('fetch res-', res.success);
+                console.log('typeof', typeof(res.success));
+                                                 
+                
+				if (res.success) {
+                    console.log('fetch sucsess');
+					// if(prod.count === 0){delete state.inBasket[prod.id]}
+                }
+                success = res.success;
+            });
+        return success;
+	}
 	login(log, pas, save) {
 		this.getData(log, pas);
 		if (save) {
@@ -295,7 +322,8 @@ export default class App extends React.Component<any, State> {
 					stocks: this.state.stocks,
 					favorite: this.state.favorite,
 					setOrderData: this.setOrderData,
-					addToFavorite: this.addToFavorite
+					addToFavorite: this.addToFavorite,
+					sendMail: this.sendMail
 				}}
 			/>
 		) : null;

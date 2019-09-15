@@ -34,7 +34,10 @@ const appStyles = StyleSheet.create({
     headerTitle:{
         fontFamily: 'Neuron',
         fontSize: 24,
-        color: Colors.text
+        color: Colors.text,
+        textAlign: 'left',
+        width: '100%',
+        flex: 1,
     },
     paddings:{
         paddingLeft: 15,

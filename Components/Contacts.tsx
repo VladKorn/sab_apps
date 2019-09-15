@@ -11,23 +11,26 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
+import Form from './Form';
+import {phone , phoneFormated} from '../constants/data.js';
 export default class Contacts extends React.Component<any> {
+  
 	static navigationOptions = {
 		title: "Контакты"
 	};
 	render() {
 		return (
-			<View>
+			<ScrollView>
 				<View
 					style={{
 						backgroundColor: Colors.lightgray,
-                        alignItems: "center",
-                        paddingTop: 30,
-                         paddingBottom: 30
+						alignItems: "center",
+						paddingTop: 30,
+						paddingBottom: 30
 					}}
 				>
 					<Image
-						style={{ width: 144, height: 56.43 }}
+						style={{ width: 144, height: 56.43 , marginBottom: 20 }}
 						source={require("../img/logo.png")}
 					/>
 					<Text
@@ -45,14 +48,15 @@ export default class Contacts extends React.Component<any> {
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
-							fontFamily: "Neuron"
+                            fontFamily: "Neuron",
+                            marginBottom: 10
 						}}
 					>
-						Телефон для связи
+						Телефон для связи{phone}
 					</Text>
 					<TouchableOpacity
 						onPress={() => {
-							Linking.openURL("tel:+84996775060");
+							Linking.openURL(`tel:${phone}`);
 						}}
 					>
 						<Text
@@ -60,10 +64,11 @@ export default class Contacts extends React.Component<any> {
 								textAlign: "center",
 								fontSize: 28,
 								color: Colors.text,
-								fontFamily: "Neuron-Bold"
+                                fontFamily: "Neuron-Bold",
+                                marginBottom: 10,
 							}}
 						>
-							8 499 677 50 60
+							{phoneFormated}
 						</Text>
 						<View style={appStyles.button}>
 							<Text style={appStyles.buttonText}>
@@ -72,7 +77,7 @@ export default class Contacts extends React.Component<any> {
 						</View>
 					</TouchableOpacity>
 					<View style={appStyles.hr} />
-                    <Text
+					<Text
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
@@ -81,7 +86,7 @@ export default class Contacts extends React.Component<any> {
 					>
 						E-mail
 					</Text>
-                    <TouchableOpacity
+					<TouchableOpacity
 						onPress={() => {
 							Linking.openURL("mailto:zakaz@subexpress.ru");
 						}}
@@ -96,17 +101,28 @@ export default class Contacts extends React.Component<any> {
 						>
 							ZAKAZ@SUBEXPRESS.RU
 						</Text>
-						
 					</TouchableOpacity>
 				</View>
-                <View style={{paddingTop: 30, paddingBottom: 30}}>
-                    <Text style={{
+				<View style={{ paddingTop: 30 }}>
+					<Text
+						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
 							fontFamily: "Neuron"
-						}}>Заполните форму обратной связи{"\n"}и мы свяжемся с вами в ближайшее время</Text>
-                </View>
-			</View>
+						}}
+					>
+						Заполните форму обратной связи{"\n"}и мы свяжемся с вами
+						в ближайшее время
+					</Text>
+                    
+				</View>
+                    <Form 
+                        style={{paddingBottom: 50}}
+                        title='Форма обратной связи'
+                        fromPage='С страницы контакты'
+                        sendMail={this.props.screenProps.sendMail}
+                    />
+			</ScrollView>
 		);
 	}
 }

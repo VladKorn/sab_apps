@@ -13,7 +13,6 @@ import {
 import ProductItem from "./ProductItem";
 
 import appStyles from "./appStyles";
-import customHeaderBackImage from "./customHeaderBackImage"
 
 interface State {
 	data: object;
@@ -64,9 +63,9 @@ export default class Catalog extends React.Component<any, State> {
 		}
     }
    
-	static navigationOptions = {
+
+	// static navigationOptions = {
         // headerBackTitle: null,
-        // headerBackImage: customHeaderBackImage,
         // headerStyle: appStyles.headerStyle,
         // headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
         // headerRight: (
@@ -81,7 +80,7 @@ export default class Catalog extends React.Component<any, State> {
         //     </TouchableOpacity>
         //   ),
         // title: 'Меню'
-	};
+	// };
 	search() {
 		console.log("search", this.state.search);
 		fetch(

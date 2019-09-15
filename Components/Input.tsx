@@ -3,10 +3,19 @@ import Colors from "../constants/Colors";
 import appStyles from "./appStyles";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 interface State {
-    // text: string;
     isFocus: boolean;
 }
-export default class Input extends React.Component<any, State> {
+interface Props {
+    // text: string;
+    placeholder: string;
+    value?: string;
+    autoFocus?: boolean;
+    center?: boolean;
+    error?: boolean;
+    onChangeText: (text) => void;
+    
+}
+export default class Input extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {

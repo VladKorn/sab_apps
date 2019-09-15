@@ -7,6 +7,11 @@ import Modal ,{
 import { View, Text, Animated, StyleSheet, Image } from "react-native";
 import { BlurView } from "expo-blur";
 
+interface Props {
+	isOpen: boolean;
+	isOpenHendler: (boolean)=> void;
+	height?: number;
+}
 interface State {
 	visible: boolean;
 	visibleBlur: boolean;
@@ -14,7 +19,7 @@ interface State {
 }
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-export default class Modals extends React.Component<any, State> {
+export default class Modals extends React.Component<Props, State> {
 	constructor(props) {
 		super(props);
 		this.state = {

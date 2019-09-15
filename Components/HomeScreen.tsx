@@ -180,7 +180,7 @@ export default class HomeScreen extends React.Component<any> {
 						</View>
 					</TouchableOpacity>
 				</View>
-				<View style={{ height: 270 }}>
+				<View style={{ height: 270  }}>
 					<ImageSlider
 						loopBothSides
 						images={sliderImages}
@@ -200,7 +200,7 @@ export default class HomeScreen extends React.Component<any> {
 					/>
 				</View>
 				<View >
-					<Text style={{...appStyles.sectTitle , paddingLeft: 15}}>Новинки</Text>
+					<Text style={{...appStyles.sectTitle , paddingLeft: 15 , marginTop: -20}}>Новинки</Text>
 					<ScrollView style={{paddingLeft: 15}} horizontal={true}>{products}</ScrollView>
 					<Text style={{...appStyles.sectTitle , paddingLeft: 15}}>Меню</Text>
 					<ScrollView style={{paddingLeft: 15}}  horizontal={true}>{catalog}</ScrollView>

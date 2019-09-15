@@ -35,7 +35,7 @@ export default class Order extends React.Component<any, State> {
 			address: this.props.screenProps.user.addresses[0].address,
 			date: "2019-08-11",
             modalIsOpen: false,
-            modalOrderIsOpen: false,
+            modalOrderIsOpen: true,
 			DatePickerIsOpen: false
 		};
 		this.setAddress = this.setAddress.bind(this);

@@ -150,9 +150,7 @@ export default class Sidebar extends React.Component<any, State> {
                 >
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.dispatch(
-                                DrawerActions.closeDrawer()
-                            );
+                            this.props.navigation.closeDrawer()
                         }}
                     >
                         <Image
