@@ -1,29 +1,10 @@
 import React from "react";
 import { View, ShadowPropTypesIOS, Text, Alert } from "react-native";
-import {
-	createAppContainer,
-	
-} from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator } from "react-navigation-drawer";
 
 
-import { fromRight, fromBottom } from "react-navigation-transitions";
 import * as Font from "expo-font";
 import LoginForm from "./Components/LoginForm";
-import HomeScreen from "./Components/HomeScreen";
-import Catalog from "./Components/Catalog";
-import News from "./Components/News";
-import Stocks from "./Components/Stocks";
-import Order from "./Components/Order";
-import Delivery from "./Components/Delivery";
-
-import CategorySlider from "./Components/CategorySlider";
-import Sidebar from "./Components/Sidebar";
-import SidebarCatalog from "./Components/SidebarCatalog";
-import Contacts from "./Components/Contacts";
-import History from "./Components/History";
-import HistoryDetail from "./Components/HistoryDetail";
+import AppContainer from './Components/AppContainer'
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
@@ -38,8 +19,8 @@ interface State {
 	stocks: object;
 	favorite: Array<number>;
 	userError: object;
-    comment: string;
-    promo: string;
+	comment: string;
+	promo: string;
 }
 export default class App extends React.Component<any, State> {
 	constructor(props) {
@@ -50,12 +31,12 @@ export default class App extends React.Component<any, State> {
 			favorite: [],
 			products: {},
 			stocks: {},
-            basket: {},
+			basket: {},
 			isLoading: false,
 			fontLoaded: false,
-            userError: {},
-            comment: '',
-            promo: '',
+			userError: {},
+			comment: "",
+			promo: ""
 		};
 
 		// bind functions..
@@ -63,11 +44,10 @@ export default class App extends React.Component<any, State> {
 		this.basketApi = this.basketApi.bind(this);
 		this.getData = this.getData.bind(this);
 		this.openProduct = this.openProduct.bind(this);
-        this.addToFavorite = this.addToFavorite.bind(this);
-        this.setOrderData = this.setOrderData.bind(this);
-        this.login = this.login.bind(this);
-        this.makeOrder = this.makeOrder.bind(this);
-        
+		this.addToFavorite = this.addToFavorite.bind(this);
+		this.setOrderData = this.setOrderData.bind(this);
+		this.login = this.login.bind(this);
+		this.makeOrder = this.makeOrder.bind(this);
 	}
 	componentDidMount() {
 		this.loadAssetsAsync();
@@ -75,21 +55,17 @@ export default class App extends React.Component<any, State> {
 
 		const getBasket = async () => {
 			try {
-                const basket = await AsyncStorage.getItem("@basket");
-                // console.log('basket1' , basket);
-                if(basket){
-                    this.setState({ basket: JSON.parse( basket) });
-                }
-                return basket;
-                
+				const basket = await AsyncStorage.getItem("@basket");
+				// console.log('basket1' , basket);
+				if (basket) {
+					this.setState({ basket: JSON.parse(basket) });
+				}
+				return basket;
 			} catch (e) {
 				Alert.alert(e);
 			}
-        };
-        getBasket();
-
-        
-        
+		};
+		getBasket();
 	}
 	loadAssetsAsync = async () => {
 		await Font.loadAsync({
@@ -102,13 +78,13 @@ export default class App extends React.Component<any, State> {
 		this.setState({ fontLoaded: true });
 	};
 	basketApi(obj) {
-        const storeBasket = async basket => {
-            try {
-                await AsyncStorage.setItem("@basket", JSON.stringify( basket));
-            } catch (e) {
-                Alert.alert(e);
-            }
-        };
+		const storeBasket = async basket => {
+			try {
+				await AsyncStorage.setItem("@basket", JSON.stringify(basket));
+			} catch (e) {
+				Alert.alert(e);
+			}
+		};
 		let basket = this.state.basket;
 		if (obj.action === "setProduct") {
 			if (obj.params.count === 0) {
@@ -118,12 +94,11 @@ export default class App extends React.Component<any, State> {
 			}
 			this.setState({ basket: basket });
 			storeBasket(basket);
-        }
+		}
 		if (obj.action === "clear") {
-            this.setState({ basket: {} });
+			this.setState({ basket: {} });
 			storeBasket({});
-            
-        }        
+		}
 	}
 	openProduct() {}
 	getCatalog() {}
@@ -187,45 +162,47 @@ export default class App extends React.Component<any, State> {
 			}
 		};
 		getData();
-    }
-    setOrderData(data){
-        // console.log('setOrderData' , data)
-        this.setState({comment: data.comment , promo: data.promo});
-
-    }
+	}
+	setOrderData(data) {
+		// console.log('setOrderData' , data)
+		this.setState({ comment: data.comment, promo: data.promo });
+	}
 	async makeOrder(obj) {
-        console.log('makeOrder');
+		console.log("makeOrder");
 		let data: any = {};
 		data.userId = this.state.user.id;
 		data.promo = this.state.promo;
-		data.comment = `(from mobile app) `+this.state.comment;
+		data.comment = `(from mobile app) ` + this.state.comment;
 		data.address = obj.address;
-        data.deliveryDate = obj.date;
-
+		data.deliveryDate = obj.date;
 
 		data.products = this.state.basket;
 
 		let headers = new Headers();
 		headers.set("Accept", "application/json");
 		let formData = new FormData();
-        formData.append("json", JSON.stringify(data));
-        
+		formData.append("json", JSON.stringify(data));
+
 		console.log("order sended-", JSON.stringify(data));
-		const success = await fetch(`https://subexpress.ru/apps_api/order.php`, {
-			method: "POST",
-			headers,
-			body: formData
-		})
+		const success = await fetch(
+			`https://subexpress.ru/apps_api/order.php`,
+			{
+				method: "POST",
+				headers,
+				body: formData
+			}
+		)
 			.then(res => res.json())
 			.then(res => {
 				// console.log("order fetch res-", res);
 				if (res.sucsess) {
-                    return 'success';
+					return "success";
 					// alert("ok");
-					
-				} else{ return 'error'}
-            });
-        return success;
+				} else {
+					return "error";
+				}
+			});
+		return success;
 	}
 	addToFavorite(id) {
 		let favorite: Array<number> = this.state.favorite;
@@ -316,75 +293,14 @@ export default class App extends React.Component<any, State> {
 					makeOrder: this.makeOrder,
 					user: this.state.user,
 					stocks: this.state.stocks,
-                    favorite: this.state.favorite,
-                    setOrderData: this.setOrderData,
+					favorite: this.state.favorite,
+					setOrderData: this.setOrderData,
 					addToFavorite: this.addToFavorite
 				}}
 			/>
 		) : null;
 	}
 }
-
-const handleCustomTransition = ({ scenes }) => {
-	const prevScene = scenes[scenes.length - 2];
-	const nextScene = scenes[scenes.length - 1];
-	if (
-		nextScene.route.routeName === "CategorySlider" ||
-		nextScene.route.routeName === "HistoryDetail"
-	) {
-		return fromBottom();
-	} else {
-		return fromRight();
-	}
-};
-
-const Home = createStackNavigator(
-	{
-		// LoginForm: LoginForm,
-		Home: HomeScreen,
-		CategorySlider: CategorySlider,
-		Catalog: Catalog,
-		News: News,
-		Stocks: Stocks,
-		Favorites: Catalog,
-		OrderHistory: History,
-		Addresses: News,
-		User: News,
-		Info: News,
-		Contacts: Contacts,
-		OrderByPhone: News,
-		Order: Order,
-		Delivery: Delivery,
-		HistoryDetail: HistoryDetail
-	},
-	{
-		initialRouteName: "Home",
-        transitionConfig: nav => handleCustomTransition(nav),
-        
-        
-	}
-);
-const AppNavigator2 = createDrawerNavigator(
-	{
-		Home: Home
-	},
-	{
-		contentComponent: Sidebar,
-		drawerWidth: 310
-	}
-);
-const AppNavigator = createDrawerNavigator(
-	{
-		Home: AppNavigator2
-	},
-	{
-		contentComponent: SidebarCatalog,
-		drawerPosition: "right",
-		drawerWidth: 310
-	}
-);
-
-const AppContainer = createAppContainer(AppNavigator);
 
 // export default ()=><View style={{flex: 1}}><AppContainer/></View>;
 

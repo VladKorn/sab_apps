@@ -65,21 +65,21 @@ export default class Catalog extends React.Component<any, State> {
     }
    
 	static navigationOptions = {
-        headerBackTitle: null,
-        headerBackImage: customHeaderBackImage,
-        headerStyle: appStyles.headerStyle,
-        headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
-        headerRight: (
-            <TouchableOpacity
-            onPress={()=>{
+        // headerBackTitle: null,
+        // headerBackImage: customHeaderBackImage,
+        // headerStyle: appStyles.headerStyle,
+        // headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
+        // headerRight: (
+        //     <TouchableOpacity
+        //     onPress={()=>{
                 
-            }}>
-                <Image 
-                style={{width: 20 , height: 24}}
-                source={require('../img/ico-menu1.png')}
-                />
-            </TouchableOpacity>
-          ),
+        //     }}>
+        //         <Image 
+        //         style={{width: 20 , height: 24}}
+        //         source={require('../img/ico-menu1.png')}
+        //         />
+        //     </TouchableOpacity>
+        //   ),
         // title: 'Меню'
 	};
 	search() {
