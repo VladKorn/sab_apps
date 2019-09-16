@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         flexDirection: "row",
         backgroundColor: "#ffffff",
-        marginLeft: 55,
+        // marginLeft: 55,
         paddingBottom: 15,
         paddingTop: 15,
         marginRight: 15,
-        // paddingLeft: 15,
-        // paddingLeft: 15,
         paddingRight: 10,
+        marginLeft: 15,
+
 
         // width: '100%',
 
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
         width: 100,
         borderRadius: 10,
         height: 100,
-        marginLeft: -40,
+        // marginLeft: -40,
+        marginLeft: 5,
         marginTop: -10,
         marginBottom: -10,
         marginRight: 15
