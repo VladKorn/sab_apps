@@ -21,7 +21,9 @@ import Carousel from "react-native-looped-carousel";
 import SwiperComponent from "./SwiperComponent";
 import CategorySliderItem from "./CategorySliderItem";
 
-
+// interface Slides {
+//     id: number;
+// }
 interface State {
     currentProductId: number;
     currentIndex: number;

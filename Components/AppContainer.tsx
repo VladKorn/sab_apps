@@ -52,7 +52,6 @@ const Home = createStackNavigator(
 				headerRight: (
 					<TouchableOpacity
 						onPress={() => {
-                            // navigation.openDrawer();
                             navigation.dangerouslyGetParent().dangerouslyGetParent().dangerouslyGetParent().openDrawer()
 						}}
 					>
@@ -73,7 +72,24 @@ const Home = createStackNavigator(
 		Info: Contacts,
 		Contacts: Contacts,
 		OrderByPhone: Contacts,
-		Order: Order,
+        Order: {
+            screen: Order,
+            navigationOptions: ({ navigation }) => ({
+				headerRight: (
+					<TouchableOpacity
+						onPress={() => {
+                            navigation.navigate('Order',{'action': "clear"});
+                            // navigation.dangerouslyGetParent().dangerouslyGetParent().dangerouslyGetParent().openDrawer()
+						}}
+					>
+						<Image
+							style={{ width: 18, height: 21 , marginRight: 20}}
+							source={require("../img/ico-delete2.png")}
+						/>
+					</TouchableOpacity>
+				)
+			})
+        },
 		Delivery: Delivery,
 		HistoryDetail: HistoryDetail
 	},

@@ -73,7 +73,8 @@ export default class SwiperComponent extends Component {
                     products={this.props.products}
                     navigation={this.props.navigation}
                 />:null} 
-      </View>
+
+        </View>
     )
   }
 }

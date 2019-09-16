@@ -8,7 +8,7 @@ import {
 	Image,
 	TouchableOpacity,
 	SafeAreaView,
-	StyleSheet,
+	StyleSheet
 } from "react-native";
 import Colors from "../constants/Colors.js";
 
@@ -31,7 +31,7 @@ export default class Order extends React.Component<any, State> {
 			priceTotal: 0,
 			comment: "",
 			promo: "",
-			modalIsOpen: false,
+			modalIsOpen: false
 		};
 		this.setDate = this.setDate.bind(this);
 		this.makeOrder = this.makeOrder.bind(this);
@@ -40,32 +40,37 @@ export default class Order extends React.Component<any, State> {
 		title: "Оформление заказа"
 	};
 	componentDidMount() {
-        this._totalPrice();
+		this._totalPrice();
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-        this._totalPrice()
+		this._totalPrice();
+		const nav = this.props.navigation;
+		if (nav && nav.state && nav.state.params && nav.state.params.action) {
+            // console.log(this.props.screenProps.basket)
+            if(nav.state.params.action === 'clear' && Object.keys(this.props.screenProps.basket).length > 0){
+                this.props.screenProps.basketApi({action: 'clear'})
+            }
+		}
 	}
-    _totalPrice(){
-        let price = 0;
-        const basket = this.props.screenProps.basket;
-        const products = this.props.screenProps.products;
-        Object.keys(basket).map(id => {
-            price =
-                price +
-                parseInt(products[id].price) * parseInt(basket[id].count);
-        });
-        if(this.state.priceTotal !== price){
-            this.setState({ priceTotal: price });
-        }
-    }
+	_totalPrice() {
+		let price = 0;
+		const basket = this.props.screenProps.basket;
+		const products = this.props.screenProps.products;
+		Object.keys(basket).map(id => {
+			price =
+				price +
+				parseInt(products[id].price) * parseInt(basket[id].count);
+		});
+		if (this.state.priceTotal !== price) {
+			this.setState({ priceTotal: price });
+		}
+	}
 	setDate(newDate) {
 		// this.setState({chosenDate: newDate});
 		this.props.navigation.actions.goBack();
 	}
-	makeOrder() {
-
-	}
+	makeOrder() {}
 	render() {
 		const basket = this.props.screenProps.basket;
 		const products = this.props.screenProps.products;
@@ -87,7 +92,7 @@ export default class Order extends React.Component<any, State> {
 							/>
 						);
 				  })
-				: [];
+				: <Text style={appStyles.text}>Корзина пуста</Text>;
 
 		return (
 			<SafeAreaView style={appStyles.page}>
@@ -183,9 +188,13 @@ export default class Order extends React.Component<any, State> {
 				</ScrollView>
 				<TouchableOpacity
 					onPress={() => {
-
-                        this.props.screenProps.setOrderData({comment: this.state.comment, promo: this.state.promo});
-                        this.state.priceTotal < 1500 ? this.setState({ modalIsOpen: true }): this.props.navigation.navigate('Delivery');
+						this.props.screenProps.setOrderData({
+							comment: this.state.comment,
+							promo: this.state.promo
+						});
+						this.state.priceTotal < 1500
+							? this.setState({ modalIsOpen: true })
+							: this.props.navigation.navigate("Delivery");
 					}}
 					style={appStyles.buttonBottom}
 				>
@@ -201,12 +210,14 @@ export default class Order extends React.Component<any, State> {
 						this.setState({ modalIsOpen: isOpen });
 					}}
 				>
-					<Text style={appStyles.modalText}>Ваш заказ менее {"\n"} 1500 рублей
+					<Text style={appStyles.modalText}>
+						Ваш заказ менее {"\n"} 1500 рублей
 					</Text>
-                    <Text style={appStyles.modalTextDesc}>
-                    Вы можете добавить позиции {"\n"}до нужной суммы или оформить заказ {"\n"}с доставкой 150 рублей
-                        </Text>
-                        <View style={{ flexDirection: "column" }}>
+					<Text style={appStyles.modalTextDesc}>
+						Вы можете добавить позиции {"\n"}до нужной суммы или
+						оформить заказ {"\n"}с доставкой 150 рублей
+					</Text>
+					<View style={{ flexDirection: "column" }}>
 						<TouchableOpacity
 							onPress={() => {
 								this.setState({ modalIsOpen: false });
@@ -216,15 +227,19 @@ export default class Order extends React.Component<any, State> {
 								{ backgroundColor: "white" }
 							]}
 						>
-							<Text style={appStyles.modalButtonText}>Продолжить покупки</Text>
+							<Text style={appStyles.modalButtonText}>
+								Продолжить покупки
+							</Text>
 						</TouchableOpacity>
-                        <TouchableOpacity
-                        onPress={() => {
-                            this.setState({ modalIsOpen: false });
-                            setTimeout(()=>{this.props.navigation.navigate('Delivery');},500)
-                            
-                        }}
-                         style={appStyles.modalButton}>
+						<TouchableOpacity
+							onPress={() => {
+								this.setState({ modalIsOpen: false });
+								setTimeout(() => {
+									this.props.navigation.navigate("Delivery");
+								}, 500);
+							}}
+							style={appStyles.modalButton}
+						>
 							<Text
 								style={[
 									appStyles.modalButtonText,

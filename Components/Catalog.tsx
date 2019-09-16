@@ -7,13 +7,13 @@ import {
 	TextInput,
 	Button,
 	TouchableOpacity,
-    Image,
-    StyleSheet
+	Image,
+	StyleSheet
 } from "react-native";
 import ProductItem from "./ProductItem";
 
 import appStyles from "./appStyles";
-
+import Basket from "./Basket";
 interface State {
 	data: object;
 	isLoading: boolean;
@@ -48,38 +48,36 @@ export default class Catalog extends React.Component<any, State> {
 		// }
 		if (nextState.searchRes.length !== this.state.searchRes.length) {
 			return true;
-		} else if (
-			this.props.navigation.state.params
-		) {
-            if(nextProps.navigation.state.params.innerCatId !==
-                this.props.navigation.state.params.innerCatId || 
-                nextProps.navigation.state.params.catId !==
-				this.props.navigation.state.params.catId ){
-
-            }
+		} else if (this.props.navigation.state.params) {
+			if (
+				nextProps.navigation.state.params.innerCatId !==
+					this.props.navigation.state.params.innerCatId ||
+				nextProps.navigation.state.params.catId !==
+					this.props.navigation.state.params.catId
+			) {
+			}
 			return true;
 		} else {
 			return this.state.isLoading;
 		}
-    }
-   
+	}
 
 	// static navigationOptions = {
-        // headerBackTitle: null,
-        // headerStyle: appStyles.headerStyle,
-        // headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
-        // headerRight: (
-        //     <TouchableOpacity
-        //     onPress={()=>{
-                
-        //     }}>
-        //         <Image 
-        //         style={{width: 20 , height: 24}}
-        //         source={require('../img/ico-menu1.png')}
-        //         />
-        //     </TouchableOpacity>
-        //   ),
-        // title: 'Меню'
+	// headerBackTitle: null,
+	// headerStyle: appStyles.headerStyle,
+	// headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
+	// headerRight: (
+	//     <TouchableOpacity
+	//     onPress={()=>{
+
+	//     }}>
+	//         <Image
+	//         style={{width: 20 , height: 24}}
+	//         source={require('../img/ico-menu1.png')}
+	//         />
+	//     </TouchableOpacity>
+	//   ),
+	// title: 'Меню'
 	// };
 	search() {
 		console.log("search", this.state.search);
@@ -126,6 +124,7 @@ export default class Catalog extends React.Component<any, State> {
 		const isFavorites = this.props.navigation.state.params
 			? this.props.navigation.state.params.isFavorite || false
 			: false;
+
 		const products = this.props.screenProps.products;
 		// console.log('products' , products);
 		let cats = catalog
@@ -211,63 +210,70 @@ export default class Catalog extends React.Component<any, State> {
 			: [];
 		// console.log('items' , this.state.data);
 		return (
-			// this.state.procunts.map
-			<SafeAreaView style={appStyles.SafeAreaView}>
-				{/* <Text>{this.props.navigation}</Text> */}
-				<ScrollView style={{paddingTop: 25}}>
-					<View style={{ alignItems: "center" }}>
-						<View
-							style={{
-								maxWidth: 335,
-								flexDirection: "row",
-								justifyContent: "center",
-								position: "relative"
-							}}
-						>
-							{/* <Text>
+            // this.state.procunts.map
+            <View style={{}}>
+			<ScrollView style={{ paddingTop: 25 , position: "relative" }}>
+				<View style={{ alignItems: "center" }}>
+					<View
+						style={{
+							maxWidth: 335,
+							flexDirection: "row",
+							justifyContent: "center",
+							position: "relative"
+						}}
+					>
+						{/* <Text>
 								{this.state.search}
 								{this.state.searchRes.length}
 							</Text> */}
-							<TextInput
-								style={{
-									height: 40,
-									backgroundColor: "#F1F1F1",
-									borderWidth: 0,
-									borderRadius: 50,
-									maxWidth: 335,
-									width: "100%",
-									paddingLeft: 25
-									// color: appStyles.input.color,
-								}}
-								placeholderTextColor={appStyles.input.color}
-								placeholder="Поиск"
-								onChangeText={text =>
-									this.setState({ search: text })
-								}
-								// value={this.state.text}
+						<TextInput
+							style={{
+								height: 40,
+								backgroundColor: "#F1F1F1",
+								borderWidth: 0,
+								borderRadius: 50,
+								maxWidth: 335,
+								width: "100%",
+								paddingLeft: 25
+								// color: appStyles.input.color,
+							}}
+							placeholderTextColor={appStyles.input.color}
+							placeholder="Поиск"
+							onChangeText={text =>
+								this.setState({ search: text })
+							}
+							// value={this.state.text}
+						/>
+						<TouchableOpacity
+							style={{
+								position: "absolute",
+								zIndex: 3,
+								right: 0,
+								height: 40,
+								width: 40,
+								justifyContent: "center",
+								alignItems: "center"
+							}}
+							onPress={this.search}
+						>
+							<Image
+								style={{ width: 18, height: 18 }}
+								source={require("../img/ico-search.png")}
 							/>
-							<TouchableOpacity
-								style={{
-									position: "absolute",
-									zIndex: 3,
-									right: 0,
-									height: 40,
-									width: 40,
-									justifyContent: "center",
-									alignItems: "center"
-								}}
-								onPress={this.search}
-							>
-								<Image
-									style={{ width: 18, height: 18 }}
-									source={require("../img/ico-search.png")}
-								/>
-							</TouchableOpacity>
-						</View>
+						</TouchableOpacity>
 					</View>
-					{cats}
-				</ScrollView>
-			</SafeAreaView>
+				</View>
+				
+				
+				{cats}
+			</ScrollView>
+            <Basket
+					basket={this.props.screenProps.basket}
+					products={this.props.screenProps.products}
+					navigation={this.props.navigation}
+				/>
+        
+            </View>
 		);
 	}
 }

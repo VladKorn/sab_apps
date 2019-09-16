@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "0.9.1",
+    "version": "0.9.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,7 +29,8 @@
     },
     "android": {
       "package": "com.vladkorn.subexpress",
-      "permissions": []
+      "permissions": [],
+      "versionCode": 3
     },
     "description": ""
   }

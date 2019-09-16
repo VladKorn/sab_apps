@@ -237,8 +237,6 @@ export default class App extends React.Component<any, State> {
 
 		// console.log("addToFavorite", this.state.favorite);
 	}
-	// vladkorn
-	// afihso323nc1
 	async sendMail(data) {
         let success:boolean = false;
         data['userId'] = this.state.user.id;
@@ -297,7 +295,7 @@ export default class App extends React.Component<any, State> {
 
 		if (
 			(this.state.user && Object.keys(this.state.user).length === 0) ||
-			!this.state.user
+            !this.state.user
 		) {
 			return (
 				<LoginForm
@@ -328,7 +326,6 @@ export default class App extends React.Component<any, State> {
 	}
 }
 
-// export default ()=><View style={{flex: 1}}><AppContainer/></View>;
 
 // Keystore credentials
 //   Keystore password: 0f45834b5f014368a158de89bbf34ca1
@@ -336,3 +333,8 @@ export default class App extends React.Component<any, State> {
 //   Key password:      6183fb8ef6ed47ac98e168eb30ec9062
 
 //   Path to Keystore:  /work/sub_apps/subexpress/subexpress.jks
+
+
+// basket1
+// width: 22.5,
+// height: 20,
