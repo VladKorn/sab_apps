@@ -61,24 +61,6 @@ export default class Catalog extends React.Component<any, State> {
 			return this.state.isLoading;
 		}
 	}
-
-	// static navigationOptions = {
-	// headerBackTitle: null,
-	// headerStyle: appStyles.headerStyle,
-	// headerTitle: <Text style={appStyles.headerTitle}>Меню</Text>,
-	// headerRight: (
-	//     <TouchableOpacity
-	//     onPress={()=>{
-
-	//     }}>
-	//         <Image
-	//         style={{width: 20 , height: 24}}
-	//         source={require('../img/ico-menu1.png')}
-	//         />
-	//     </TouchableOpacity>
-	//   ),
-	// title: 'Меню'
-	// };
 	search() {
 		console.log("search", this.state.search);
 		fetch(
@@ -189,6 +171,7 @@ export default class Catalog extends React.Component<any, State> {
 										}
 										navigation={this.props.navigation}
 										isFavorite={isFavorite}
+										searchWords={this.state.search.split(' ')}
 									/>
 								);
 						  })

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Counter from "./Counter";
 import Colors from "../constants/Colors.js";
+import Highlighter from 'react-native-highlight-words';
 
 interface State {
     count: number;
@@ -42,11 +43,12 @@ export default class ProductItem extends React.Component<any, State> {
             }
         });
     }
+ 
     render() {
         return (
             <View style={styles.box}>
                 <TouchableOpacity
-                    onPress={()=>{this.props.navigation.navigate( 'CategorySlider' , { id: this.props.id} )}}>
+                    onPress={()=>{this.props.navigation.navigate( 'CategorySlider' , { id: this.props.id , searchWords: this.props.searchWords} )}}>
                 <View style={styles.imgWrap}>
                     <Image
                         style={styles.img}
@@ -80,7 +82,12 @@ export default class ProductItem extends React.Component<any, State> {
                                 maxWidth: 150
                             }}
                         >
-                            {this.props.name.replace('&quot;' , "\"").replace('&quot;' , "\"") }
+                            <Highlighter
+                                highlightStyle={{backgroundColor: '#DDDDDD' , color: 'black'}}
+                                searchWords={this.props.searchWords||[] }
+                                textToHighlight={this.props.name.replace('&quot;' , "\"").replace('&quot;' , "\"")}
+                            />
+                          
                         </Text>
                         <TouchableHighlight
                             onPress={this.addToFavorite}
@@ -188,4 +195,6 @@ const styles = StyleSheet.create({
         color: "#FF00FF"
     }
 });
+
+
 AppRegistry.registerComponent("subexpress", () => ProductItem);

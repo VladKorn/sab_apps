@@ -47,6 +47,7 @@ export default class SwiperComponent extends Component {
                     isZoom={this.state.isZoom}
                     basketApi={this.props.basketApi}
                     navigation={this.props.navigation}
+                    searchWords={this.props.searchWords}
                 />
                 
             );

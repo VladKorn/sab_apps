@@ -18,6 +18,8 @@ import Counter from "./Counter";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
 import SwiperComponent from "./SwiperComponent";
+import Highlighter from 'react-native-highlight-words';
+
 
 interface State {
     currentProduct: number;
@@ -177,10 +179,13 @@ export default class CategorySliderItem extends React.Component<any, State> {
                                 color: Colors.gray
                             }}
                         >
-                            {/* {this.props.item.id} */}
-                            {this.props.item.name
-                                .replace("&quot;", '"')
-                                .replace("&quot;", '"')}
+                            
+                        
+                            <Highlighter
+                                highlightStyle={{backgroundColor: '#DDDDDD' , color: 'black'}}
+                                searchWords={this.props.searchWords||[] }
+                                textToHighlight={this.props.item.name.replace('&quot;' , "\"").replace('&quot;' , "\"")}
+                            />
                         </Text>
                         <View
                             style={{
@@ -214,10 +219,14 @@ export default class CategorySliderItem extends React.Component<any, State> {
                     >
                         <Text>
                             Состав:{" "}
-                            {this.props.item.text
-                                .replace("&quot;", '"')
-                                .replace("&quot;", '"')
-                                .replace("<br />", "")}
+                            <Highlighter
+                                highlightStyle={{backgroundColor: '#DDDDDD' , color: 'black'}}
+                                searchWords={this.props.searchWords||[] }
+                                textToHighlight={this.props.item.text
+                                    .replace("&quot;", '"')
+                                    .replace("&quot;", '"')
+                                    .replace("<br />", "")}
+                            />
                         </Text>
                         <Text>
                             Вес НЕТТО: {this.props.item.weight} (+/- 5 гр.)

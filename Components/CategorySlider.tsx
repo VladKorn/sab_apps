@@ -107,6 +107,10 @@ export default class CategorySlider extends React.Component<any, State> {
         if (this.state.isLoading) {
             return( <Text>Loading...</Text>);
         }
+        let searchWords = []
+        if(this.props.navigation.state&&this.props.navigation.state.params&&this.props.navigation.state.params.searchWords ){
+            searchWords = this.props.navigation.state.params.searchWords
+        }
         // console.log('navigation' ,JSON.stringify( this.props.navigation  ))
         // console.log(this.props.screenProps.catalog.cats[this.props.screenProps.products[this.state.currentProduct].categoryId] )
         console.log("render");
@@ -167,6 +171,9 @@ export default class CategorySlider extends React.Component<any, State> {
                     
                     basket={this.props.screenProps.basket}
                     products={this.props.screenProps.products}
+
+                    searchWords={searchWords} 
+                    
                 />
                 
             </SafeAreaView>
