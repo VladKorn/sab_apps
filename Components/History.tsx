@@ -63,6 +63,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
                                     products={item.products}
                                     desc={item.desc}
                                     navigation={this.props.navigation}
+                                    basketApi={this.props.screenProps.basketApi}
                                     
                                 />
                            )
@@ -89,6 +90,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
                                     products={item.products}
                                     desc={item.desc}
                                     navigation={this.props.navigation}
+                                    basketApi={this.props.screenProps.basketApi}
                                     
                                 />
                            )
@@ -113,6 +115,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
                                     desc={item.desc}
 
                                     navigation={this.props.navigation}
+                                    basketApi={this.props.screenProps.basketApi}
 
                                     
                                 />
@@ -137,6 +140,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
                                     products={item.products}
                                     desc={item.desc}
                                     navigation={this.props.navigation}
+                                    basketApi={this.props.screenProps.basketApi}
                                     
                                 />
                            )

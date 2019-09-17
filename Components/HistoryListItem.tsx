@@ -10,12 +10,15 @@ interface Props {
 	img: string;
 	address: string;
 	date: string;
-	status: string;
+	status: StatusTypes;
     canceled: string;
     desc: string;
     products: Array<object>;
-	navigation: any;
+    navigation: any;
+    basketApi: any;
 }
+type StatusTypes = "N" | "P" | "F";
+
 // STATUS_ID == "N"  - принят
 // STATUS_ID == "P"  - оплачен
 // STATUS_ID == "F"  - выполнен
@@ -24,7 +27,7 @@ const HistiryListItem: React.FC<Props> = props => {
 		<TouchableOpacity
 			onPress={() => {
 				props.navigation.navigate("HistoryDetail", {
-					props: props
+					pageData: props
 				});
 			}}
 			style={{

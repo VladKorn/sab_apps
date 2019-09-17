@@ -9,11 +9,12 @@ interface Props {
 interface State {
 	isVisible: boolean;
     totalProductsCount: number;
-    animatedValue: any
+    translateY: any
 }
 const Dimensions = require("Dimensions");
 const { width, height } = Dimensions.get("window");
 export default class Basket extends React.Component<Props, State> {
+    timer: any;
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -38,7 +39,6 @@ export default class Basket extends React.Component<Props, State> {
 		// }
 	}
 	componentDidUpdate(prevProps, prevState) {
-        console.log('height' , height)
 		let totalProductsCount = 0;
 		Object.keys(this.props.basket).map(key => {
 			totalProductsCount =
@@ -71,10 +71,7 @@ export default class Basket extends React.Component<Props, State> {
     }
 	render() {
         if(Object.keys(this.props.products).length === 0){return null}
-		const offset =
-			this.props.navigation.state.routeName === "CategorySlider"
-				? height - 100
-				: height - 195;
+		
 		let price = 0;
 		Object.keys(this.props.basket).map(key => {
 			price =

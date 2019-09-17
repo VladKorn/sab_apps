@@ -7,6 +7,8 @@ import AppContainer from "./Components/AppContainer";
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
+
+import {MakeOrderData , tsBasketApi , tsBasket} from './interfaces';
 interface User {
     id: number;
 }
@@ -22,7 +24,7 @@ interface LoginData {
 interface State {
 	user: User;
 	catalog: object;
-	basket: object;
+	basket: tsBasket;
 	products: object;
 	isLoading: boolean;
 	fontLoaded: boolean;
@@ -41,7 +43,7 @@ export default class App extends React.Component<any, State> {
 			favorite: [],
 			products: {},
 			stocks: {},
-			basket: {},
+			basket: null,
 			isLoading: false,
 			fontLoaded: false,
 			userError: {},
@@ -88,7 +90,7 @@ export default class App extends React.Component<any, State> {
 
 		this.setState({ fontLoaded: true });
 	};
-	basketApi(obj) {
+	basketApi(obj:tsBasketApi) {
 		const storeBasket = async basket => {
 			try {
 				await AsyncStorage.setItem("@basket", JSON.stringify(basket));
@@ -103,13 +105,19 @@ export default class App extends React.Component<any, State> {
 			} else {
 				basket[obj.params.productId] = { count: obj.params.count };
 			}
-			this.setState({ basket: basket });
+            this.setState({ basket: basket });
+            console.log('this.state.basket', this.state.basket);
 			storeBasket(basket);
 		}
 		if (obj.action === "clear") {
 			this.setState({ basket: {} });
 			storeBasket({});
-		}
+        }
+        if (obj.action === "setBasket") {
+			this.setState({ basket: obj.params.products });
+			storeBasket({});
+        }
+       
 	}
 	openProduct() {}
 	getCatalog() {}
@@ -125,7 +133,7 @@ export default class App extends React.Component<any, State> {
 
         // this._saveLoginData(loginData.log , loginData.pas);
 
-		const getData = async (loginData = {}) => {
+		const getData = async (loginData) => {
 			try {
 				const value = await AsyncStorage.getItem("@log");
 				const value2 = await AsyncStorage.getItem("@pas");
@@ -143,8 +151,8 @@ export default class App extends React.Component<any, State> {
                         loginData['log'] = decryptedLog;
                         loginData['pas'] = decryptedPas;
                     }
-                    console.log("@pas", decryptedPas);
-                    console.log("@log", decryptedLog);
+                    // console.log("@pas", decryptedPas);
+                    // console.log("@log", decryptedLog);
 					// value previously stored
 					//
 
@@ -191,16 +199,23 @@ export default class App extends React.Component<any, State> {
 		// console.log('setOrderData' , data)
 		this.setState({ comment: data.comment, promo: data.promo });
 	}
-	async makeOrder(obj) {
+	async makeOrder(obj: MakeOrderData) {
 		console.log("makeOrder");
-		let data: any = {};
-		data.userId = this.state.user.id;
-		data.promo = this.state.promo;
-		data.comment = `(from mobile app) ` + this.state.comment;
-		data.address = obj.address;
-		data.deliveryDate = obj.date;
+        const data:MakeOrderData={
+            userId : this.state.user.id,
+            promo : this.state.promo,
+            products: this.state.basket,
+            comment : `(from mobile app) ` + this.state.comment,
+            address : obj.address,
+            deliveryDate : obj.date,
+        }
+		// data.userId = this.state.user.id;
+		// data.promo = this.state.promo;
+		// data.comment = `(from mobile app) ` + this.state.comment;
+		// data.address = obj.address;
+		// data.deliveryDate = obj.date;
 
-		data.products = this.state.basket;
+		// data.products = this.state.basket;
 
 		let headers = new Headers();
 		headers.set("Accept", "application/json");

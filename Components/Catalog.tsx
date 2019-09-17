@@ -194,7 +194,7 @@ export default class Catalog extends React.Component<any, State> {
 		// console.log('items' , this.state.data);
 		return (
             // this.state.procunts.map
-            <View style={{}}>
+            <View style={{flex: 1}}>
 			<ScrollView style={{ paddingTop: 25 , position: "relative" }}>
 				<View style={{ alignItems: "center" }}>
 					<View

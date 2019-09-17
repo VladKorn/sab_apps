@@ -11,24 +11,65 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
+import { phone } from "../constants/data.js";
+
+import { tsBasketApi } from "../interfaces";
+
 interface State {
 	navigation: any;
+	data: navigationProps;
 }
-export default class SidebarCatalog extends React.Component<any, State> {
+interface navigationProps {
+	canceled: string;
+	status: StatusTypes;
+	id: number;
+	payed: string;
+	date: string;
+	desc: string;
+
+	price: number;
+	products: any;
+	address: string;
+}
+type StatusTypes = "N" | "P" | "F";
+export default class HistoryDetail extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			navigation: {}
+			navigation: {},
+			data: null
 		};
 	}
 	static navigationOptions = {
 		header: null
-    };
-	componentDidMount() {
-		// console.log("params", this.props.navigation.state.params);
+	};
+
+	_repeatOrder() {
+		const pageData = this.props.navigation.state.params.pageData;
+		console.log("pageData", pageData.products);
+		let products = {};
+		pageData.products.map(item => {
+			typeof item === 'object' && item.id ? products[item['id']] = { count: item.count }:null;
+		});
+		console.log("products", products);
+
+		const data: tsBasketApi = {
+			action: "setBasket",
+			params: {
+				products: products
+			}
+		};
+		pageData.basketApi(data);
+		setTimeout(() => {
+			this.props.navigation.navigate("Order");
+		}, 500);
+
+		// console.log('basketApi' , pageData.basketApi);
 	}
 	render() {
-		const props = this.props.navigation.state.params.props;
+		const props: navigationProps = this.props.navigation.state.params
+			.pageData;
+		// console.log("props", props);
 		return (
 			<SafeAreaView style={{ ...appStyles.SafeAreaView }}>
 				<ScrollView>
@@ -266,19 +307,35 @@ export default class SidebarCatalog extends React.Component<any, State> {
 								</Text>
 							</View>
 						</View>
-						<TouchableOpacity
-							onPress={() => {
-                                Linking.openURL(`tel:${phone}`);
-							}}
-							style={[
-								appStyles.button,
-								{ marginTop: 20, marginBottom: 25 }
-							]}
-						>
-							<Text style={appStyles.buttonText}>
-								Позвонить нам
-							</Text>
-						</TouchableOpacity>
+						{props.status === "F" || props.canceled === "Y" ? (
+							<TouchableOpacity
+								onPress={() => {
+									this._repeatOrder();
+								}}
+								style={[
+									appStyles.button,
+									{ marginTop: 20, marginBottom: 25 }
+								]}
+							>
+								<Text style={appStyles.buttonText}>
+                                    Повторить заказ
+								</Text>
+							</TouchableOpacity>
+						) : (
+							<TouchableOpacity
+								onPress={() => {
+									Linking.openURL(`tel:${phone}`);
+								}}
+								style={[
+									appStyles.button,
+									{ marginTop: 20, marginBottom: 25 }
+								]}
+							>
+								<Text style={appStyles.buttonText}>
+									Позвонить нам
+								</Text>
+							</TouchableOpacity>
+						)}
 					</View>
 					{/*  */}
 					<View style={{ ...appStyles.paddings }}>
@@ -309,7 +366,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 										fontSize: 16
 									}}
 								>
-									{props.payed ? "Наличными" : 'Нет'}
+									{props.payed ? "Наличными" : "Нет"}
 								</Text>
 							</Text>
 							<Text
@@ -369,28 +426,90 @@ export default class SidebarCatalog extends React.Component<any, State> {
 								</Text>
 							</View>
 						</View>
-                        {/* products */}
-                        <View>
-                            {props.products ? props.products.map(item=>{
-                                return(
-                                <View key={item.id} style={{flexDirection: 'row' , height: 50, alignItems: 'center', borderBottomColor: "#E2E2E2",
-                                borderBottomWidth: 1}}>
-                                    <View style={{width: 65, alignItems: 'center'}}><Text style={{fontFamily: 'Neuron' , color: Colors.lightText}}>X{item.count}</Text>
-                                    </View>
-                                    <Text style={{fontFamily: 'Neuron' , color: Colors.lightText}}>{item.name}</Text>
-                                    <Text style={{fontFamily: 'Neuron' , color: Colors.text , marginLeft: 'auto'}}>{item.price * item.count} руб.</Text>
-                                </View>
-                                );
-                            }): null}
-                            <View style={{marginLeft: 65 , paddingTop: 20}}>
-                                <View style={{justifyContent: 'space-between' , flexDirection: 'row'}}>
-                                <Text style={{fontFamily: 'Neuron-Heavy' , color: Colors.text}}> Общая сумма:</Text>
-                                <Text style={{fontFamily: 'Neuron-Heavy' , color: Colors.text}}> {props.price} руб.</Text>
-                                </View>
-                            </View>
-                        </View>
-                        {/*END products */}
-
+						{/* products */}
+						<View>
+							{props.products
+								? props.products.map(item => {
+										return (
+											<View
+												key={item.id}
+												style={{
+													flexDirection: "row",
+													height: 50,
+													alignItems: "center",
+													borderBottomColor:
+														"#E2E2E2",
+													borderBottomWidth: 1
+												}}
+											>
+												<View
+													style={{
+														width: 65,
+														alignItems: "center"
+													}}
+												>
+													<Text
+														style={{
+															fontFamily:
+																"Neuron",
+															color:
+																Colors.lightText
+														}}
+													>
+														X{item.count}
+													</Text>
+												</View>
+												<Text
+													style={{
+														fontFamily: "Neuron",
+														color: Colors.lightText
+													}}
+												>
+													{item.name}
+												</Text>
+												<Text
+													style={{
+														fontFamily: "Neuron",
+														color: Colors.text,
+														marginLeft: "auto"
+													}}
+												>
+													{item.price * item.count}{" "}
+													руб.
+												</Text>
+											</View>
+										);
+								  })
+								: null}
+							<View style={{ marginLeft: 65, paddingTop: 20 }}>
+								<View
+									style={{
+										justifyContent: "space-between",
+										flexDirection: "row"
+									}}
+								>
+									<Text
+										style={{
+											fontFamily: "Neuron-Heavy",
+											color: Colors.text
+										}}
+									>
+										{" "}
+										Общая сумма:
+									</Text>
+									<Text
+										style={{
+											fontFamily: "Neuron-Heavy",
+											color: Colors.text
+										}}
+									>
+										{" "}
+										{props.price} руб.
+									</Text>
+								</View>
+							</View>
+						</View>
+						{/*END products */}
 					</View>
 				</ScrollView>
 			</SafeAreaView>
