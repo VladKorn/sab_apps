@@ -123,6 +123,7 @@ export default class App extends React.Component<any, State> {
         // save: true,
         // isSignUp: false
 
+        // this._saveLoginData(loginData.log , loginData.pas);
 
 		const getData = async (loginData = {}) => {
 			try {
@@ -138,10 +139,12 @@ export default class App extends React.Component<any, State> {
 				).toString(CryptoJS.enc.Utf8);
 				// console.log('decryptedLog' , decryptedLog);
 				if (value !== null) {
-					loginData['log'] = decryptedLog;
-					loginData['pas'] = decryptedPas;
-					// console.log("@log", log);
-					// console.log("@pas", pas);
+                    if(!loginData.isSignUp){
+                        loginData['log'] = decryptedLog;
+                        loginData['pas'] = decryptedPas;
+                    }
+                    console.log("@pas", decryptedPas);
+                    console.log("@log", decryptedLog);
 					// value previously stored
 					//
 
@@ -155,7 +158,7 @@ export default class App extends React.Component<any, State> {
 						.then(res => res.json())
 						.then(res => {
                             if(res.error){alert(res.error)}
-							console.log('login res' , res);
+							// console.log('login res' , res);
 							this.setState(
 								{
 									isLoading: false,
@@ -165,9 +168,11 @@ export default class App extends React.Component<any, State> {
 									user: res.user,
 									stocks: res.stocks,
 									favorite: res.favorite
-								},
-								function() {}
-							);
+								}
+                            );
+                            if(loginData.isSignUp && loginData.save){
+                                this._saveLoginData(loginData.log , res.user.pas);
+                            }
 
 							// console.log('login res' , res);
 						})
@@ -176,7 +181,8 @@ export default class App extends React.Component<any, State> {
 						});
 				}
 			} catch (e) {
-				// error reading value
+                // error reading value
+                alert(e);
 			}
 		};
 		getData(loginData);
@@ -283,28 +289,32 @@ export default class App extends React.Component<any, State> {
         console.log('login', loginData.log , loginData.pas)
         this.getData(loginData);
 
-		if (loginData.save) {
-			const storeData = async () => {
-				try {
-					const encryptedLog = CryptoJS.AES.encrypt(
-						loginData.log,
-						"F24czi3II092Xnrhc"
-					).toString();
-					const encryptedPas = CryptoJS.AES.encrypt(
-						loginData.pas,
-						"F24czi3II092Xnrhc"
-					).toString();
-					// console.log('encryptedLog' , encryptedLog)
-					await AsyncStorage.setItem("@log", encryptedLog);
-					await AsyncStorage.setItem("@pas", encryptedPas);
-				} catch (e) {
-					// saving error
-				}
-			};
-			storeData();
+		if (loginData.save&&!loginData.isSignUp) {
+            this._saveLoginData(loginData.log , loginData.pas);
 			// console.log('storeData' , storeData);
 		}
-	}
+    }
+    _saveLoginData(log , pas){
+        console.log('_saveLoginData' , log , pas);
+        const storeData = async (log , pas) => {
+            try {
+                const encryptedLog = CryptoJS.AES.encrypt(
+                    log,
+                    "F24czi3II092Xnrhc"
+                ).toString();
+                const encryptedPas = CryptoJS.AES.encrypt(
+                    pas,
+                    "F24czi3II092Xnrhc"
+                ).toString();
+                // console.log('encryptedLog' , encryptedLog)
+                await AsyncStorage.setItem("@log", encryptedLog);
+                await AsyncStorage.setItem("@pas", encryptedPas);
+            } catch (e) {
+                // saving error
+            }
+        };
+        storeData(log , pas);
+    }
 	render() {
 		// console.log("user", this.state.user);
 		if (!this.state.fontLoaded) {
