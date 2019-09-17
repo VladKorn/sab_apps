@@ -21,8 +21,8 @@ interface State {
 	priceTotal: number;
 	comment: string;
 	promo: string;
-	modalIsOpen: boolean;
-	// data: any;
+    modalIsOpen: boolean;
+    modalFirstIsOpen: boolean;
 }
 export default class Order extends React.Component<any, State> {
 	constructor(props) {
@@ -31,7 +31,8 @@ export default class Order extends React.Component<any, State> {
 			priceTotal: 0,
 			comment: "",
 			promo: "",
-			modalIsOpen: false
+            modalIsOpen: false,
+            modalFirstIsOpen: false
 		};
 		this.setDate = this.setDate.bind(this);
 		this.makeOrder = this.makeOrder.bind(this);
@@ -47,10 +48,13 @@ export default class Order extends React.Component<any, State> {
 		this._totalPrice();
 		const nav = this.props.navigation;
 		if (nav && nav.state && nav.state.params && nav.state.params.action) {
-            // console.log(this.props.screenProps.basket)
-            if(nav.state.params.action === 'clear' && Object.keys(this.props.screenProps.basket).length > 0){
-                this.props.screenProps.basketApi({action: 'clear'})
-            }
+			// console.log(this.props.screenProps.basket)
+			if (
+				nav.state.params.action === "clear" &&
+				Object.keys(this.props.screenProps.basket).length > 0
+			) {
+				this.props.screenProps.basketApi({ action: "clear" });
+			}
 		}
 	}
 	_totalPrice() {
@@ -77,22 +81,24 @@ export default class Order extends React.Component<any, State> {
 		// console.log("addresses", this.props.screenProps.user.addresses);
 		const items =
 			Object.entries(basket).length !== 0 &&
-			Object.entries(products).length !== 0
-				? Object.keys(basket).map(key => {
-						let item = products[key];
-						return (
-							<ProductItemOrder
-								key={item.id}
-								id={item.id}
-								name={item.name}
-								img={item.img}
-								price={item.price}
-								count={parseInt(basket[item.id].count)}
-								basketApi={this.props.screenProps.basketApi}
-							/>
-						);
-				  })
-				: <Text style={appStyles.text}>Корзина пуста</Text>;
+			Object.entries(products).length !== 0 ? (
+				Object.keys(basket).map(key => {
+					let item = products[key];
+					return (
+						<ProductItemOrder
+							key={item.id}
+							id={item.id}
+							name={item.name}
+							img={item.img}
+							price={item.price}
+							count={parseInt(basket[item.id].count)}
+							basketApi={this.props.screenProps.basketApi}
+						/>
+					);
+				})
+			) : (
+				<Text style={appStyles.text}>Корзина пуста</Text>
+			);
 
 		return (
 			<SafeAreaView style={appStyles.page}>
@@ -192,7 +198,9 @@ export default class Order extends React.Component<any, State> {
 							comment: this.state.comment,
 							promo: this.state.promo
 						});
-						this.state.priceTotal < 1500
+						this.state.priceTotal < 1000
+							? this.setState({ modalIsOpen: true })
+							: this.state.priceTotal < 1500
 							? this.setState({ modalIsOpen: true })
 							: this.props.navigation.navigate("Delivery");
 					}}
@@ -251,6 +259,7 @@ export default class Order extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</Modals>
+                
 			</SafeAreaView>
 		);
 	}

@@ -10,6 +10,15 @@ import CryptoJS from "crypto-js";
 interface User {
     id: number;
 }
+interface LoginData {
+    log?: string
+    pas?: string
+    save?: boolean;
+    name?: string,
+    phone?: string,
+    isSignUp?: false
+}
+
 interface State {
 	user: User;
 	catalog: object;
@@ -53,7 +62,7 @@ export default class App extends React.Component<any, State> {
 	}
 	componentDidMount() {
 		this.loadAssetsAsync();
-		this.getData();
+		this.getData({});
 
 		const getBasket = async () => {
 			try {
@@ -104,8 +113,18 @@ export default class App extends React.Component<any, State> {
 	}
 	openProduct() {}
 	getCatalog() {}
-	getData(log = "", pas = "") {
-		const getData = async () => {
+	getData(loginData) {
+
+
+        // log: null,
+        // pas: null,
+        // name: null,
+        // phone: null,
+        // save: true,
+        // isSignUp: false
+
+
+		const getData = async (loginData = {}) => {
 			try {
 				const value = await AsyncStorage.getItem("@log");
 				const value2 = await AsyncStorage.getItem("@pas");
@@ -119,25 +138,24 @@ export default class App extends React.Component<any, State> {
 				).toString(CryptoJS.enc.Utf8);
 				// console.log('decryptedLog' , decryptedLog);
 				if (value !== null) {
-					log = decryptedLog;
-					pas = decryptedPas;
+					loginData['log'] = decryptedLog;
+					loginData['pas'] = decryptedPas;
 					// console.log("@log", log);
 					// console.log("@pas", pas);
 					// value previously stored
 					//
 
-					const req = {
-						log,
-						pas
-					};
+					
+                    // console.log('getData' , loginData);
 
 					return fetch("https://subexpress.ru/apps_api/", {
 						method: "post",
-						body: JSON.stringify(req)
+						body: JSON.stringify(loginData)
 					})
 						.then(res => res.json())
 						.then(res => {
-							// console.log('res.user' , res.userError);
+                            if(res.error){alert(res.error)}
+							console.log('login res' , res);
 							this.setState(
 								{
 									isLoading: false,
@@ -151,7 +169,7 @@ export default class App extends React.Component<any, State> {
 								function() {}
 							);
 
-							// console.log('favorite' , res);
+							// console.log('login res' , res);
 						})
 						.catch(error => {
 							console.error(error);
@@ -161,7 +179,7 @@ export default class App extends React.Component<any, State> {
 				// error reading value
 			}
 		};
-		getData();
+		getData(loginData);
 	}
 	setOrderData(data) {
 		// console.log('setOrderData' , data)
@@ -251,9 +269,7 @@ export default class App extends React.Component<any, State> {
 		})
 			.then(res => res.json())
 			.then(res => {
-                console.log('fetch res-', res.success);
-                console.log('typeof', typeof(res.success));
-                                                 
+                // console.log('fetch res-', res.success);
                 
 				if (res.success) {
                     console.log('fetch sucsess');
@@ -263,17 +279,19 @@ export default class App extends React.Component<any, State> {
             });
         return success;
 	}
-	login(log, pas, save) {
-		this.getData(log, pas);
-		if (save) {
+	login(loginData:LoginData) {
+        console.log('login', loginData.log , loginData.pas)
+        this.getData(loginData);
+
+		if (loginData.save) {
 			const storeData = async () => {
 				try {
 					const encryptedLog = CryptoJS.AES.encrypt(
-						log,
+						loginData.log,
 						"F24czi3II092Xnrhc"
 					).toString();
 					const encryptedPas = CryptoJS.AES.encrypt(
-						pas,
+						loginData.pas,
 						"F24czi3II092Xnrhc"
 					).toString();
 					// console.log('encryptedLog' , encryptedLog)
