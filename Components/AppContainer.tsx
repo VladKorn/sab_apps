@@ -20,6 +20,7 @@ import Contacts from "./Contacts";
 import History from "./History";
 import HistoryDetail from "./HistoryDetail";
 import Addresses from "./Addresses";
+import User from "./User";
 
 import { TouchableOpacity, Image } from "react-native";
 
@@ -68,7 +69,7 @@ const Home = createStackNavigator(
 		Favorites: Catalog,
 		OrderHistory: History,
 		Addresses: Addresses,
-		User: News,
+		User: User,
 		Info: Contacts,
 		Contacts: Contacts,
 		OrderByPhone: Contacts,

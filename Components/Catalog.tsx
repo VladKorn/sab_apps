@@ -5,18 +5,17 @@ import {
 	ScrollView,
 	SafeAreaView,
 	TextInput,
-	Button,
 	TouchableOpacity,
 	Image,
 	StyleSheet
 } from "react-native";
-import ProductItem from "./ProductItem";
+
+import CatalogCategories from "./CatalogCategories";
 
 import appStyles from "./appStyles";
 import Basket from "./Basket";
 interface State {
 	data: object;
-	isLoading: boolean;
 	search: string;
 	searchRes: Array<number>;
 }
@@ -25,7 +24,7 @@ export default class Catalog extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isLoading: true,
+		
 			data: [],
 			search: "",
 			searchRes: []
@@ -35,32 +34,9 @@ export default class Catalog extends React.Component<any, State> {
 	}
 
 	componentDidMount() {
-		setTimeout(() => {
-			this.setState({ isLoading: false });
-		}, 500);
+		
 	}
-	shouldComponentUpdate(nextProps, nextState) {
-		// console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
-		// if(nextProps.screenProps.favorite.length !== this.props.screenProps.favorite.length){
-		//     return true
-		// } else{
-		//     return this.state.isLoading
-		// }
-		if (nextState.searchRes.length !== this.state.searchRes.length) {
-			return true;
-		} else if (this.props.navigation.state.params) {
-			if (
-				nextProps.navigation.state.params.innerCatId !==
-					this.props.navigation.state.params.innerCatId ||
-				nextProps.navigation.state.params.catId !==
-					this.props.navigation.state.params.catId
-			) {
-			}
-			return true;
-		} else {
-			return this.state.isLoading;
-		}
-	}
+	
 	search() {
 		console.log("search", this.state.search);
 		fetch(
@@ -77,124 +53,10 @@ export default class Catalog extends React.Component<any, State> {
 			});
 	}
 	render() {
-		console.log("render");
 
-		if (this.state.isLoading) {
-			return <Text>Loading...</Text>;
-		}
-		const catId = this.props.navigation.state.params
-			? this.props.navigation.state.params.catId
-			: false;
-		const innerCatId = this.props.navigation.state.params
-			? this.props.navigation.state.params.innerCatId
-			: false;
-		// console.log('nav',this.props.screenProps.catalog[123]);
-
-		let catalog = {};
-		if (catId && this.props.screenProps.catalog[catId]) {
-			catalog[catId] = this.props.screenProps.catalog[catId];
-		} else {
-			catalog = this.props.screenProps.catalog;
-		}
-		// let products = []
-		// if(){
-
-		// }else{
-
-		// }
-		// console.log('params' , this.props.navigation.state.params);
-		const isFavorites = this.props.navigation.state.params
-			? this.props.navigation.state.params.isFavorite || false
-			: false;
-
-		const products = this.props.screenProps.products;
-		// console.log('products' , products);
-		let cats = catalog
-			? Object.keys(catalog).map(key => {
-					let cat = catalog[key];
-					let items = cat.products
-						? cat.products.map(pkey => {
-								let item = products[pkey];
-								// console.log('item' , this.state.searchRes ,pkey);
-
-								// is in search
-								if (this.state.searchRes.length > 0) {
-									if (
-										!this.state.searchRes.includes(
-											parseInt(pkey)
-										)
-									) {
-										return false;
-									}
-								}
-								// is in favorites
-								if (
-									isFavorites &&
-									!this.props.screenProps.favorite.includes(
-										parseInt(item.id)
-									)
-								) {
-									return false;
-								}
-
-								// is in inner category
-								// console.log('cat' , cat.cats[innerCatId]);
-								if (innerCatId) {
-									if (
-										innerCatId &&
-										cat.cats[innerCatId] &&
-										cat.cats[innerCatId].products &&
-										!cat.cats[innerCatId].products.includes(
-											parseInt(item.id)
-										)
-									) {
-										return false;
-									}
-								}
-								//
-								const isFavorite = this.props.screenProps.favorite.includes(
-									parseInt(item.id)
-								);
-								// console.log('render' , item.id);
-								return (
-									<ProductItem
-										key={item.id}
-										id={item.id}
-										name={item.name}
-										img={item.img}
-										price={item.price}
-										basketApi={
-											this.props.screenProps.basketApi
-										}
-										addToFavorite={
-											this.props.screenProps.addToFavorite
-										}
-										navigation={this.props.navigation}
-										isFavorite={isFavorite}
-										searchWords={this.state.search.split(' ')}
-									/>
-								);
-						  })
-						: [];
-					return (
-						<View key={cat.id}>
-							<Text
-								style={[
-									appStyles.sectTitle,
-									{ marginLeft: 25 }
-								]}
-							>
-								{cat.name}
-							</Text>
-							{items}
-						</View>
-					);
-			  })
-			: [];
-		// console.log('items' , this.state.data);
 		return (
-            // this.state.procunts.map
             <View style={{flex: 1}}>
+            
 			<ScrollView style={{ paddingTop: 25 , position: "relative" }}>
 				<View style={{ alignItems: "center" }}>
 					<View
@@ -246,9 +108,18 @@ export default class Catalog extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</View>
+                <CatalogCategories
+                    navigation={this.props.navigation}
+                    catalog={this.props.screenProps.catalog}
+                    products={this.props.screenProps.products}
+                    favorite={this.props.screenProps.favorite}
+                    addToFavorite={this.props.screenProps.addToFavorite}
+                    basketApi={this.props.screenProps.basketApi}
+                    searchRes={this.state.searchRes}
+                    search={this.state.search}
+                />
 				
-				
-				{cats}
+				{/* {cats} */}
 			</ScrollView>
             <Basket
 					basket={this.props.screenProps.basket}

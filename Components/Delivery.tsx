@@ -34,8 +34,8 @@ export default class Order extends React.Component<any, State> {
 			priceTotal: 0,
 			address: this.props.screenProps.user.addresses[0].address,
 			date: "2019-08-11",
-            modalIsOpen: false,
-            modalOrderIsOpen: false,
+			modalIsOpen: false,
+			modalOrderIsOpen: false,
 			DatePickerIsOpen: false
 		};
 		this.setAddress = this.setAddress.bind(this);
@@ -54,6 +54,18 @@ export default class Order extends React.Component<any, State> {
 		).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
 		console.log("formatedDate", formatedDate);
 		this.setState({ date: formatedDate });
+	}
+	componentDidMount() {
+		const didBlurSubscription = this.props.navigation.addListener(
+			"willBlur",
+			payload => {
+				//   console.debug('willBlur', payload);
+				this.setState({
+					modalIsOpen: false,
+					modalOrderIsOpen: false
+				});
+			}
+		);
 	}
 	componentDidUpdate(prevProps, prevState) {}
 	openDatePicker() {
@@ -89,13 +101,13 @@ export default class Order extends React.Component<any, State> {
 		const success = await this.props.screenProps.makeOrder({
 			address: this.state.address,
 			date: this.state.date
-        });
-        console.log('success' , success);
-        if(success){
-            this.setState({ modalOrderIsOpen: true });
-        } else{
-            alert('error');
-        }
+		});
+		console.log("success", success);
+		if (success) {
+			this.setState({ modalOrderIsOpen: true });
+		} else {
+			alert("error");
+		}
 	}
 	render() {
 		const addresses = this.props.screenProps.user.addresses || [];
@@ -176,56 +188,74 @@ export default class Order extends React.Component<any, State> {
 					<Text style={appStyles.sectTitle}>
 						Дата и время доставки
 					</Text>
-                    <View style={{flexDirection: 'row' , justifyContent: 'space-between' , alignItems: 'center', width: '100%' }}>
-					<TouchableOpacity
-						onPress={this.openDatePicker}
-						style={{ flexDirection: "row" }}
+					<View
+						style={{
+							flexDirection: "row",
+							justifyContent: "space-between",
+							alignItems: "center",
+							width: "100%"
+						}}
 					>
-						<View style={styles.dateLabel}>
-							<Text style={styles.dateLabelText}>{this.state.date.split("-")[0]}</Text>
-						</View>
-						<View style={styles.dateLabel}>
-							<Text style={styles.dateLabelText}>
-                                {months[parseInt(this.state.date.split("-")[1])-1]}
-							</Text>
-						</View>
-						<View style={styles.dateLabel}>
-							<Text style={styles.dateLabelText}>
-								{this.state.date.split("-")[2]}
-							</Text>
-						</View>
-					</TouchableOpacity>
-					<DatePicker
-						isOpen={this.state.DatePickerIsOpen}
-						style={{ width: 30 }}
-						date={this.state.date}
-						mode="date"
-						placeholder="select date"
-						format="YYYY-MM-DD"
-						minDate={new Date()}
-						confirmBtnText="Confirm"
-						cancelBtnText="Cancel"
-						iconSource={require("../img/ico-date.png")}
-						hideText="true"
-						customStyles={{
-							dateIcon: {
-								position: "absolute",
-								left: 0,
-								top: 4,
-								marginLeft: 0,
-								width: 18,
-								height: 21
-							},
-							dateInput: {
-								marginLeft: 36
-							}
-							// ... You can check the source to find the other keys.
-						}}
-						onDateChange={date => {
-							this.setState({ date: date });
-						}}
-					/>
-                    </View>
+                        <View style={{marginLeft: 5 , marginTop: 5}}>
+						<DatePicker
+							isOpen={this.state.DatePickerIsOpen}
+							style={{ width: 30 }}
+							date={this.state.date}
+							mode="date"
+							placeholder="select date"
+							format="YYYY-MM-DD"
+							minDate={new Date()}
+							confirmBtnText="Confirm"
+							cancelBtnText="Cancel"
+							iconSource={require("../img/ico-date.png")}
+							hideText="true"
+							customStyles={{
+								dateIcon: {
+									position: "absolute",
+									left: 0,
+									top: 4,
+									marginLeft: 0,
+									width: 18,
+									height: 21
+								},
+								dateInput: {
+									marginLeft: 30
+								}
+								// ... You can check the source to find the other keys.
+							}}
+							onDateChange={date => {
+								this.setState({ date: date });
+							}}
+						/>
+                        </View>
+						<TouchableOpacity
+							onPress={this.openDatePicker}
+							style={{ flexDirection: "row" }}
+						>
+							
+                            <View style={styles.dateLabel}>
+								<Text style={styles.dateLabelText}>
+									{this.state.date.split("-")[2]}
+								</Text>
+							</View>
+							<View style={styles.dateLabel}>
+								<Text style={styles.dateLabelText}>
+									{
+										months[
+											parseInt(
+												this.state.date.split("-")[1]
+											) - 1
+										]
+									}
+								</Text>
+							</View>
+							<View style={styles.dateLabel}>
+								<Text style={styles.dateLabelText}>
+									{this.state.date.split("-")[0]}
+								</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
 				</ScrollView>
 				<TouchableOpacity
 					onPress={() => {
@@ -264,7 +294,7 @@ export default class Order extends React.Component<any, State> {
 						<TouchableOpacity
 							onPress={() => {
 								this.setState({ modalIsOpen: false });
-                                this.makeOrder();
+								this.makeOrder();
 							}}
 							style={appStyles.modalButton}
 						>
@@ -279,20 +309,21 @@ export default class Order extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</Modals>
-                <Modals
+				<Modals
 					height={250}
 					isOpen={this.state.modalOrderIsOpen}
 					isOpenHendler={isOpen => {}}
 				>
 					<Text style={appStyles.modalText}>
-                        Спасибо!{"\n"}Ваш заказ принят
+						Спасибо!{"\n"}Ваш заказ принят
 					</Text>
 					<View style={{ flexDirection: "row", marginTop: 10 }}>
-					
 						<TouchableOpacity
 							onPress={() => {
-                                this.setState({ modalOrderIsOpen: false });
-                                setTimeout(()=>{this.props.navigation.navigate('Home')},500);
+								this.setState({ modalOrderIsOpen: false });
+								setTimeout(() => {
+									this.props.navigation.navigate("Home");
+								}, 500);
 							}}
 							style={appStyles.modalButton}
 						>
@@ -307,7 +338,6 @@ export default class Order extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</Modals>
-                
 			</SafeAreaView>
 		);
 	}
@@ -318,8 +348,8 @@ const styles = StyleSheet.create({
 		borderBottomColor: "#E2E2E2",
 		borderBottomWidth: 1,
 		height: 50,
-        justifyContent: "center",
-        marginRight: 25,
+		justifyContent: "center",
+		marginRight: 25
 	},
 	dateLabelText: { fontFamily: "Neuron", fontSize: 30, color: Colors.text }
 });

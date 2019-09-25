@@ -41,9 +41,19 @@ export default class Order extends React.Component<any, State> {
 		title: "Оформление заказа"
 	};
 	componentDidMount() {
-		this._totalPrice();
-	}
-
+        this._totalPrice();
+        const didBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload => {
+            //   console.debug('willBlur', payload);
+                this.setState({
+                    modalIsOpen: false,
+                    modalFirstIsOpen: false
+                });
+            }
+        );
+    }
+    
 	componentDidUpdate(prevProps, prevState) {
 		this._totalPrice();
 		const nav = this.props.navigation;
@@ -101,6 +111,7 @@ export default class Order extends React.Component<any, State> {
 			);
 
 		return (
+
 			<SafeAreaView style={appStyles.page}>
 				<ScrollView
 					style={{
@@ -199,7 +210,7 @@ export default class Order extends React.Component<any, State> {
 							promo: this.state.promo
 						});
 						this.state.priceTotal < 1000
-							? this.setState({ modalIsOpen: true })
+							? this.setState({ modalFirstIsOpen: true })
 							: this.state.priceTotal < 1500
 							? this.setState({ modalIsOpen: true })
 							: this.props.navigation.navigate("Delivery");
@@ -255,6 +266,36 @@ export default class Order extends React.Component<any, State> {
 								]}
 							>
 								Добавить доставку
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</Modals>
+                {/*  */}
+                <Modals
+					height={250}
+					isOpen={this.state.modalFirstIsOpen}
+					isOpenHendler={isOpen => {
+						this.setState({ modalFirstIsOpen: isOpen });
+					}}
+				>
+					<Text style={appStyles.modalText}>
+						Ваш заказ менее {"\n"} 1000 рублей
+					</Text>
+					<View style={{ flexDirection: "column" , marginTop: 10}}>
+						<TouchableOpacity
+							onPress={() => {
+								this.setState({ modalFirstIsOpen: false });
+								
+							}}
+							style={appStyles.modalButton}
+						>
+							<Text
+								style={[
+									appStyles.modalButtonText,
+									{ color: "white" }
+								]}
+							>
+								Ок
 							</Text>
 						</TouchableOpacity>
 					</View>

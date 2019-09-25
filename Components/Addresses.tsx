@@ -159,6 +159,8 @@ export default class Addresses extends React.Component<any> {
                         title='Добавлени/изменение адреса'
                         fromPage='С страницы "Адреса доставок" '
                         sendMail={this.props.screenProps.sendMail}
+                        
+                        navigation={this.props.navigation}
                     />
 			</ScrollView>
 		);

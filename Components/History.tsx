@@ -3,12 +3,15 @@ import { View, Text , ScrollView} from "react-native";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
 import HistoryListItem from "./HistoryListItem";
+import Loading from "./Loading";
+
 interface State {
 	items: object;
 	active: Array<number>;
 	week: Array<number>;
 	month: Array<number>;
-	year: Array<number>;
+    year: Array<number>;
+    isLoading: boolean;
 }
 export default class SidebarCatalog extends React.Component<any, State> {
 	constructor(props) {
@@ -18,7 +21,8 @@ export default class SidebarCatalog extends React.Component<any, State> {
 			active: [],
 			week: [],
 			month: [],
-			year: []
+            year: [],
+            isLoading: true,
 		};
 	}
 	static navigationOptions = {
@@ -33,12 +37,16 @@ export default class SidebarCatalog extends React.Component<any, State> {
 					active: res.orders.active,
 					week: res.orders.week,
 					month: res.orders.month,
-					year: res.orders.year
+                    year: res.orders.year,
+                    isLoading: false
 				});
 				// console.log("news", res);
 			});
     }
 	render() {
+        if(this.state.isLoading){
+            return <Loading></Loading>
+        }
 		return (
 			<ScrollView>
                 <View style={{

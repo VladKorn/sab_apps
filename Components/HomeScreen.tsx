@@ -14,6 +14,7 @@ import Images from "../constants/Images";
 import appStyles from "./appStyles";
 import ImageSlider from "react-native-image-slider";
 
+
 export default class HomeScreen extends React.Component<any> {
 	static navigationOptions = {
         header: null,
@@ -26,7 +27,6 @@ export default class HomeScreen extends React.Component<any> {
 		});
 		const products = this.props.screenProps.products
 			? Object.keys(this.props.screenProps.products)
-					.slice(6, 16)
 					.map(key => {
 						const item = this.props.screenProps.products[key];
 						return (
@@ -172,9 +172,9 @@ export default class HomeScreen extends React.Component<any> {
 								}}
 							>
 								{
-									Object.entries(
+									this.props.screenProps.basket? Object.entries(
 										this.props.screenProps.basket
-									).length
+									).length : null
 								}
 							</Text>
 						</View>

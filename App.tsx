@@ -4,21 +4,23 @@ import { View, ShadowPropTypesIOS, Text, Alert } from "react-native";
 import * as Font from "expo-font";
 import LoginForm from "./Components/LoginForm";
 import AppContainer from "./Components/AppContainer";
+import Loading from "./Components/Loading";
+
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
 
-import {MakeOrderData , tsBasketApi , tsBasket} from './interfaces';
+import { MakeOrderData, tsBasketApi, tsBasket } from "./interfaces";
 interface User {
-    id: number;
+	id: number;
 }
 interface LoginData {
-    log?: string
-    pas?: string
-    save?: boolean;
-    name?: string,
-    phone?: string,
-    isSignUp?: false
+	log: string;
+	pas: string;
+	save?: boolean;
+	name?: string;
+	phone?: string;
+	isSignUp?: false;
 }
 
 interface State {
@@ -32,20 +34,22 @@ interface State {
 	favorite: Array<number>;
 	userError: object;
 	comment: string;
-	promo: string;
+    promo: string;
+    isSavedLoginDataChecked: boolean;
 }
 export default class App extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: {id: null},
+			user: { id: null },
 			catalog: {},
 			favorite: [],
 			products: {},
 			stocks: {},
 			basket: null,
 			isLoading: false,
-			fontLoaded: false,
+            fontLoaded: false,
+            isSavedLoginDataChecked: false,
 			userError: {},
 			comment: "",
 			promo: ""
@@ -61,11 +65,11 @@ export default class App extends React.Component<any, State> {
 		this.login = this.login.bind(this);
 		this.makeOrder = this.makeOrder.bind(this);
 		this.sendMail = this.sendMail.bind(this);
+		this.logout = this.logout.bind(this);
 	}
 	componentDidMount() {
 		this.loadAssetsAsync();
-		this.getData({});
-
+		this._autoLogin();
 		const getBasket = async () => {
 			try {
 				const basket = await AsyncStorage.getItem("@basket");
@@ -90,7 +94,7 @@ export default class App extends React.Component<any, State> {
 
 		this.setState({ fontLoaded: true });
 	};
-	basketApi(obj:tsBasketApi) {
+	basketApi(obj: tsBasketApi) {
 		const storeBasket = async basket => {
 			try {
 				await AsyncStorage.setItem("@basket", JSON.stringify(basket));
@@ -105,110 +109,77 @@ export default class App extends React.Component<any, State> {
 			} else {
 				basket[obj.params.productId] = { count: obj.params.count };
 			}
-            this.setState({ basket: basket });
-            console.log('this.state.basket', this.state.basket);
+			this.setState({ basket: basket });
+			console.log("this.state.basket", this.state.basket);
 			storeBasket(basket);
 		}
 		if (obj.action === "clear") {
 			this.setState({ basket: {} });
 			storeBasket({});
-        }
-        if (obj.action === "setBasket") {
+		}
+		if (obj.action === "setBasket") {
 			this.setState({ basket: obj.params.products });
 			storeBasket({});
-        }
-       
+		}
 	}
 	openProduct() {}
 	getCatalog() {}
-	getData(loginData) {
+	async getData(loginData: LoginData) {
+        // let res = false;
+		const getData = async loginData => {
+			// console.log("getData", loginData);
+			return await fetch("https://subexpress.ru/apps_api/", {
+				method: "post",
+				body: JSON.stringify({ loginData: loginData })
+			})
+				.then(res => res.json())
+				.then(res => {
+                    this.setState({isSavedLoginDataChecked: true});
+					if (res.user && res.user.error) {
+                        // alert("getData fetch " + res.user.error);
+                        return res.user;
+                        
+					}
+					console.log("fetch res stocks", res.stocks);
+					this.setState({
+						isLoading: false,
+						userError: res.userError,
+						catalog: res.catalog.cats,
+						products: res.catalog.products,
+						user: res.user,
+						stocks: res.stocks,
+						favorite: res.user.favorite
+					});
+					if (res.user && loginData.isSignUp && loginData.save) {
+						this._saveLoginData(loginData.log, res.user.pas);
+					}
 
-
-        // log: null,
-        // pas: null,
-        // name: null,
-        // phone: null,
-        // save: true,
-        // isSignUp: false
-
-        // this._saveLoginData(loginData.log , loginData.pas);
-
-		const getData = async (loginData) => {
-			try {
-				const value = await AsyncStorage.getItem("@log");
-				const value2 = await AsyncStorage.getItem("@pas");
-				const decryptedLog = CryptoJS.AES.decrypt(
-					value,
-					"F24czi3II092Xnrhc"
-				).toString(CryptoJS.enc.Utf8);
-				const decryptedPas = CryptoJS.AES.decrypt(
-					value2,
-					"F24czi3II092Xnrhc"
-				).toString(CryptoJS.enc.Utf8);
-				// console.log('decryptedLog' , decryptedLog);
-				if (value !== null) {
-                    if(!loginData.isSignUp){
-                        loginData['log'] = decryptedLog;
-                        loginData['pas'] = decryptedPas;
-                    }
-                    // console.log("@pas", decryptedPas);
-                    // console.log("@log", decryptedLog);
-					// value previously stored
-					//
-
-					
-                    // console.log('getData' , loginData);
-
-					return fetch("https://subexpress.ru/apps_api/", {
-						method: "post",
-						body: JSON.stringify(loginData)
-					})
-						.then(res => res.json())
-						.then(res => {
-                            if(res.error){alert(res.error)}
-							// console.log('login res' , res);
-							this.setState(
-								{
-									isLoading: false,
-									userError: res.userError,
-									catalog: res.catalog.cats,
-									products: res.catalog.products,
-									user: res.user,
-									stocks: res.stocks,
-									favorite: res.favorite
-								}
-                            );
-                            if(loginData.isSignUp && loginData.save){
-                                this._saveLoginData(loginData.log , res.user.pas);
-                            }
-
-							// console.log('login res' , res);
-						})
-						.catch(error => {
-							console.error(error);
-						});
-				}
-			} catch (e) {
-                // error reading value
-                alert(e);
-			}
+                    // console.log('getData res' , res);
+                    return res.user;
+				})
+				.catch(error => {
+					// console.error(error);
+                    alert("getData fetch error" + error);
+				});
 		};
-		getData(loginData);
+        return await getData(loginData);
+        // console.log('getData await res' , getData ,res);
+		// return res;
 	}
 	setOrderData(data) {
 		// console.log('setOrderData' , data)
 		this.setState({ comment: data.comment, promo: data.promo });
 	}
 	async makeOrder(obj: MakeOrderData) {
-		console.log("makeOrder");
-        const data:MakeOrderData={
-            userId : this.state.user.id,
-            promo : this.state.promo,
-            products: this.state.basket,
-            comment : `(from mobile app) ` + this.state.comment,
-            address : obj.address,
-            deliveryDate : obj.date,
-        }
+		// console.log("makeOrder");
+		const data: MakeOrderData = {
+			userId: this.state.user.id,
+			promo: this.state.promo,
+			products: this.state.basket,
+			comment: `(from mobile app) ` + this.state.comment,
+			address: obj.address,
+			deliveryDate: obj.date
+		};
 		// data.userId = this.state.user.id;
 		// data.promo = this.state.promo;
 		// data.comment = `(from mobile app) ` + this.state.comment;
@@ -222,7 +193,7 @@ export default class App extends React.Component<any, State> {
 		let formData = new FormData();
 		formData.append("json", JSON.stringify(data));
 
-		console.log("order sended-", JSON.stringify(data));
+		// console.log("order sended-", JSON.stringify(data));
 		const success = await fetch(
 			`https://subexpress.ru/apps_api/order.php`,
 			{
@@ -243,7 +214,86 @@ export default class App extends React.Component<any, State> {
 			});
 		return success;
 	}
-	addToFavorite(id) {
+	
+	async login(loginData: LoginData) {
+		// console.log("login", loginData.log, loginData.pas);
+
+		if (loginData.save && !loginData.isSignUp) {
+			this._saveLoginData(loginData.log, loginData.pas);
+			// console.log('storeData' , storeData);
+		}
+		// const res = await this.getData(loginData);
+        return await this.getData(loginData);
+        
+        // return 'resasd';
+
+	}
+	_autoLogin() {
+		let loginData: LoginData = { log: null, pas: null };
+		const getLoginData = async loginData => {
+			try {
+				const cryptedLog = await AsyncStorage.getItem("@log");
+				const cryptedPas = await AsyncStorage.getItem("@pas");
+				const decryptedLog = CryptoJS.AES.decrypt(
+					cryptedLog,
+					"F24czi3II092Xnrhc"
+				).toString(CryptoJS.enc.Utf8);
+				const decryptedPas = CryptoJS.AES.decrypt(
+					cryptedPas,
+					"F24czi3II092Xnrhc"
+				).toString(CryptoJS.enc.Utf8);
+				// console.log('decryptedLog' , decryptedLog);
+				// console.log("_autoLogin @pas", decryptedPas);
+				// console.log("_autoLogin @log", decryptedLog);
+				if (
+					cryptedLog !== null &&
+					cryptedLog !== "" &&
+					cryptedPas !== null
+				) {
+					if (!loginData.isSignUp) {
+						loginData["log"] = decryptedLog;
+						loginData["pas"] = decryptedPas;
+                    }
+                    
+                    
+                    
+					this.login(loginData);
+				}
+			} catch (e) {
+				// alert("getLoginData" + e);
+			}
+		};
+		getLoginData(loginData);
+	}
+	_saveLoginData(log, pas) {
+		// console.log("_saveLoginData", log, pas);
+		const storeData = async (log, pas) => {
+			try {
+				const encryptedLog = CryptoJS.AES.encrypt(
+					log,
+					"F24czi3II092Xnrhc"
+				).toString();
+				const encryptedPas = CryptoJS.AES.encrypt(
+					pas,
+					"F24czi3II092Xnrhc"
+				).toString();
+				// console.log('encryptedLog' , encryptedLog)
+				await AsyncStorage.setItem("@log", encryptedLog);
+				await AsyncStorage.setItem("@pas", encryptedPas);
+			} catch (e) {
+				alert("_saveLoginData error " + e);
+				// saving error
+			}
+		};
+		storeData(log, pas);
+	}
+	logout() {
+		AsyncStorage.setItem("@log", "");
+		AsyncStorage.setItem("@pas", "");
+		// this.login({pas: '' , log: ''});
+		this.setState({ user: { id: null } });
+    }
+    addToFavorite(id) {
 		let favorite: Array<number> = this.state.favorite;
 		let prodId = parseInt(id);
 		if (favorite.includes(prodId)) {
@@ -265,7 +315,11 @@ export default class App extends React.Component<any, State> {
 		let formData = new FormData();
 		formData.append("json", JSON.stringify(data));
 		// console.log('sended-', data)
-		fetch(`https://subexpress.ru/apps_api/favorites.php`, { method: "POST", headers, body: formData })
+		fetch(`https://subexpress.ru/apps_api/favorites.php`, {
+			method: "POST",
+			headers,
+			body: formData
+		})
 			.then(res => res.json())
 			.then(res => {
 				// console.log('fetch res-', res);
@@ -277,8 +331,8 @@ export default class App extends React.Component<any, State> {
 		// console.log("addToFavorite", this.state.favorite);
 	}
 	async sendMail(data) {
-        let success:boolean = false;
-        data['userId'] = this.state.user.id;
+		let success: boolean = false;
+		data["userId"] = this.state.user.id;
 		console.log("sendMail", data);
 		await fetch(`https://subexpress.ru/apps_api/email.php`, {
 			method: "POST",
@@ -290,56 +344,23 @@ export default class App extends React.Component<any, State> {
 		})
 			.then(res => res.json())
 			.then(res => {
-                // console.log('fetch res-', res.success);
-                
-				if (res.success) {
-                    console.log('fetch sucsess');
-					// if(prod.count === 0){delete state.inBasket[prod.id]}
-                }
-                success = res.success;
-            });
-        return success;
-	}
-	login(loginData:LoginData) {
-        console.log('login', loginData.log , loginData.pas)
-        this.getData(loginData);
+				// console.log('fetch res-', res.success);
 
-		if (loginData.save&&!loginData.isSignUp) {
-            this._saveLoginData(loginData.log , loginData.pas);
-			// console.log('storeData' , storeData);
-		}
-    }
-    _saveLoginData(log , pas){
-        console.log('_saveLoginData' , log , pas);
-        const storeData = async (log , pas) => {
-            try {
-                const encryptedLog = CryptoJS.AES.encrypt(
-                    log,
-                    "F24czi3II092Xnrhc"
-                ).toString();
-                const encryptedPas = CryptoJS.AES.encrypt(
-                    pas,
-                    "F24czi3II092Xnrhc"
-                ).toString();
-                // console.log('encryptedLog' , encryptedLog)
-                await AsyncStorage.setItem("@log", encryptedLog);
-                await AsyncStorage.setItem("@pas", encryptedPas);
-            } catch (e) {
-                // saving error
-            }
-        };
-        storeData(log , pas);
-    }
+				if (res.success) {
+					console.log("fetch sucsess");
+					// if(prod.count === 0){delete state.inBasket[prod.id]}
+				}
+				success = res.success;
+			});
+		return success;
+	}
 	render() {
 		// console.log("user", this.state.user);
-		if (!this.state.fontLoaded) {
-			return <Text>Loaging Font</Text>;
+		if (!this.state.fontLoaded || !this.state.isSavedLoginDataChecked) {
+			return (<View style={{flex:1 , justifyContent: 'center'}}><Loading></Loading></View>);
 		}
 
-		if (
-			(this.state.user && Object.keys(this.state.user).length === 0) ||
-            !this.state.user
-		) {
+		if (!this.state.user.id && this.state.isSavedLoginDataChecked) {
 			return (
 				<LoginForm
 					login={this.login}
@@ -362,13 +383,13 @@ export default class App extends React.Component<any, State> {
 					favorite: this.state.favorite,
 					setOrderData: this.setOrderData,
 					addToFavorite: this.addToFavorite,
-					sendMail: this.sendMail
+					sendMail: this.sendMail,
+					logout: this.logout
 				}}
 			/>
 		) : null;
 	}
 }
-
 
 // Keystore credentials
 //   Keystore password: 0f45834b5f014368a158de89bbf34ca1
@@ -377,6 +398,9 @@ export default class App extends React.Component<any, State> {
 
 //   Path to Keystore:  /work/sub_apps/subexpress/subexpress.jks
 
+// firebase
+// sub-apps
+// Project ID: lknsdh2m1c
 
 // basket1
 // width: 22.5,

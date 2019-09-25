@@ -121,6 +121,7 @@ export default class Contacts extends React.Component<any> {
                         title='Форма обратной связи'
                         fromPage='С страницы контакты'
                         sendMail={this.props.screenProps.sendMail}
+                        navigation={this.props.navigation}
                     />
 			</ScrollView>
 		);

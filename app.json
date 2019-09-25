@@ -29,8 +29,9 @@
     },
     "android": {
       "package": "com.vladkorn.subexpress",
+      "googleServicesFile": "./google-services.json",
       "permissions": [],
-      "versionCode": 3
+      "versionCode": 5
     },
     "description": ""
   }

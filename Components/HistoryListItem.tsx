@@ -164,7 +164,7 @@ const HistiryListItem: React.FC<Props> = props => {
 						marginTop: 5
 					}}
 				>
-					{props.date}
+					{props.date.split(' ')[0]}
 				</Text>
 			</View>
 		</TouchableOpacity>

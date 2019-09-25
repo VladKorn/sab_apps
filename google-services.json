@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "150263702844",
+    "firebase_url": "https://lknsdh2m1c.firebaseio.com",
+    "project_id": "lknsdh2m1c",
+    "storage_bucket": "lknsdh2m1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150263702844:android:24435ca5f08582faaf6a39",
+        "android_client_info": {
+          "package_name": "com.vladkorn.subexpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150263702844-630e539tcn6j3rl7aujdm5ac4koihj5n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhknIkYXppRW7BH-tcVzVY0eVMkuI2yYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150263702844-630e539tcn6j3rl7aujdm5ac4koihj5n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

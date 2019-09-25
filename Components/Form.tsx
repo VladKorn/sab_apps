@@ -7,7 +7,8 @@ interface Props {
 	title?: string;
 	fromPage: string;
 	sendMail: (data) => any;
-	style?: object;
+    style?: object;
+    navigation: any;
 }
 interface State {
 	name: string;
@@ -26,9 +27,20 @@ export default class Form extends React.Component<Props, State> {
 		};
 		this.submit = this.submit.bind(this);
 		this.isOpenHendler = this.isOpenHendler.bind(this);
-	}
+    }
+    componentDidMount(){
+        const didBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload => {
+            //   console.debug('willBlur', payload);
+                this.setState({
+                    modalIsOpen: false,
+                });
+            }
+        );
+    }
 	isOpenHendler(isOpen) {
-		this.setState({ modalIsOpen: isOpen });
+        this.setState({ modalIsOpen: isOpen });
 	}
 	async submit() {
         // console.log('submit');
