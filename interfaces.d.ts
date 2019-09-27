@@ -12,7 +12,14 @@ export interface tsBasketApi{
     params?: {count?: number , productId?: number ,products?: tsBasket};
     // params?: actionTypesparams;
 }
-
+export interface LoginData {
+	log: string;
+	pas: string;
+	save?: boolean;
+	name?: string;
+	phone?: string;
+	isSignUp?: false;
+}
 export interface tsBasket{
     [id:number]: tsBasketItem
 }

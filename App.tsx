@@ -10,18 +10,11 @@ import Loading from "./Components/Loading";
 import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
 
-import { MakeOrderData, tsBasketApi, tsBasket } from "./interfaces";
+import { MakeOrderData, tsBasketApi, tsBasket , LoginData} from "./interfaces";
 interface User {
 	id: number;
 }
-interface LoginData {
-	log: string;
-	pas: string;
-	save?: boolean;
-	name?: string;
-	phone?: string;
-	isSignUp?: false;
-}
+
 
 interface State {
 	user: User;
@@ -52,7 +45,7 @@ export default class App extends React.Component<any, State> {
             isSavedLoginDataChecked: false,
 			userError: {},
 			comment: "",
-			promo: ""
+            promo: "",
 		};
 
 		// bind functions..
@@ -66,13 +59,21 @@ export default class App extends React.Component<any, State> {
 		this.makeOrder = this.makeOrder.bind(this);
 		this.sendMail = this.sendMail.bind(this);
 		this.logout = this.logout.bind(this);
-	}
+        this.autoLogin = this.autoLogin.bind(this);
+        this.saveLoginData = this.saveLoginData.bind(this);
+        
+    }
+	componentWillMount() {
+        // console.log('componentWillMount');
+		// this.autoLogin();
+    }    
 	componentDidMount() {
+        // console.log('componentDidMount');
 		this.loadAssetsAsync();
-		this._autoLogin();
+		this.autoLogin();
 		const getBasket = async () => {
 			try {
-				const basket = await AsyncStorage.getItem("@basket");
+				const basket = await AsyncStorage.getItem("@basket") || JSON.stringify({});
 				// console.log('basket1' , basket);
 				if (basket) {
 					this.setState({ basket: JSON.parse(basket) });
@@ -82,7 +83,10 @@ export default class App extends React.Component<any, State> {
 				Alert.alert(e);
 			}
 		};
-		getBasket();
+        getBasket();
+        setTimeout(()=>{
+            this.setState({isSavedLoginDataChecked: true});
+        }, 5000)
 	}
 	loadAssetsAsync = async () => {
 		await Font.loadAsync({
@@ -110,7 +114,7 @@ export default class App extends React.Component<any, State> {
 				basket[obj.params.productId] = { count: obj.params.count };
 			}
 			this.setState({ basket: basket });
-			console.log("this.state.basket", this.state.basket);
+			// console.log("this.state.basket", this.state.basket);
 			storeBasket(basket);
 		}
 		if (obj.action === "clear") {
@@ -140,7 +144,7 @@ export default class App extends React.Component<any, State> {
                         return res.user;
                         
 					}
-					console.log("fetch res stocks", res.stocks);
+					// console.log("fetch res stocks", res.stocks);
 					this.setState({
 						isLoading: false,
 						userError: res.userError,
@@ -148,10 +152,10 @@ export default class App extends React.Component<any, State> {
 						products: res.catalog.products,
 						user: res.user,
 						stocks: res.stocks,
-						favorite: res.user.favorite
+						favorite: res.user.favorite || []
 					});
-					if (res.user && loginData.isSignUp && loginData.save) {
-						this._saveLoginData(loginData.log, res.user.pas);
+					if (res.user && res.user.id && loginData.isSignUp && loginData.save) {
+						this.saveLoginData(loginData.log, res.user.pas);
 					}
 
                     // console.log('getData res' , res);
@@ -219,7 +223,7 @@ export default class App extends React.Component<any, State> {
 		// console.log("login", loginData.log, loginData.pas);
 
 		if (loginData.save && !loginData.isSignUp) {
-			this._saveLoginData(loginData.log, loginData.pas);
+            this.saveLoginData(loginData.log, loginData.pas);
 			// console.log('storeData' , storeData);
 		}
 		// const res = await this.getData(loginData);
@@ -228,8 +232,9 @@ export default class App extends React.Component<any, State> {
         // return 'resasd';
 
 	}
-	_autoLogin() {
-		let loginData: LoginData = { log: null, pas: null };
+	autoLogin() {
+        // console.log('_autoLogin');
+		let loginData: LoginData = { log: '', pas: '' };
 		const getLoginData = async loginData => {
 			try {
 				const cryptedLog = await AsyncStorage.getItem("@log");
@@ -243,8 +248,8 @@ export default class App extends React.Component<any, State> {
 					"F24czi3II092Xnrhc"
 				).toString(CryptoJS.enc.Utf8);
 				// console.log('decryptedLog' , decryptedLog);
-				// console.log("_autoLogin @pas", decryptedPas);
-				// console.log("_autoLogin @log", decryptedLog);
+				// console.log("autoLogin @pas", decryptedPas);
+				// console.log("autoLogin @log", decryptedLog);
 				if (
 					cryptedLog !== null &&
 					cryptedLog !== "" &&
@@ -257,31 +262,36 @@ export default class App extends React.Component<any, State> {
                     
                     
                     
-					this.login(loginData);
 				}
 			} catch (e) {
 				// alert("getLoginData" + e);
-			}
+            }
+            
+            this.login(loginData);
 		};
 		getLoginData(loginData);
 	}
-	_saveLoginData(log, pas) {
-		// console.log("_saveLoginData", log, pas);
+	saveLoginData(log, pas) {
+		console.log("saveLoginData", log, pas);
 		const storeData = async (log, pas) => {
 			try {
-				const encryptedLog = CryptoJS.AES.encrypt(
-					log,
-					"F24czi3II092Xnrhc"
-				).toString();
-				const encryptedPas = CryptoJS.AES.encrypt(
-					pas,
-					"F24czi3II092Xnrhc"
-				).toString();
-				// console.log('encryptedLog' , encryptedLog)
-				await AsyncStorage.setItem("@log", encryptedLog);
-				await AsyncStorage.setItem("@pas", encryptedPas);
+                if(log){
+                    const encryptedLog = CryptoJS.AES.encrypt(
+                        log,
+                        "F24czi3II092Xnrhc"
+                    ).toString();
+                    await AsyncStorage.setItem("@log", encryptedLog);
+                }
+                if(pas){
+                    const encryptedPas = CryptoJS.AES.encrypt(
+                        pas,
+                        "F24czi3II092Xnrhc"
+                    ).toString();
+                    // console.log('encryptedLog' , encryptedLog)
+                    await AsyncStorage.setItem("@pas", encryptedPas);
+                }
 			} catch (e) {
-				alert("_saveLoginData error " + e);
+				alert("saveLoginData error " + e);
 				// saving error
 			}
 		};
@@ -355,12 +365,11 @@ export default class App extends React.Component<any, State> {
 		return success;
 	}
 	render() {
-		// console.log("user", this.state.user);
 		if (!this.state.fontLoaded || !this.state.isSavedLoginDataChecked) {
 			return (<View style={{flex:1 , justifyContent: 'center'}}><Loading></Loading></View>);
 		}
 
-		if (!this.state.user.id && this.state.isSavedLoginDataChecked) {
+		if (!this.state.user.id) {
 			return (
 				<LoginForm
 					login={this.login}
@@ -384,7 +393,10 @@ export default class App extends React.Component<any, State> {
 					setOrderData: this.setOrderData,
 					addToFavorite: this.addToFavorite,
 					sendMail: this.sendMail,
-					logout: this.logout
+                    logout: this.logout,
+                    login: this.login,
+                    autoLogin: this.autoLogin,
+                    saveLoginData: this.saveLoginData
 				}}
 			/>
 		) : null;

@@ -26,7 +26,7 @@ export default class HomeScreen extends React.Component<any> {
 			sliderImages.push(this.props.screenProps.stocks[item].img);
 		});
 		const products = this.props.screenProps.products
-			? Object.keys(this.props.screenProps.products)
+			? Object.keys(this.props.screenProps.products).slice(0 , 20)
 					.map(key => {
 						const item = this.props.screenProps.products[key];
 						return (
@@ -40,19 +40,21 @@ export default class HomeScreen extends React.Component<any> {
 								}}
 							>
 								<View style={{ width: 130, marginRight: 5 }}>
-									<Image
-										style={{
-											width: 130,
-											height: 130,
-											borderRadius: 10,
-											marginBottom: 5
-										}}
-										source={{
-											uri:
-												"https://subexpress.ru" +
-												item.img
-										}}
-									/>
+                                <View style={{backgroundColor: Colors.lightgray,borderRadius: 10,}}>
+                                        <Image
+                                            style={{
+                                                width: 130,
+                                                height: 130,
+                                                borderRadius: 10,
+                                                marginBottom: 5
+                                            }}
+                                            source={{
+                                                uri:
+                                                    "https://subexpress.ru" +
+                                                    item.img
+                                            }}
+                                        />
+                                    </View>
 									<Text
 										numberOfLines={1}
 										style={{

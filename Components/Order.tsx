@@ -68,15 +68,17 @@ export default class Order extends React.Component<any, State> {
 		}
 	}
 	_totalPrice() {
-		let price = 0;
+        let price = 0;
 		const basket = this.props.screenProps.basket;
 		const products = this.props.screenProps.products;
 		Object.keys(basket).map(id => {
-			price =
-				price +
-				parseInt(products[id].price) * parseInt(basket[id].count);
+            const addToPrice = parseInt(products[id].price) * parseInt(basket[id].count);
+            if(!isNaN(addToPrice)){
+                price = price + addToPrice;
+            }
 		});
-		if (this.state.priceTotal !== price) {
+        console.log('basket' , basket, this.state.priceTotal , price);
+		if (this.state.priceTotal !== price && !isNaN(price) ) {
 			this.setState({ priceTotal: price });
 		}
 	}

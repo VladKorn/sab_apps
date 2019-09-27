@@ -96,6 +96,7 @@ const Home = createStackNavigator(
 	},
 	{
 		initialRouteName: "Home",
+		// initialRouteName: "User",
         transitionConfig: nav => handleCustomTransition(nav),
         defaultNavigationOptions: {
             headerBackImage: customHeaderBackImage,

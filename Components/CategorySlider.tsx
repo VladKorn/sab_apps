@@ -5,21 +5,12 @@ import {
     Image,
     AppRegistry,
     SafeAreaView,
-    TouchableHighlight,
     TouchableOpacity,
-    TouchableWithoutFeedback,
-    Dimensions,
-    Animated,
-    Easing,
     StyleSheet
 } from "react-native";
-import Counter from "./Counter";
-import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
-import ImageSlider from "react-native-image-slider";
-import Carousel from "react-native-looped-carousel";
 import SwiperComponent from "./SwiperComponent";
-import CategorySliderItem from "./CategorySliderItem";
+import Loading from "./Loading";
 
 // interface Slides {
 //     id: number;
@@ -105,7 +96,7 @@ export default class CategorySlider extends React.Component<any, State> {
 
     render() {
         if (this.state.isLoading) {
-            return( <Text>Loading...</Text>);
+			return (<View style={{flex:1 , justifyContent: 'center'}}><Loading></Loading></View>);
         }
         let searchWords = []
         if(this.props.navigation.state&&this.props.navigation.state.params&&this.props.navigation.state.params.searchWords ){
