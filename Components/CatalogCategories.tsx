@@ -1,11 +1,41 @@
 import React, { Component } from 'react'
 import {
 	View,
-	Text
+    Text,
+    StyleSheet,
+    SectionList
 } from "react-native";
 import ProductItem from "./ProductItem";
 import appStyles from "./appStyles";
+import Loading from './Loading'
+// const DATA = [
+//     {
+//       title: 'Main dishes',
+//       data: ['Pizza', 'Burger', 'Risotto'],
+//     },
+//     {
+//       title: 'Sides',
+//       data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
+//     },
+//     {
+//       title: 'Drinks',
+//       data: ['Water', 'Coke', 'Beer'],
+//     },
+//     {
+//       title: 'Desserts',
+//       data: ['Cheese Cake', 'Ice Cream'],
+//     },
+//   ];
+let data = [
 
+]
+function Item({ title }) {
+return (
+    <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+    </View>
+);
+}
 export default class CatalogCategories extends Component<any , any> {
     constructor(props) {
 		super(props);
@@ -49,11 +79,23 @@ export default class CatalogCategories extends Component<any , any> {
     componentDidMount(){
         setTimeout(() => {
             this.setState({isLoading: false});
-        }, 50);
-    }    
+        }, 200);
+    }
+
     render() {
-        if(this.state.isLoading){return null}
-    
+        // if(this.state.isLoading){return null}
+
+        // return(<SectionList
+        //     sections={DATA}
+        //     keyExtractor={(item, index) => item + index}
+        //     renderItem={({ item }) => <Item title={item} />}
+        //     renderSectionHeader={({ section: { title } }) => (
+        //       <Text style={styles.header}>{title}</Text>
+        //     )}
+        //   />);
+        if(this.state.isLoading){
+            return (<View style={{flex:1 , justifyContent: 'center'}}><Loading></Loading></View>);
+        }
 		const catId = this.props.navigation.state.params
 			? this.props.navigation.state.params.catId
 			: false;
@@ -147,7 +189,10 @@ export default class CatalogCategories extends Component<any , any> {
 									/>
 								);
 						  })
-						: [];
+                        : [];
+                    data.push({
+                        title: cat.name,
+                    });
 					return (
 						<View key={cat.id}>
 							<Text
@@ -171,3 +216,22 @@ export default class CatalogCategories extends Component<any , any> {
         )
     }
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      marginHorizontal: 16,
+    },
+    item: {
+      backgroundColor: '#f9c2ff',
+      padding: 20,
+      marginVertical: 8,
+    },
+    header: {
+      fontSize: 32,
+    },
+    title: {
+      fontSize: 24,
+    },
+  });
