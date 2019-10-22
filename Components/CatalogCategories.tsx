@@ -57,11 +57,7 @@ export default class CatalogCategories extends Component<any, any> {
     
 	render() {
 		if (this.state.isLoading) {
-			return (
-				<View style={{ flex: 1, justifyContent: "center" }}>
-					<Loading></Loading>
-				</View>
-			);
+			return (null);
 		}
 		const catId = this.props.navigation.state.params
 			? this.props.navigation.state.params.catId

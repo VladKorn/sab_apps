@@ -9,13 +9,13 @@
       "android",
       "web"
     ],
-    "version": "0.9.3",
+    "version": "0.9.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#f5c934"
+      "image": "./assets/splash_c.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -31,7 +31,7 @@
       "package": "com.vladkorn.subexpress",
       "googleServicesFile": "./google-services.json",
       "permissions": [],
-      "versionCode": 6
+      "versionCode": 7
     },
     "description": ""
   }

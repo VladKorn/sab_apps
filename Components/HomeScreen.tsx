@@ -6,7 +6,8 @@ import {
 	Image,
 	TouchableOpacity,
 	StyleSheet,
-	ScrollView
+    ScrollView,
+    Dimensions
 } from "react-native";
 
 import Colors from "../constants/Colors.js";
@@ -15,12 +16,18 @@ import appStyles from "./appStyles";
 import ImageSlider from "react-native-image-slider";
 
 
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
+
 export default class HomeScreen extends React.Component<any> {
 	static navigationOptions = {
         header: null,
         headerBackTitle: null,
 	};
 	render() {
+        // console.log('screenWidth' , screenWidth);
+        // console.log('screenHeight' , screenHeight);
+
 		const sliderImages = [];
 		Object.keys(this.props.screenProps.stocks).map(item => {
 			sliderImages.push(this.props.screenProps.stocks[item].img);
@@ -39,12 +46,12 @@ export default class HomeScreen extends React.Component<any> {
 									);
 								}}
 							>
-								<View style={{ width: 130, marginRight: 5 }}>
+								<View style={{ width: screenHeight > 600 ?130: 70, marginRight: 5 }}>
                                 <View style={{backgroundColor: Colors.lightgray,borderRadius: 10,}}>
                                         <Image
                                             style={{
-                                                width: 130,
-                                                height: 130,
+                                                width: screenHeight > 600 ?130: 70,
+                                                height: screenHeight > 600 ?130: 70,
                                                 borderRadius: 10,
                                                 marginBottom: 5
                                             }}
@@ -128,7 +135,8 @@ export default class HomeScreen extends React.Component<any> {
 					}}
 				>
 					<TouchableOpacity
-						onPress={this.props.navigation.openDrawer}
+                            style={{width: 40 , height: 40}}
+                            onPress={this.props.navigation.openDrawer}
 					>
 						<Image
 							style={{ width: 22, height: 19 }}
@@ -136,7 +144,8 @@ export default class HomeScreen extends React.Component<any> {
 						/>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={() => this.props.navigation.navigate("Stocks")}
+                            style={{width: 40 , height: 40}}
+                            onPress={() => this.props.navigation.navigate("Stocks")}
 					>
 						<Image
 							style={{ width: 24, height: 24 }}
@@ -144,7 +153,8 @@ export default class HomeScreen extends React.Component<any> {
 						/>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={() => {
+                            style={{width: 40 , height: 40}}
+                            onPress={() => {
 							this.props.navigation.navigate("Order");
 						}}
 					>
@@ -182,7 +192,7 @@ export default class HomeScreen extends React.Component<any> {
 						</View>
 					</TouchableOpacity>
 				</View>
-				<View style={{ height: 270  }}>
+				<View style={{ height: screenHeight > 600 ? 270 : 200   }}>
 					<ImageSlider
 						loopBothSides
 						images={sliderImages}

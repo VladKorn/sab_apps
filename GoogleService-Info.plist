@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>150263702844-ot4afcbo7lfbbaiciivd8bmk1ufobcqj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.150263702844-ot4afcbo7lfbbaiciivd8bmk1ufobcqj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAm7_t7ySeqHV7piGBj1k8WzchXZF1sMZ0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>150263702844</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vladkorn.subexpress</string>
+	<key>PROJECT_ID</key>
+	<string>lknsdh2m1c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lknsdh2m1c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:150263702844:ios:b57ec5d213fcfae0af6a39</string>
+	<key>DATABASE_URL</key>
+	<string>https://lknsdh2m1c.firebaseio.com</string>
+</dict>
+</plist>
