@@ -77,7 +77,7 @@ export default class Order extends React.Component<any, State> {
                 price = price + addToPrice;
             }
 		});
-        console.log('basket' , basket, this.state.priceTotal , price);
+        // console.log('basket' , basket, this.state.priceTotal , price);
 		if (this.state.priceTotal !== price && !isNaN(price) ) {
 			this.setState({ priceTotal: price });
 		}
@@ -145,12 +145,13 @@ export default class Order extends React.Component<any, State> {
 						onChangeText={promo => this.setState({ promo: promo })}
 					/>
 					<Text style={appStyles.sectTitle}>Сумма для оплаты</Text>
-					<View>
+					<View style={{paddingBottom: 30}}>
 						<View
 							style={{
 								flex: 1,
 								flexDirection: "row",
-								justifyContent: "space-between"
+                                justifyContent: "space-between",
+                                
 							}}
 						>
 							<Text>Сумма заказа</Text>

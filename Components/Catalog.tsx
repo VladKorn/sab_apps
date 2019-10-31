@@ -17,10 +17,11 @@ import Basket from "./Basket";
 interface State {
 	data: object;
 	search: string;
-	searchRes: Array<number>;
+    searchRes: Array<number>;
 }
 
 export default class Catalog extends React.Component<any, State> {
+    timer: any;
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -28,17 +29,26 @@ export default class Catalog extends React.Component<any, State> {
 			data: [],
 			search: "",
 			searchRes: []
-			// searchRes: [1949 ,1946 ,1355],
-		};
-		this.search = this.search.bind(this);
+            // searchRes: [1949 ,1946 ,1355],
+            
+        };
+        this.timer = null;
+        this.search = this.search.bind(this);
+        this.onChangeSearch = this.onChangeSearch.bind(this);
+        
 	}
-
+    onChangeSearch(){
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+            this.search();
+        }, 700);
+    }
 	componentDidMount() {
 		
 	}
 	
 	search() {
-		console.log("search", this.state.search);
+        console.log("search", this.state.search);
 		fetch(
 			`https://subexpress.ru/apps_api/search.php/?search=${this.state.search}`
 		)
@@ -47,7 +57,7 @@ export default class Catalog extends React.Component<any, State> {
 				this.setState({
 					searchRes: res.products.map(item => {
 						return parseInt(item);
-					})
+					})|| []
 				});
 				// console.log('searchRes' ,this.state.searchRes);
 			});
@@ -84,8 +94,10 @@ export default class Catalog extends React.Component<any, State> {
 							}}
 							placeholderTextColor={appStyles.input.color}
 							placeholder="Поиск"
-							onChangeText={text =>
-								this.setState({ search: text })
+							onChangeText={text =>{
+                                this.setState({ search: text });
+                                this.onChangeSearch();
+                                }
 							}
 							// value={this.state.text}
 						/>

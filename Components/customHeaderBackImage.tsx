@@ -15,7 +15,8 @@ const customHeaderBackImage: React.FC  = ()=>{
                     marginLeft: 20,
                     marginRight: 12,
                     marginVertical: 12,
-                    resizeMode: "contain"
+                    resizeMode: "contain",
+
                 }}
 			/>
 		);

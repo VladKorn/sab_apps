@@ -145,7 +145,15 @@ export default class Counter extends Component {
                     <TextInput
                         style={this.props.mode === 'v' ? Styles.text_v: Styles.text }
                         keyboardType="numeric"
-                        onChangeText={(number) => this.setState({number: parseInt(number)|| 0 })}
+                        onChangeText={(number) => { 
+                            let value = parseInt(number) || 0;
+                            if(value>99){value = 99}
+                            this.setState({number: value});
+                                if(value !== 0){
+                                    this.props.onChange(value, "+");
+                                }
+                            }
+                        }
                         value={`${this.state.number}`}
                     />
                 </View> : null }
@@ -248,7 +256,7 @@ Counter.propTypes = {
 Counter.defaultProps = {
     value: 0,
     min: 0,
-    max: 999,
+    max: 99,
     onChange(number, type) {
         // Number, - or +
     },

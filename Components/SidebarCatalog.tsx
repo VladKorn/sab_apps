@@ -44,13 +44,13 @@ export default class SidebarCatalog extends React.Component<any, State> {
                         );
                     }}
                     style={{ flexDirection: "row" , paddingLeft: 10}}>
-                        <View style={{justifyContent: 'center' , alignItems: 'center' ,width: 20  , height: 45}}>
+                        <View style={{justifyContent: 'center' , alignItems: 'center' ,width: 20  , height: 40}}>
                         {Images[key]}
                         </View>
-                        <View style={{borderBottomWidth: 1, borderBottomColor: Colors.gray , marginLeft: 35, height: 45, marginBottom: 15 , width: 120 , justifyContent: 'center'}}>
+                        <View style={{borderBottomWidth: 1, borderBottomColor: Colors.gray , marginLeft: 35, height: 40, marginBottom: 15 , width: 120 , justifyContent: 'center'}}>
                             <Text style={{fontFamily: 'Neuron-Heavy' , fontSize: 18, color: Colors.text  }}>{item.name}</Text>
                         </View>
-                        <View style={{marginLeft: "auto" , height: 45, justifyContent: 'center'}}>
+                        <View style={{marginLeft: "auto" , height: 40, justifyContent: 'center'}}>
 						<Text style={{ fontFamily: 'Segoe', color: '#DCDCDC' , fontSize: 18  , }}>
 							{item.products.length}
 						</Text>
@@ -85,7 +85,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
                                                 margin: 2,
                                                 // justifyContent: 'center',
                                                 lineHeight: 27,
-                                                marginBottom: 10,
+                                                marginBottom: 7,
                                                 paddingLeft: 5,
                                                 paddingRight: 5,
                                                 height: 30

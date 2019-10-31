@@ -23,7 +23,8 @@ interface State {
 	modalIsOpen: boolean;
 	modalOrderIsOpen: boolean;
 	DatePickerIsOpen: boolean;
-
+    isInitial: boolean;
+    isSunday: boolean;
 	// data: any;
 }
 
@@ -36,7 +37,9 @@ export default class Order extends React.Component<any, State> {
 			date: "2019-08-11",
 			modalIsOpen: false,
 			modalOrderIsOpen: false,
-			DatePickerIsOpen: false
+            DatePickerIsOpen: false,
+            isInitial: true,
+            isSunday: false,
 		};
 		this.setAddress = this.setAddress.bind(this);
 		this.setDate = this.setDate.bind(this);
@@ -52,7 +55,7 @@ export default class Order extends React.Component<any, State> {
 			"0" +
 			(date.getMonth() + 1)
 		).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
-		console.log("formatedDate", formatedDate);
+		// console.log("formatedDate", formatedDate);
 		this.setState({ date: formatedDate });
 	}
 	componentDidMount() {
@@ -67,7 +70,15 @@ export default class Order extends React.Component<any, State> {
 			}
 		);
 	}
-	componentDidUpdate(prevProps, prevState) {}
+	componentDidUpdate(prevProps, prevState) {
+        // const datestr = this.state.date.replace('-', ',').replace('-', ',');
+        // const selectedDate = new Date();
+        // const dateArr = this.state.date.split("-");
+        // selectedDate.setFullYear(parseInt(dateArr[0]));
+        // selectedDate.setMonth(parseInt(dateArr[1]), 0);
+        // selectedDate.setDate(parseInt(dateArr[2]));
+        // console.log('selectedDate'  , selectedDate.getMonth() ,'-',selectedDate.toUTCString(),'-', selectedDate.getDate() , selectedDate.getDay());
+    }
 	openDatePicker() {
 		this.setState({ DatePickerIsOpen: true });
 		setTimeout(() => {
@@ -75,9 +86,27 @@ export default class Order extends React.Component<any, State> {
 		}, 300);
 	}
 	_checkDate() {
+        if(this.state.isInitial){return false;}
 		const date = new Date();
-		const dateArr = this.state.date.split("-");
+        const dateArr = this.state.date.split("-");
 
+        // disable for sunday
+        const selectedDate = new Date();
+        selectedDate.setFullYear(parseInt(dateArr[0]));
+        selectedDate.setMonth(parseInt(dateArr[1]), 0);
+        selectedDate.setDate(parseInt(dateArr[2]));
+        // console.log('selectedDate'  , selectedDate.getMonth() ,'-',selectedDate.toUTCString(),'-', selectedDate.getDate() , selectedDate.getDay());
+        if(selectedDate.getDay() === 0 ){
+            // console.log('FALSE');
+            this.setState({isSunday: true});
+            return false;
+        } else{
+            this.setState({isSunday: false});
+        }
+        // END disable for sunday
+
+        // const selectedDay = parseInt(dateArr[2]);
+        
 		if (
 			parseInt(dateArr[0]) === date.getFullYear() &&
 			parseInt(dateArr[1]) === date.getMonth() + 1 &&
@@ -205,8 +234,8 @@ export default class Order extends React.Component<any, State> {
 							placeholder="select date"
 							format="YYYY-MM-DD"
 							minDate={new Date()}
-							confirmBtnText="Confirm"
-							cancelBtnText="Cancel"
+							confirmBtnText="Принять"
+							cancelBtnText="Отмена"
 							iconSource={require("../img/ico-date.png")}
 							hideText="true"
 							customStyles={{
@@ -224,7 +253,8 @@ export default class Order extends React.Component<any, State> {
 								// ... You can check the source to find the other keys.
 							}}
 							onDateChange={date => {
-								this.setState({ date: date });
+                                this.setState({ date: date });
+                                this.setState({isInitial: false});
 							}}
 						/>
                         </View>
@@ -235,7 +265,8 @@ export default class Order extends React.Component<any, State> {
 							
                             <View style={styles.dateLabel}>
 								<Text style={styles.dateLabelText}>
-									{this.state.date.split("-")[2]}
+                                
+									{this.state.isInitial ? '--' : this.state.date.split("-")[2]}
 								</Text>
 							</View>
 							<View style={styles.dateLabel}>
@@ -276,11 +307,12 @@ export default class Order extends React.Component<any, State> {
 					isOpenHendler={isOpen => {}}
 				>
 					<Text style={appStyles.modalText}>
-						Даю согласие{"\n"}на обработку заказа{"\n"}на следующий
-						{"\n"}рабочий день
+                    {this.state.isSunday ? 'Доставка в воскресенье невозможна\nвыберите другой день' :
+                        this.state.isInitial ? 'Укажите дату доставки':'Даю согласие\nна обработку заказа\nна следующий \nрабочий день'}
+						
 					</Text>
 					<View style={{ flexDirection: "row", marginTop: 10 }}>
-						<TouchableOpacity
+						{!this.state.isInitial && !this.state.isSunday ? <TouchableOpacity
 							onPress={() => {
 								this.setState({ modalIsOpen: false });
 							}}
@@ -290,11 +322,11 @@ export default class Order extends React.Component<any, State> {
 							]}
 						>
 							<Text style={appStyles.modalButtonText}>Нет</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> : null}
 						<TouchableOpacity
 							onPress={() => {
 								this.setState({ modalIsOpen: false });
-								this.makeOrder();
+								!this.state.isInitial && !this.state.isSunday ? this.makeOrder(): null;
 							}}
 							style={appStyles.modalButton}
 						>
@@ -304,7 +336,7 @@ export default class Order extends React.Component<any, State> {
 									{ color: "white" }
 								]}
 							>
-								Да
+								{!this.state.isInitial && !this.state.isSunday ? 'Да' : 'Ок' }
 							</Text>
 						</TouchableOpacity>
 					</View>

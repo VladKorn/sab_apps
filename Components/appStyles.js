@@ -28,7 +28,7 @@ const appStyles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         borderBottomWidth: 1,
-        borderBottomColor: Colors.lightgray
+        borderBottomColor: Colors.lightgray,
 
     },
     headerTitle:{

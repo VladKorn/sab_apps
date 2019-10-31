@@ -145,7 +145,8 @@ export default class CategorySliderItem extends React.Component<any, State> {
                 <TouchableWithoutFeedback onPress={this.zoomToggle}>
                     <Animated.Image
                         source={{
-                            uri: "https://subexpress.ru" + this.props.item.img
+                            uri: "https://subexpress.ru" + this.props.item.img,
+                            cache: "force-cache"
                         }}
                         style={[
                             styles.customImage,

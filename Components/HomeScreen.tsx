@@ -35,7 +35,8 @@ export default class HomeScreen extends React.Component<any> {
 		const products = this.props.screenProps.products
 			? Object.keys(this.props.screenProps.products).slice(0 , 20)
 					.map(key => {
-						const item = this.props.screenProps.products[key];
+                        const item = this.props.screenProps.products[key];
+                        if(item.price)
 						return (
 							<TouchableOpacity
 								key={item.name}
@@ -129,8 +130,9 @@ export default class HomeScreen extends React.Component<any> {
 						flexDirection: "row",
 						alignItems: "center",
 						justifyContent: "space-between",
-						paddingLeft: 30,
-						paddingRight: 30,
+						paddingTop: 30,
+						paddingLeft: 40,
+						paddingRight: 40,
 						height: 70
 					}}
 				>
@@ -192,7 +194,7 @@ export default class HomeScreen extends React.Component<any> {
 						</View>
 					</TouchableOpacity>
 				</View>
-				<View style={{ height: screenHeight > 600 ? 270 : 200   }}>
+				<View style={{ height: screenHeight > 600 ? 270 : 200 }}>
 					<ImageSlider
 						loopBothSides
 						images={sliderImages}

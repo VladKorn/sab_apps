@@ -17,17 +17,21 @@ export default class CatalogCategories extends Component<any, any> {
 		// this.search = this.search.bind(this);
 	}
 	shouldComponentUpdate(nextProps, nextState) {
+        // console.log('searchRes' , this.props.searchRes);
 		// return true;
         // console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
-		// if(nextProps.screenProps.favorite.length !== this.props.screenProps.favorite.length){
+		// if(nextProps.favorite.length !== this.props.favorite.length){
 		//     return true
-		// } else{
-		//     return this.state.isLoading
-		// }
+        // } 
+        const isFavorites = this.props.navigation.state.params
+			? this.props.navigation.state.params.isFavorite || false
+            : false;
+        if(isFavorites) {return true}
 		// return true;
 		// if (Object.keys(nextProps.screenProps.basket).length !== Object.keys(this.props.screenProps.basket).length) {
 		// 	return true;
-		// }
+        // }
+        // console.log(this.props.navigation.state);
 		if (nextProps.searchRes.length !== this.props.searchRes.length) {
 			return true;
         }
@@ -46,7 +50,9 @@ export default class CatalogCategories extends Component<any, any> {
                 return true;
             } 
             return this.state.isLoading;
-		}
+        }
+		return false;
+        
 	}
 
 	componentDidMount() {
@@ -76,6 +82,7 @@ export default class CatalogCategories extends Component<any, any> {
 		const isFavorites = this.props.navigation.state.params
 			? this.props.navigation.state.params.isFavorite || false
 			: false;
+        // console.log('isFavorites' , isFavorites);
 
         const products = this.props.products;
         let data = [];

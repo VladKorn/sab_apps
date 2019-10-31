@@ -82,6 +82,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 						}}
 					>
 						<TouchableOpacity
+                            style={{paddingLeft: 20}}
 							onPress={() => {
 								this.props.navigation.goBack();
 							}}
@@ -307,35 +308,35 @@ export default class HistoryDetail extends React.Component<any, State> {
 								</Text>
 							</View>
 						</View>
-						{props.status === "F" || props.canceled === "Y" ? (
+						{/* {props.status === "F" || props.canceled === "Y" ? ( */}
 							<TouchableOpacity
 								onPress={() => {
 									this._repeatOrder();
 								}}
 								style={[
 									appStyles.button,
-									{ marginTop: 20, marginBottom: 25 }
+									{ marginTop: 20, marginBottom: 5 }
 								]}
 							>
 								<Text style={appStyles.buttonText}>
                                     Повторить заказ
 								</Text>
 							</TouchableOpacity>
-						) : (
+						{/* ) : ( */}
 							<TouchableOpacity
 								onPress={() => {
 									Linking.openURL(`tel:${phone}`);
 								}}
 								style={[
 									appStyles.button,
-									{ marginTop: 20, marginBottom: 25 }
+									{ marginTop: 10, marginBottom: 25 }
 								]}
 							>
 								<Text style={appStyles.buttonText}>
 									Позвонить нам
 								</Text>
 							</TouchableOpacity>
-						)}
+						{/* )} */}
 					</View>
 					{/*  */}
 					<View style={{ ...appStyles.paddings }}>

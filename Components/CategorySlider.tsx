@@ -64,7 +64,7 @@ export default class CategorySlider extends React.Component<any, State> {
     }
     onPositionChanged(index) {
         // const id = this.props.screenProps.products[this.state.currentProductId].id;
-        console.log('onPositionChanged' , this.state.slides[index].id);
+        // console.log('onPositionChanged' , this.state.slides[index].id);
         this.setState({ currentIndex: index ,
              currentProductId: parseInt(this.state.slides[index].id )
             });
@@ -180,9 +180,9 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "100%",
         zIndex: 3,
-        top: 25,
-        paddingLeft: 15,
-        paddingRight: 15,
+        top: 35,
+        paddingLeft: 40,
+        paddingRight: 40,
         paddingTop: 20,
         alignItems: "center",
         // justifyContent: 'center',
