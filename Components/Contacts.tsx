@@ -23,12 +23,13 @@ export default class Contacts extends React.Component<any> {
 			<ScrollView>
 				<View
 					style={{
-						backgroundColor: Colors.lightgray,
+                        backgroundColor: Colors.lightgray,
 						alignItems: "center",
 						paddingTop: 30,
 						paddingBottom: 30
 					}}
-				>
+                    >
+                    
 					<Image
 						style={{ width: 144, height: 56.43 , marginBottom: 20 }}
 						source={require("../img/logo.png")}
