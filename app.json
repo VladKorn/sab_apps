@@ -24,14 +24,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.vladkorn.subexpress"
     },
     "android": {
       "package": "com.vladkorn.subexpress",
       "googleServicesFile": "./google-services.json",
       "permissions": [],
-      "versionCode": 7
+      "versionCode": 8
     },
     "description": ""
   }
