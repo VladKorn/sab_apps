@@ -11,8 +11,8 @@ interface State {
     totalProductsCount: number;
     translateY: any
 }
-const Dimensions = require("Dimensions");
-const { width, height } = Dimensions.get("window");
+// const Dimensions = require("Dimensions");
+// const { width, height } = Dimensions.get("window");
 export default class Basket extends React.Component<Props, State> {
     timer: any;
 	constructor(props) {

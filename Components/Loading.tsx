@@ -1,6 +1,7 @@
 import React from "react";
 
 import * as Progress from 'react-native-progress';
+import CircleSnail from 'react-native-progress/CircleSnail';
 import Colors from "../constants/Colors.js";
 
 import {
@@ -16,6 +17,7 @@ export default class Loading extends React.Component<any, any> {
       }
     
     render(){
+        return null;
         return(
             <View style={styles.container}>
               <Progress.CircleSnail
