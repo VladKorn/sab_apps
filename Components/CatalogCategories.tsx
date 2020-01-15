@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SectionList } from "react-native";
 import ProductItem from "./ProductItem";
 import appStyles from "./appStyles";
 import Loading from "./Loading";
-
+import InputSearch from "./InputSearch";
 export default class CatalogCategories extends Component<any, any> {
 	constructor(props) {
 		super(props);
@@ -148,7 +148,7 @@ export default class CatalogCategories extends Component<any, any> {
 												.addToFavorite,
 											navigation: this.props.navigation,
 											isFavorite: isFavorite,
-											searchWords: this.props.search.split(
+											searchWords: this.props.searchText.split(
 												" "
 											)
 									  })
@@ -163,22 +163,25 @@ export default class CatalogCategories extends Component<any, any> {
             : [];
 		// return null;
 		return (
-			<View>
-				{/* {cats} */}
-                {/* {this.props.getHeader()} */}
-				<SectionList
-                    ListHeaderComponent={this.props.getHeader}
-                    sections={data}
-                    keyExtractor={(item, index) => item.id + index}
-                    stickySectionHeadersEnabled={false}
-					renderItem={({ item }) => <ProductItem {...item} />}
-					renderSectionHeader={({ section: { title } }) => (
-						<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
-							{title}
-						</Text>
-					)}
-				/>
-			</View>
+            <SectionList
+                // ListHeaderComponent={this.props.getHeader}
+                ListHeaderComponent={
+                <InputSearch
+                    initialText={this.props.searchText}
+                    search={this.props.search}
+                    
+                ></InputSearch>}
+                
+                sections={data}
+                keyExtractor={(item, index) => item.id + index}
+                stickySectionHeadersEnabled={false}
+                renderItem={({ item }) => <ProductItem {...item} />}
+                renderSectionHeader={({ section: { title } }) => (
+                    <Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
+                        {title}
+                    </Text>
+                )}
+            />
 		);
 	}
 }

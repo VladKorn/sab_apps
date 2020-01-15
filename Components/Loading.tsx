@@ -13,7 +13,7 @@ export default class Loading extends React.Component<any, any> {
 		// return null;
 		return (
 			<View style={styles.container}>
-				<ActivityIndicator size="large" color={Colors.assent4} />
+				<ActivityIndicator size="large" color={Colors.assent} />
 			</View>
 		);
 	}

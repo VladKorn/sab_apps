@@ -12,6 +12,7 @@ import {
 
 import CatalogCategories from "./CatalogCategories";
 
+
 import appStyles from "./appStyles";
 import Basket from "./Basket";
 interface State {
@@ -34,96 +35,41 @@ export default class Catalog extends React.Component<any, State> {
         };
         this.timer = null;
         this.search = this.search.bind(this);
-        this.onChangeSearch = this.onChangeSearch.bind(this);
         
 	}
-    onChangeSearch(){
-        clearTimeout(this.timer);
-        this.timer = setTimeout(() => {
-            this.search();
-        }, 700);
-    }
-	componentDidMount() {
-		
-	}
-	
-	search() {
-        console.log("search", this.state.search);
+
+	search(text:string) {
+        console.log("search", text);
+        this.setState({search: text});
 		fetch(
-			`https://subexpress.ru/apps_api/search.php/?search=${this.state.search}`
+			`https://subexpress.ru/apps_api/search.php/?search=${text}`
 		)
 			.then(res => res.json())
 			.then(res => {
-				this.setState({
-					searchRes: res.products.map(item => {
-						return parseInt(item);
-					})|| []
-				});
+                console.log('res' , res)
+                if(res.products){
+                    this.setState({
+                        searchRes: res.products.map(item => {
+                            return parseInt(item);
+                        })|| []
+                    });
+                } else{
+                    this.setState({
+                        searchRes: []
+                    });
+                }
 				// console.log('searchRes' ,this.state.searchRes);
 			});
 	}
 	render() {
-        const getHeader = () => {
-            return <View style={{ alignItems: "center" ,paddingTop: 25  }}>
-            <View
-                style={{
-                    maxWidth: 335,
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    position: "relative",
-                }}
-            >
-                {/* <Text>
-                        {this.state.search}
-                        {this.state.searchRes.length}
-                    </Text> */}
-                <TextInput
-                    style={{
-                        height: 40,
-                        backgroundColor: "#F1F1F1",
-                        borderWidth: 0,
-                        borderRadius: 50,
-                        maxWidth: 335,
-                        width: "100%",
-                        paddingLeft: 25
-                        // color: appStyles.input.color,
-                    }}
-                    placeholderTextColor={appStyles.input.color}
-                    placeholder="Поиск"
-                    onChangeText={text =>{
-                        this.setState({ search: text });
-                        this.onChangeSearch();
-                        }
-                    }
-                    // value={this.state.text}
-                />
-                <TouchableOpacity
-                    style={{
-                        position: "absolute",
-                        zIndex: 3,
-                        right: 0,
-                        height: 40,
-                        width: 40,
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}
-                    onPress={this.search}
-                >
-                    <Image
-                        style={{ width: 18, height: 18 }}
-                        source={require("../img/ico-search.png")}
-                    />
-                </TouchableOpacity>
-            </View>
-        </View>;
-        };
+       
 		return (
             <View style={{flex: 1}}>
             
 			<View >
             {/* {getHeader()} */}
                 <CatalogCategories
-                    getHeader={getHeader}
+                    // getHeader={getHeader}
                     navigation={this.props.navigation}
                     catalog={this.props.screenProps.catalog}
                     products={this.props.screenProps.products}
@@ -131,7 +77,9 @@ export default class Catalog extends React.Component<any, State> {
                     addToFavorite={this.props.screenProps.addToFavorite}
                     basketApi={this.props.screenProps.basketApi}
                     searchRes={this.state.searchRes}
-                    search={this.state.search}
+                    searchText={this.state.search}
+
+                    search={this.search}
                 />
 				
 				{/* {cats} */}
