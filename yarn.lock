@@ -1394,7 +1394,7 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
-"@react-native-community/art@^1.0.3", "@react-native-community/art@^1.1.2":
+"@react-native-community/art@^1.0.3":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@react-native-community/art/-/art-1.1.2.tgz#8d365ad5a12f83a0570ef83590f883a201f8e723"
   integrity sha512-KCPWdrdkjMOjUjKjYhJUt628mjf+SyoopXPztFbPvSpMl6jI9Qs8fnxnrt8ITKJvt7Xy7K7y6Cn/Q5h1GgIwjQ==
@@ -1569,9 +1569,9 @@
   integrity sha512-Jugo5V/1bS0fRhy2z8+cUAHEyWOATaz4rbyLVvcFs7+dXp5HfwpEwzF1Q11bB10ApUqHf+yTauxI0UXQDwGrbA==
 
 "@types/react-native@^0.60.15":
-  version "0.60.27"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.60.27.tgz#d6313256f3cf9a685bd8885efddb86b85b9a4820"
-  integrity sha512-W8YrhnnHBwybruJp57enWc9dP9G7okcQkm88TMPZZKMVNiJIZj17q/rruMLuuuER+SaGrYjhO+BA3MpfkiTaSQ==
+  version "0.60.30"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.60.30.tgz#33ab525194142a5e3b428e60f0e77e0d1dbd253d"
+  integrity sha512-Ho41o+6NBlv1K5q2Z+NREST3UsGahXn4V1to2D2U4bcn1hO5MGjzOdkruzsnN10WiP8hW33jvQE6eERClgwvJg==
   dependencies:
     "@types/prop-types" "*"
     "@types/react" "*"
@@ -5392,10 +5392,10 @@ react-native-looped-carousel@^0.1.13:
     lodash.isequal "^4.5.0"
     prop-types "^15.6.1"
 
-react-native-modals@^0.19.7:
-  version "0.19.7"
-  resolved "https://registry.yarnpkg.com/react-native-modals/-/react-native-modals-0.19.7.tgz#6d9691a6a728fe1da45259b6666c3c0a624c0afc"
-  integrity sha512-yumMckW9LnM25VtPbi/5yjKt3oF/w4FYr6YV04hi6aX5FZ5H0X4CtjVRa9Kc6l+0VIIc6Au9/U3m1OCB1z8eYQ==
+react-native-modals@^0.19.9:
+  version "0.19.9"
+  resolved "https://registry.yarnpkg.com/react-native-modals/-/react-native-modals-0.19.9.tgz#90e78bed3d2cabb28f555ec26a0c89c24e565633"
+  integrity sha512-blBIiWEnn+DEZEqc8xmmb53Osc3vU7QD0A3QOT0ALovQdbDHOw5nBqKNIehl3+eC2ddyJEehf9KiE9fbn9b7QQ==
   dependencies:
     babel-plugin-flow-react-proptypes "^9.1.1"
     prop-types "^15.6.0"
@@ -5443,10 +5443,10 @@ react-native-screens@2.0.0-alpha.12:
   dependencies:
     debounce "^1.2.0"
 
-react-native-snap-carousel@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-snap-carousel/-/react-native-snap-carousel-3.8.0.tgz#9372222d61d37d0a8a3bec423d135d0caa1b7595"
-  integrity sha512-YtDZLv2Di77HfnH4yf+NyyYyISPNjrnjXDQLrzOkG9kkSlho/BROgHLQKGRLg3C2YSUMArFOePrb9CH3yeV5FA==
+react-native-snap-carousel@^3.8.4:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/react-native-snap-carousel/-/react-native-snap-carousel-3.8.4.tgz#4c749c6a714d46ed82de527233850cb5da41bc62"
+  integrity sha512-KMxLl75Tyf12DzeTCtV7xU0KuPZQQs/2+2iM90cgxcm3lrg4+hLXff5/61ynasBkzzJ5v4bTRq5CEy/qGUJVQw==
   dependencies:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
@@ -5520,15 +5520,15 @@ react-native-web@^0.11.7:
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
 
-react-navigation-drawer@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.2.1.tgz#00bc5a9fcd80a519834f2db8a37aba9fc7f99d8b"
-  integrity sha512-FfGG27CGd2zimBYwICyURNpFkP5ggHNfgYLUnWZDo4FnpmPPFTPeYsEmfKeITD0Mg334CI23CLW8HSCuq5Mszw==
+react-navigation-drawer@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.3.3.tgz#d7e607d5e10f2b3c40ab7dc9720228ce3f888a0f"
+  integrity sha512-d/rA8Slqv7HoMfONKVDBQUrRF7YQH796Gzal/KOhaY4VOwUUqIwfxMRJ3WrsdL2OkDPixtkXJE2Fz6KAj658uA==
 
-react-navigation-stack@^1.7.3:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-1.7.3.tgz#2dce28bdc80bbd2bf09755a6aa7200055a907504"
-  integrity sha512-wOt7T5NkIFInnFw+cxkUHUbNrXbPqascScia6azMWSdHhx+gvz3uW4Ubyw+2NULHcoshU53boUuQ8lUmUrJdhg==
+react-navigation-stack@^1.10.3:
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-1.10.3.tgz#e714e442b20427f0d2d3c18fce1f9e8cfe69be0b"
+  integrity sha512-1gksFi/g/Lg9sBhgLlD0OiEB5xnatHb4C0eNMA5tli9cTVlhq375XNPIqOiTyftibBmjdApAsZFj5srUCoOu/w==
   dependencies:
     prop-types "^15.7.2"
 
@@ -5537,10 +5537,10 @@ react-navigation-transitions@^1.0.12:
   resolved "https://registry.yarnpkg.com/react-navigation-transitions/-/react-navigation-transitions-1.0.12.tgz#7307668bc7d5fdbdc1954224e7891f7fe6cb5f74"
   integrity sha512-Hp0wX9KoXwsFch6Fgiz9HpGjQZDhnyucLbCai0LcaOC3VpmgYmvkbeAg/mQ5Z5exuY6PPrh/+FXU00yMPDHkcw==
 
-react-navigation@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-4.0.5.tgz#d4e16d9884cfd6bb2cda4d16e001227e2c859b46"
-  integrity sha512-VidRiSA2RvrgPlKs/7FNKV6pXEYXREtxiEl6m/Dmfb8x27amG6JRibzJC2mpWt4w0SAIGMUjHallRi3h9sIk0A==
+react-navigation@^4.0.10:
+  version "4.0.10"
+  resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-4.0.10.tgz#ddf41134600689d6ba99e35dd22ba1f664f91e5c"
+  integrity sha512-7PqvmsdQ7HIyxPUMYbd9Uq//VoMdniEOLAOSvIhb/ExtbAt/1INSjUF+RiMWOMCWLTCNvNPRvTz7xy7qwWureg==
   dependencies:
     "@react-navigation/core" "^3.5.1"
     "@react-navigation/native" "^3.6.2"

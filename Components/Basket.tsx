@@ -32,11 +32,6 @@ export default class Basket extends React.Component<Props, State> {
 		});
 		this.setState({ totalProductsCount: totalProductsCount });
     }
-	componentWillUpdate(nextProps, nextState) {
-		// if (nextState.open == true && this.state.open == false) {
-		//   this.props.onWillOpen();
-		// }
-	}
 	componentDidUpdate(prevProps, prevState) {
 		let totalProductsCount = 0;
 		Object.keys(this.props.basket).map(key => {

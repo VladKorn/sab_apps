@@ -39,13 +39,13 @@ export default class Modals extends React.Component<Props, State> {
 	componentDidMount() {
 		this.state.visibleBlur ? this._blur() : null;
 	}
-	componentWillUpdate(nextProps, nextState) {
-		if (this.props.isOpen !== nextProps.isOpen) {
-			if (nextProps.isOpen) {
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.isOpen !== prevProps.isOpen) {
+			if (this.props.isOpen) {
 				this.setState({ visibleBlur: true });
 			}
 		}
-		nextProps.isOpen ? this._blur() : null;
+		prevProps.isOpen ? this._blur() : null;
 	}
 	render() {
 		return [
