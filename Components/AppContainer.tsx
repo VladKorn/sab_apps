@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Text , StyleSheet} from "react-native";
+import { Text , StyleSheet , View} from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -51,16 +51,38 @@ const Home = createStackNavigator(
 			navigationOptions: ({ navigation }) => ({
                 headerTitle: 'Меню',
 				headerRight: (
-					<TouchableOpacity
-						onPress={() => {
-                            navigation.dangerouslyGetParent().dangerouslyGetParent().dangerouslyGetParent().openDrawer()
-						}}
-					>
-						<Image
-							style={{ width: 20, height: 24 , marginRight: 20}}
-							source={require("../img/ico-menu1.png")}
-						/>
-					</TouchableOpacity>
+                    <View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.dangerouslyGetParent().dangerouslyGetParent().dangerouslyGetParent().openDrawer()
+                            }}
+                        >
+                            <Image
+                                style={{ width: 20, height: 24 , marginRight: 20}}
+                                source={require("../img/ico-menu1.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{ width: 40, height: 40 }}
+                            onPress={() => {
+                                navigation.navigate("Order");
+                            }}
+                        >
+                            <Image
+                                style={{ width: 30, height: 24 }}
+                                source={require("../img/ico-orders.png")}
+                            />
+                            <View style={appStyles.bottonToOrderCount}>
+                                <Text style={appStyles.bottonToOrderCountText}>
+                                    {navigation.getScreenProps().basket
+                                        ? Object.entries(
+                                                navigation.getScreenProps().basket
+                                            ).length
+                                        : null}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
 				)
 			})
 		},

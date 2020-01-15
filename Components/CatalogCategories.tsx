@@ -160,13 +160,17 @@ export default class CatalogCategories extends Component<any, any> {
 						data: items
 					});
 			  })
-			: [];
+            : [];
+		// return null;
 		return (
 			<View>
 				{/* {cats} */}
+                {/* {this.props.getHeader()} */}
 				<SectionList
+                    ListHeaderComponent={this.props.getHeader}
                     sections={data}
-					keyExtractor={(item, index) => item.id + index}
+                    keyExtractor={(item, index) => item.id + index}
+                    stickySectionHeadersEnabled={false}
 					renderItem={({ item }) => <ProductItem {...item} />}
 					renderSectionHeader={({ section: { title } }) => (
 						<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
