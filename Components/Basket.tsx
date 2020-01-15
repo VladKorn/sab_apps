@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image,Text, TouchableOpacity, Animated } from "react-native";
+import { View, Image, Text, TouchableOpacity, Animated } from "react-native";
 import Colors from "../constants/Colors";
 interface Props {
 	basket: object;
@@ -8,19 +8,19 @@ interface Props {
 }
 interface State {
 	isVisible: boolean;
-    totalProductsCount: number;
-    translateY: any
+	totalProductsCount: number;
+	translateY: any;
 }
 // const Dimensions = require("Dimensions");
 // const { width, height } = Dimensions.get("window");
 export default class Basket extends React.Component<Props, State> {
-    timer: any;
+	timer: any;
 	constructor(props) {
 		super(props);
 		this.state = {
 			isVisible: false,
-            totalProductsCount: 0,
-            translateY: new Animated.Value(100)
+			totalProductsCount: 0,
+			translateY: new Animated.Value(100)
 		};
 		this.timer = null;
 	}
@@ -31,7 +31,6 @@ export default class Basket extends React.Component<Props, State> {
 				parseInt(this.props.basket[key].count) + totalProductsCount;
 		});
 		this.setState({ totalProductsCount: totalProductsCount });
-		
 	}
 	componentWillUpdate(nextProps, nextState) {
 		// if (nextState.open == true && this.state.open == false) {
@@ -53,25 +52,27 @@ export default class Basket extends React.Component<Props, State> {
 				clearTimeout(this.timer);
 			}
 			this.timer = setTimeout(() => {
-                this.setState({ isVisible: false });
+				this.setState({ isVisible: false });
 			}, 3000);
 		}
 
-		if(prevState.isVisible !== this.state.isVisible){
-            this.state.isVisible ? this._show() : this._hide();
+		if (prevState.isVisible !== this.state.isVisible) {
+			this.state.isVisible ? this._show() : this._hide();
 		}
-    }
-    _hide(){
-        let { translateY } = this.state;
-        Animated.timing(translateY, { duration: 300, toValue: 100 }).start();
-    }
-    _show(){
-        let { translateY } = this.state;
-        Animated.timing(translateY, { duration: 300, toValue: 0 }).start();
-    }
+	}
+	_hide() {
+		let { translateY } = this.state;
+		Animated.timing(translateY, { duration: 300, toValue: 100 }).start();
+	}
+	_show() {
+		let { translateY } = this.state;
+		Animated.timing(translateY, { duration: 300, toValue: 0 }).start();
+	}
 	render() {
-        if(Object.keys(this.props.products).length === 0){return null}
-		
+		if (Object.keys(this.props.products).length === 0) {
+			return null;
+		}
+
 		let price = 0;
 		Object.keys(this.props.basket).map(key => {
 			price =
@@ -80,21 +81,21 @@ export default class Basket extends React.Component<Props, State> {
 				price;
 		});
 
-
-
 		return (
 			<Animated.View
-				style={[{
-                    position: "absolute",
-					zIndex: 3,
-					// top: height,
-					left: 0,
-					right: 0,
-					bottom: 0,
-                    top: 'auto',
-				} , { transform: [{translateY: this.state.translateY}]  } ]}
-            >
-            
+				style={[
+					{
+						position: "absolute",
+						zIndex: 3,
+						// top: height,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						top: "auto"
+					},
+					{ transform: [{ translateY: this.state.translateY }] }
+				]}
+			>
 				<TouchableOpacity
 					onPress={() => {
 						this.props.navigation.navigate("Order");
@@ -109,28 +110,26 @@ export default class Basket extends React.Component<Props, State> {
 						flexDirection: "row"
 					}}
 				>
-                    <Image
-                    
-								style={{
-									width: 27,
-                                    height: 21,
-                            // backgroundColor: 'red'
-                                    
-									marginBottom: 5,
-									// marginTop: 10
-								}}
-								source={require("../img/ico-basket2.png")}
-							/>
+					<Image
+						style={{
+							width: 27,
+							height: 21,
+							// backgroundColor: 'red'
+
+							marginBottom: 5
+							// marginTop: 10
+						}}
+						source={require("../img/ico-basket2.png")}
+					/>
 					<Text
 						style={{
 							fontFamily: "Neuron-Heavy",
 							fontSize: 26,
-                            color: "white",
-                            marginRight: 'auto',
-                            marginLeft: 15,
-                            // backgroundColor: 'red',
-                            lineHeight: 26
-
+							color: "white",
+							marginRight: "auto",
+							marginLeft: 15,
+							// backgroundColor: 'red',
+							lineHeight: 26
 						}}
 					>
 						{this.state.totalProductsCount} шт.

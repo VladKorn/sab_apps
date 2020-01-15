@@ -63,10 +63,7 @@ export default class App extends React.Component<any, State> {
         this.saveLoginData = this.saveLoginData.bind(this);
         
     }
-	componentWillMount() {
-        // console.log('componentWillMount');
-		// this.autoLogin();
-    }    
+ 
 	componentDidMount() {
         // console.log('componentDidMount');
 		this.loadAssetsAsync();
