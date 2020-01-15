@@ -24,14 +24,14 @@ export default class Basket extends React.Component<Props, State> {
 		};
 		this.timer = null;
 	}
-	componentWillMount() {
+	componentDidMount() {
 		let totalProductsCount = 0;
 		Object.keys(this.props.basket).map(key => {
 			totalProductsCount =
 				parseInt(this.props.basket[key].count) + totalProductsCount;
 		});
 		this.setState({ totalProductsCount: totalProductsCount });
-	}
+    }
 	componentWillUpdate(nextProps, nextState) {
 		// if (nextState.open == true && this.state.open == false) {
 		//   this.props.onWillOpen();

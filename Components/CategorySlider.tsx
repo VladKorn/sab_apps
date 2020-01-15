@@ -69,7 +69,8 @@ export default class CategorySlider extends React.Component<any, State> {
              currentProductId: parseInt(this.state.slides[index].id )
             });
     }
-    componentWillMount() {
+   
+    componentDidMount() {
         const catId = this.props.screenProps.products[this.state.currentProductId]
             .categoryId;
         const productIndex = this.props.screenProps.catalog[
@@ -79,15 +80,13 @@ export default class CategorySlider extends React.Component<any, State> {
         this.setState({ currentIndex: productIndex, catId: catId });
         const catName = this.props.screenProps.catalog[catId].name;
         const slides = [];
-
+    
         // console.log("this.props.screenProps.products", catId);
         this.props.screenProps.catalog[catId].products.map(key => {
             const item = this.props.screenProps.products[key];
             slides.push(item);
         });
         this.setState({ slides: slides, catName: catName });
-    }
-    componentDidMount() {
         setTimeout(()=>{
             this.setState({isLoading: false});
         }, 500)

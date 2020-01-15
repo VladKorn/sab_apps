@@ -49,16 +49,16 @@ export default class Order extends React.Component<any, State> {
 	static navigationOptions = {
 		title: "Оформление заказа"
 	};
-	componentWillMount() {
-		const date = new Date();
-		const formatedDate = `${date.getFullYear()}-${(
-			"0" +
-			(date.getMonth() + 1)
-		).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
-		// console.log("formatedDate", formatedDate);
-		this.setState({ date: formatedDate });
-	}
+
 	componentDidMount() {
+        const date = new Date();
+        const formatedDate = `${date.getFullYear()}-${(
+            "0" +
+            (date.getMonth() + 1)
+        ).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
+        // console.log("formatedDate", formatedDate);
+        this.setState({ date: formatedDate });
+        
 		const didBlurSubscription = this.props.navigation.addListener(
 			"willBlur",
 			payload => {
