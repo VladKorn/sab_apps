@@ -33,7 +33,7 @@ export default class Order extends React.Component<any, State> {
 		super(props);
 		this.state = {
 			priceTotal: 0,
-			address: this.props.screenProps.user.addresses[0].address,
+			address: this.props.screenProps.user.addresses ? this.props.screenProps.user.addresses[0].address : null,
 			date: "2019-08-11",
 			modalIsOpen: false,
 			modalOrderIsOpen: false,
@@ -69,7 +69,8 @@ export default class Order extends React.Component<any, State> {
 				});
 			}
 		);
-	}
+    }
+    
 	componentDidUpdate(prevProps, prevState) {
         // const datestr = this.state.date.replace('-', ',').replace('-', ',');
         // const selectedDate = new Date();
