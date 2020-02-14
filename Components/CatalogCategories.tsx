@@ -17,42 +17,45 @@ export default class CatalogCategories extends Component<any, any> {
 		// this.search = this.search.bind(this);
 	}
 	shouldComponentUpdate(nextProps, nextState) {
-        // console.log('searchRes' , this.props.searchRes);
+		console.log("shouldComponentUpdate");
 		// return true;
-        // console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
+		// console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
 		// if(nextProps.favorite.length !== this.props.favorite.length){
 		//     return true
-        // } 
-        const isFavorites = this.props.navigation.state.params
+		// }
+		const isFavorites = this.props.navigation.state.params
 			? this.props.navigation.state.params.isFavorite || false
-            : false;
-        if(isFavorites) {return true}
+			: false;
+		if (isFavorites) {
+			return true;
+		}
 		// return true;
 		// if (Object.keys(nextProps.screenProps.basket).length !== Object.keys(this.props.screenProps.basket).length) {
 		// 	return true;
-        // }
-        // console.log(this.props.navigation.state);
+		// }
+		// console.log(this.props.navigation.state);
 		if (nextProps.searchRes.length !== this.props.searchRes.length) {
 			return true;
-        }
+		}
 		if (this.props.navigation.state.params) {
-            console.log('this.props.navigation.state.params', this.props.navigation.state.params);
 			if (
 				nextProps.navigation.state.params.innerCatId !==
 					this.props.navigation.state.params.innerCatId ||
 				nextProps.navigation.state.params.catId !==
 					this.props.navigation.state.params.catId
 			) {
-                return true;
+				return true;
 			}
 		} else {
-            if (nextProps.navigation.state.params && !this.props.navigation.state.params) {
-                return true;
-            } 
-            return this.state.isLoading;
-        }
+			if (
+				nextProps.navigation.state.params &&
+				!this.props.navigation.state.params
+			) {
+				return true;
+			}
+			return this.state.isLoading;
+		}
 		return false;
-        
 	}
 
 	componentDidMount() {
@@ -60,10 +63,10 @@ export default class CatalogCategories extends Component<any, any> {
 			this.setState({ isLoading: false });
 		}, 30);
 	}
-    
+
 	render() {
 		if (this.state.isLoading) {
-			return (null);
+			return null;
 		}
 		const catId = this.props.navigation.state.params
 			? this.props.navigation.state.params.catId
@@ -78,14 +81,14 @@ export default class CatalogCategories extends Component<any, any> {
 			catalog[catId] = this.props.catalog[catId];
 		} else {
 			catalog = this.props.catalog;
-        }
+		}
 		const isFavorites = this.props.navigation.state.params
 			? this.props.navigation.state.params.isFavorite || false
 			: false;
-        // console.log('isFavorites' , isFavorites);
+		// console.log('isFavorites' , isFavorites);
 
-        const products = this.props.products;
-        let data = [];
+		const products = this.props.products;
+		let data = [];
 		// console.log('products' , products);
 		catalog
 			? Object.keys(catalog).map(key => {
@@ -118,12 +121,11 @@ export default class CatalogCategories extends Component<any, any> {
 								}
 
 								// is in inner category
-								// console.log('cat' , cat.cats[innerCatId]);
-								if (innerCatId) {
+								if (innerCatId && cat?.cats) {
+									// console.log('innerCatId' , innerCatId, cat.cats[innerCatId]);
 									if (
-										innerCatId &&
-										cat.cats[innerCatId] &&
-										cat.cats[innerCatId].products &&
+										cat?.cats[innerCatId] &&
+										cat.cats[innerCatId]?.products &&
 										!cat.cats[innerCatId].products.includes(
 											parseInt(item.id)
 										)
@@ -160,28 +162,27 @@ export default class CatalogCategories extends Component<any, any> {
 						data: items
 					});
 			  })
-            : [];
+			: [];
 		// return null;
 		return (
-            <SectionList
-                // ListHeaderComponent={this.props.getHeader}
-                ListHeaderComponent={
-                <InputSearch
-                    initialText={this.props.searchText}
-                    search={this.props.search}
-                    
-                ></InputSearch>}
-                
-                sections={data}
-                keyExtractor={(item, index) => item.id + index}
-                stickySectionHeadersEnabled={false}
-                renderItem={({ item }) => <ProductItem {...item} />}
-                renderSectionHeader={({ section: { title } }) => (
-                    <Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
-                        {title}
-                    </Text>
-                )}
-            />
+			<SectionList
+				// ListHeaderComponent={this.props.getHeader}
+				ListHeaderComponent={
+					<InputSearch
+						initialText={this.props.searchText}
+						search={this.props.search}
+					></InputSearch>
+				}
+				sections={data}
+				keyExtractor={(item: any, index) => item.id + index}
+				stickySectionHeadersEnabled={false}
+				renderItem={({ item }) => <ProductItem {...item} />}
+				renderSectionHeader={({ section: { title } }) => (
+					<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
+						{title}
+					</Text>
+				)}
+			/>
 		);
 	}
 }

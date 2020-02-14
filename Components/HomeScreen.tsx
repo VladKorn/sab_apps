@@ -115,8 +115,8 @@ export default class HomeScreen extends React.Component<any> {
 							key={item.id}
 							onPress={() => {
 								this.props.navigation.navigate("Catalog", {
-									catId: item.id
-								});
+                                    catId: item.id
+                                });
 							}}
 						>
 							<View
