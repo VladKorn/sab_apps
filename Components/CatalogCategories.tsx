@@ -11,13 +11,22 @@ export default class CatalogCategories extends Component<any, any> {
 			isLoading: true,
 			data: [],
 			search: "",
-			searchRes: []
+            searchRes: [],
+            reset: 0
 			// searchRes: [1949 ,1946 ,1355],
 		};
 		// this.search = this.search.bind(this);
-	}
+    }
+    
 	shouldComponentUpdate(nextProps, nextState) {
-		console.log("shouldComponentUpdate");
+        const reset = nextProps.navigation?.state?.params?.reset || false;
+        // console.log("shouldComponentUpdate10" , this.props.searchText.length , reset);
+        if(reset && this.props.searchText.length){
+            if(reset !== this.state.reset){
+                this.setState({reset: reset})
+                this.props.search('');
+            }
+        }
 		// return true;
 		// console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
 		// if(nextProps.favorite.length !== this.props.favorite.length){
@@ -65,7 +74,17 @@ export default class CatalogCategories extends Component<any, any> {
         setTimeout(() => {
 			this.forceUpdate()
 		}, 100);
-	}
+    }
+    componentDidUpdate(prevProps , prevState){
+        console.log('componentDidUpdate' , this.state.search)
+        if(this.state.search){
+            if(this.props.navigation?.state?.params?.catId === 0){
+                this.setState({ search: '' });
+                
+            }
+        }
+
+    }
 
 	render() {
 		if (this.state.isLoading) {

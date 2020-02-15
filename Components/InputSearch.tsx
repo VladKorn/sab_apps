@@ -22,7 +22,12 @@ const InputSearch = (props: Props) => {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [text]);
+    }, [text]);
+    useEffect(() => {
+        if(props.initialText === ''){
+            setText('');
+        }
+	}, [props.initialText]);
 	return (
 		<View style={styles.cont}>
 			<View style={styles.wrap}>

@@ -61,12 +61,6 @@ export default class Catalog extends React.Component<any, State> {
 				// console.log('searchRes' ,this.state.searchRes);
 			});
     }
-	shouldComponentUpdate(nextProps, nextState) {
-        console.log('t=====', this.props.navigation.state.params.catId);
-        console.log('n====', nextProps.navigation.state.params.catId);
-        
-        return true;
-    }
 	render() {
 		return (
             <View style={{flex: 1}}>
@@ -83,7 +77,6 @@ export default class Catalog extends React.Component<any, State> {
                     basketApi={this.props.screenProps.basketApi}
                     searchRes={this.state.searchRes}
                     searchText={this.state.search}
-
                     search={this.search}
                 />
 				
