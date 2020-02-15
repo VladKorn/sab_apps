@@ -61,7 +61,10 @@ export default class CatalogCategories extends Component<any, any> {
 	componentDidMount() {
 		setTimeout(() => {
 			this.setState({ isLoading: false });
-		}, 30);
+        }, 30);
+        setTimeout(() => {
+			this.forceUpdate()
+		}, 300);
 	}
 
 	render() {
