@@ -143,7 +143,7 @@ export default class LoginForm extends React.Component<any, State> {
 						// color={Colors.assent}
 						style={[
 							appStyles.button,
-							{ marginBottom: 10, marginTop: 20 }
+							{ marginBottom: 10, marginTop: 20,}
 						]}
 					>
 						<Text style={appStyles.buttonText}>
@@ -151,7 +151,7 @@ export default class LoginForm extends React.Component<any, State> {
 						</Text>
 					</TouchableOpacity>
 				)}
-				<View style={appStyles.hr} />
+				<View style={[appStyles.hr , {marginTop: 50}]} />
 
 				<TouchableOpacity
 					onPress={() => {
