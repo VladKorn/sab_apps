@@ -64,7 +64,7 @@ export default class CatalogCategories extends Component<any, any> {
         }, 30);
         setTimeout(() => {
 			this.forceUpdate()
-		}, 300);
+		}, 100);
 	}
 
 	render() {
