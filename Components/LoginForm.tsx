@@ -57,14 +57,14 @@ export default class LoginForm extends React.Component<any, State> {
 				save: this.state.save
 			})
 			.then(user => {
-                // console.log('form user' , user);
-                
+				// console.log('form user' , user);
+
 				if (user && user.error) {
-                    if (user.error === "log") {
-						this.setState({ errorLog: true  ,isLoading: false});
+					if (user.error === "log") {
+						this.setState({ errorLog: true, isLoading: false });
 					}
 					if (user.error === "pas") {
-						this.setState({ errorPas: true ,isLoading: false});
+						this.setState({ errorPas: true, isLoading: false });
 					}
 				}
 			});
