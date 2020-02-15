@@ -166,6 +166,7 @@ export default class CatalogCategories extends Component<any, any> {
 											id: item.id,
 											name: item.name,
 											img: item.img,
+											sort: item.sort,
 											price: item.price,
 											basketApi: this.props.basketApi,
 											addToFavorite: this.props
@@ -178,7 +179,8 @@ export default class CatalogCategories extends Component<any, any> {
 									  })
 									: null;
 						  })
-						: [];
+                        : [];
+                    items.sort((a, b) => a.sort < b.sort ? -1 : 1)
 					data.push({
 						title: cat.name,
 						data: items
