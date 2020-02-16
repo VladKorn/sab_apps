@@ -184,11 +184,11 @@ export default class Order extends React.Component<any, State> {
 								}}
 							>
 								{item.address}
+                                {/* заголовок */}
 							</Text>
-							<Text>
-								г. Москва, ул. Олимлар, дом 25а,{"\n"} квартира
-								15
-							</Text>
+							{/* <Text>
+                            {item.address}
+							</Text> */}
 						</View>
 						{isCurrent ? (
 							<Image
@@ -218,6 +218,10 @@ export default class Order extends React.Component<any, State> {
 		);
 	};
 	render() {
+        const date = new Date();
+        // date.setDate(date.getDate() + 1);
+        const minDate = date;
+        console.log({date , minDate})
 		return (
 			<SafeAreaView style={appStyles.page}>
 				<ScrollView
@@ -252,7 +256,7 @@ export default class Order extends React.Component<any, State> {
 								mode="date"
 								placeholder="select date"
 								format="YYYY-MM-DD"
-								minDate={new Date()}
+								minDate={minDate}
 								confirmBtnText="Принять"
 								cancelBtnText="Отмена"
 								iconSource={require("../img/ico-date.png")}
