@@ -67,7 +67,7 @@ const appStyles = StyleSheet.create({
 		marginBottom: 15,
 		borderColor: Colors.assent,
 		// borderBottomWidth: 5,
-		borderBottomWidth: 3
+		borderBottomWidth: 3,
 	},
 	inputFocus: {
 		borderBottomColor: Colors.assent,

@@ -147,7 +147,7 @@ export default class Counter extends Component {
                         keyboardType="numeric"
                         onChangeText={(number) => { 
                             let value = parseInt(number) || 0;
-                            if(value>99){value = 99}
+                            if(value>999){value = 999}
                             this.setState({number: value});
                                 if(value !== 0){
                                     this.props.onChange(value, "+");
@@ -180,7 +180,7 @@ const Styles = StyleSheet.create({
         height: 30, width: 30, textAlign: "center", fontFamily: 'Neuron-Heavy', fontSize: 18, color: '#666774'
     },
     text_v: {
-        height: 25, width: 20, textAlign: "center", fontFamily: 'Neuron-Heavy', fontSize: 18, color: '#666774'
+        height: 25, width: 30, textAlign: "center", fontFamily: 'Neuron-Heavy', fontSize: 18, color: '#666774'
     },
 
     iconText: {
@@ -256,7 +256,7 @@ Counter.propTypes = {
 Counter.defaultProps = {
     value: 0,
     min: 0,
-    max: 99,
+    max: 999,
     onChange(number, type) {
         // Number, - or +
     },
