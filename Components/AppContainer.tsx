@@ -51,7 +51,7 @@ const Home = createStackNavigator(
 			navigationOptions: ({ navigation }) => ({
                 headerTitle: 'Меню',
 				headerRight: (
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row' , marginTop: 17}}>
                         <TouchableOpacity
                             onPress={() => {
                                 navigation.dangerouslyGetParent().dangerouslyGetParent().dangerouslyGetParent().openDrawer()

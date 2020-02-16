@@ -26,7 +26,7 @@ const appStyles = StyleSheet.create({
 		marginLeft: 15,
 		marginRight: 15,
 		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightgray
+        borderBottomColor: Colors.lightgray
 	},
 	headerTitle: {
 		fontFamily: "Neuron",
@@ -34,7 +34,8 @@ const appStyles = StyleSheet.create({
 		color: Colors.text,
 		textAlign: "left",
 		width: "100%",
-		flex: 1
+        flex: 1,
+        marginTop: 3
 	},
 	paddings: {
 		paddingLeft: 15,
