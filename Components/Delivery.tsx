@@ -221,7 +221,6 @@ export default class Order extends React.Component<any, State> {
         const date = new Date();
         date.setDate(date.getDate() + 1);
         const minDate = date;
-        console.log({date , minDate})
 		return (
 			<SafeAreaView style={appStyles.page}>
 				<ScrollView
