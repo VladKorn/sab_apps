@@ -151,7 +151,7 @@ export default class LoginForm extends React.Component<any, State> {
 						</Text>
 					</TouchableOpacity>
 				)}
-				<View style={[appStyles.hr , {marginTop: 50}]} />
+				<View style={[appStyles.hr , {marginTop: 140}]} />
 
 				<TouchableOpacity
 					onPress={() => {
