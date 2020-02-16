@@ -169,6 +169,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 							}}
 							onPress={() => {
 								this.props.navigation.navigate("Catalog", {
+									catId: 0,
 									reset: Math.floor(Math.random() * 100) + 1
                                 });
 								this.props.navigation.dispatch(
