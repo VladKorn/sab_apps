@@ -179,7 +179,7 @@ export default class Sidebar extends React.Component<any, State> {
 
                     {menu}
                 </View>
-                <Text style={{fontSize: 12 , marginTop: 'auto' , textAlign: 'center'}}>version: 1.0.3</Text>
+                <Text style={{fontSize: 12 , marginTop: 'auto' , textAlign: 'center'}}>version: 1.0.4</Text>
             </SafeAreaView>
         );
     }

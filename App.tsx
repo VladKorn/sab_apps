@@ -366,14 +366,14 @@ export default class App extends React.Component<any, State> {
 			return (<View style={{flex:1 , justifyContent: 'center'}}><Loading></Loading></View>);
 		}
 
-		if (!this.state.user.id) {
-			return (
-				<LoginForm
-					login={this.login}
-					userError={this.state.userError}
-				/>
-			);
-		}
+		// if (!this.state.user.id) {
+		// 	return (
+		// 		<LoginForm
+		// 			login={this.login}
+		// 			userError={this.state.userError}
+		// 		/>
+		// 	);
+		// }
 		return this.state.fontLoaded ? (
 			<AppContainer
 				key="app"
