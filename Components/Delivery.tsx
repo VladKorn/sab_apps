@@ -7,7 +7,7 @@ import {
 	TouchableHighlight,
 	TouchableOpacity,
 	SafeAreaView,
-	StyleSheet
+    StyleSheet
 } from "react-native";
 import Colors from "../constants/Colors.js";
 import months from "../constants/months.js";
@@ -184,7 +184,7 @@ export default class Order extends React.Component<any, State> {
 								}}
 							>
 								{item.address}
-                                {/* заголовок */}
+								{/* заголовок */}
 							</Text>
 							{/* <Text>
                             {item.address}
@@ -218,9 +218,29 @@ export default class Order extends React.Component<any, State> {
 		);
 	};
 	render() {
-        const date = new Date();
-        date.setDate(date.getDate() + 1);
-        const minDate = date;
+		if (!this.props.screenProps.user?.id) {
+			return (
+				<View style={appStyles.paddings}>
+					<Text style={appStyles.sectTitle}>
+						Для оформления заказа нужна авторизация
+					</Text>
+                    <TouchableOpacity 
+                    onPress={() => {
+                        this.props.navigation.navigate("User");
+                    }}
+                    style={appStyles.button}>
+                        <Text style={appStyles.buttonText}>
+						Вход
+					</Text>
+                        
+                    </TouchableOpacity>
+
+				</View>
+			);
+		}
+		const date = new Date();
+		date.setDate(date.getDate() + 1);
+		const minDate = date;
 		return (
 			<SafeAreaView style={appStyles.page}>
 				<ScrollView
