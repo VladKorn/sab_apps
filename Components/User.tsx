@@ -4,12 +4,13 @@ import {
 	StyleSheet,
 	View,
 	TouchableOpacity,
-    ScrollView,
-    Alert
+	ScrollView,
+	Alert
 } from "react-native";
 import appStyles from "./appStyles.js";
 import Input from "./Input";
 import { LoginData } from "../interfaces";
+import LoginForm from "./LoginForm";
 
 export default class User extends Component<any, any> {
 	static navigationOptions = {
@@ -47,26 +48,35 @@ export default class User extends Component<any, any> {
 				console.log("userupdate res", res);
 				if (res.user && res.user.id && res.user.updated) {
 					if (this.state.log === "" && this.state.pas === "") {
-                        this.props.screenProps.autoLogin();
-                        Alert.alert("Изменения внесены");
-					} else {
-                        const loginData: LoginData = {
-                            log: this.state.log || res.user.log,
-							pas: this.state.pas || res.user.pas
-                        };
-                        // Alert.alert("pas "+ loginData.pas);
-
-                        this.props.screenProps.saveLoginData(loginData.log , loginData.pas);
 						this.props.screenProps.autoLogin();
-                        Alert.alert("Изменения внесены");
-					} 
-						
-					
+						Alert.alert("Изменения внесены");
+					} else {
+						const loginData: LoginData = {
+							log: this.state.log || res.user.log,
+							pas: this.state.pas || res.user.pas
+						};
+						// Alert.alert("pas "+ loginData.pas);
+
+						this.props.screenProps.saveLoginData(
+							loginData.log,
+							loginData.pas
+						);
+						this.props.screenProps.autoLogin();
+						Alert.alert("Изменения внесены");
+					}
 				}
 			});
 	}
 
 	render() {
+		if (!this.props.screenProps.user?.id) {
+			return (
+				<LoginForm
+					login={this.props.screenProps.login}
+					userError={this.state.userError}
+				/>
+			);
+		}
 		return (
 			<ScrollView
 				contentContainerStyle={{ flex: 1 }}

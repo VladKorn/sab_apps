@@ -393,7 +393,7 @@ export default class App extends React.Component<any, State> {
                     logout: this.logout,
                     login: this.login,
                     autoLogin: this.autoLogin,
-                    saveLoginData: this.saveLoginData
+                    saveLoginData: this.saveLoginData,
 				}}
 			/>
 		) : null;
