@@ -11,24 +11,23 @@ export default class CatalogCategories extends Component<any, any> {
 			isLoading: true,
 			data: [],
 			search: "",
-            searchRes: [],
-            reset: 0
+			searchRes: [],
+			reset: 0
 			// searchRes: [1949 ,1946 ,1355],
 		};
 		// this.search = this.search.bind(this);
-    }
-    
+	}
+
 	shouldComponentUpdate(nextProps, nextState) {
-        const reset = nextProps.navigation?.state?.params?.reset || false;
-        // console.log("shouldComponentUpdate10" , this.props.searchText.length , reset);
-        if(reset !== this.state.reset){
-            this.setState({reset: reset})
-            this.props.search('');
-            
-        }
-        // return true;
-        // if(reset && this.props.searchText.length){
-        // }
+		const reset = nextProps.navigation?.state?.params?.reset || false;
+		// console.log("shouldComponentUpdate10" , this.props.searchText.length , reset);
+		if (reset !== this.state.reset) {
+			this.setState({ reset: reset });
+			this.props.search("");
+		}
+		// return true;
+		// if(reset && this.props.searchText.length){
+		// }
 		// return true;
 		// console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
 		// if(nextProps.favorite.length !== this.props.favorite.length){
@@ -72,23 +71,23 @@ export default class CatalogCategories extends Component<any, any> {
 	componentDidMount() {
 		setTimeout(() => {
 			this.setState({ isLoading: false });
-        }, 30);
-        setTimeout(() => {
-			this.forceUpdate()
+		}, 30);
+		setTimeout(() => {
+			this.forceUpdate();
 		}, 100);
-    }
-    componentDidUpdate(prevProps , prevState){
-        console.log('componentDidUpdate' , this.state.search)
-        console.log('componentDidUpdate catId' , this.props.navigation?.state?.params?.catId)
-        if(this.state.search){
-            if(this.props.navigation?.state?.params?.catId === 0){
-
-                this.setState({ search: '' });
-                
-            }
-        }
-
-    }
+	}
+	componentDidUpdate(prevProps, prevState) {
+		console.log("componentDidUpdate", this.state.search);
+		console.log(
+			"componentDidUpdate catId",
+			this.props.navigation?.state?.params?.catId
+		);
+		if (this.state.search) {
+			if (this.props.navigation?.state?.params?.catId === 0) {
+				this.setState({ search: "" });
+			}
+		}
+	}
 
 	render() {
 		if (this.state.isLoading) {
@@ -115,16 +114,32 @@ export default class CatalogCategories extends Component<any, any> {
 
 		const products = this.props.products;
 		let data = [];
+		let nestedData = {};
 		// console.log('products' , products);
+		// console.log("catalog", catalog);
+
 		catalog
 			? Object.keys(catalog).map(key => {
 					let cat = catalog[key];
 					let items = [];
+
+					if (cat.cats) {
+						Object.keys(cat.cats).forEach(id => {
+							if (![114, 115, 119, 121].includes(parseInt(id))) {
+								const catNested = cat.cats[id];
+								nestedData[id] = {
+									title: catNested.name,
+									data: []
+								};
+							}
+						});
+					}
 					cat.products
 						? cat.products.map(pkey => {
 								let item = products[pkey];
 								let isIncludet = true;
-								// console.log('item' , this.state.searchRes ,pkey);
+								let isNested = false;
+								console.log("item", item);
 
 								// is in search
 								if (this.props.searchRes.length > 0) {
@@ -146,7 +161,7 @@ export default class CatalogCategories extends Component<any, any> {
 									isIncludet = false;
 								}
 
-								// is in inner category
+								// inner category
 								if (innerCatId && cat?.cats) {
 									// console.log('innerCatId' , innerCatId, cat.cats[innerCatId]);
 									if (
@@ -159,39 +174,85 @@ export default class CatalogCategories extends Component<any, any> {
 										isIncludet = false;
 									}
 								}
+								//   remove an item if it is contained in a nested category
+								if (cat?.cats) {
+									const cats = Object.keys(cat?.cats) || [];
+									cats.forEach(id => {
+										cat.cats[id].products.includes(
+											parseInt(item.id)
+										)
+											? (isNested = true)
+											: null;
+									});
+								}
+								//End remove an item if it is contained in a nested category
+
 								//
 								const isFavorite = this.props.favorite.includes(
 									parseInt(item.id)
 								);
 								// console.log('render' , item.id);
-								isIncludet
-									? items.push({
-											key: item.id,
-											id: item.id,
-											name: item.name,
-											img: item.img,
-											sort: item.sort,
-											price: item.price,
-											basketApi: this.props.basketApi,
-											addToFavorite: this.props
-												.addToFavorite,
-											navigation: this.props.navigation,
-											isFavorite: isFavorite,
-											searchWords: this.props.searchText.split(
-												" "
-											)
-									  })
-									: null;
+								const itemFields = {
+									key: item.id,
+									id: item.id,
+									name: item.name,
+									img: item.img,
+									sort: item.sort,
+									price: item.price,
+									basketApi: this.props.basketApi,
+									addToFavorite: this.props.addToFavorite,
+									navigation: this.props.navigation,
+									isFavorite: isFavorite,
+									searchWords: this.props.searchText.split(
+										" "
+									)
+								};
+								if (isIncludet) {
+									if (!isNested) {
+										items.push(itemFields);
+									} else {
+										if (item.parentCategoryId === 114) {
+											item.parentCategoryId = 113;
+										}
+										if (item.parentCategoryId === 115) {
+											item.parentCategoryId = 113;
+										}
+										if (item.parentCategoryId === 119) {
+											item.parentCategoryId = 118;
+										}
+										if (item.parentCategoryId === 121) {
+											item.parentCategoryId = 120;
+										}
+										nestedData[
+											item.parentCategoryId
+										]?.data.push(itemFields);
+										// itemsNested.push(itemFields);
+									}
+								}
 						  })
-                        : [];
-                    items.sort((a, b) => a.sort < b.sort ? -1 : 1)
+						: [];
+
+					items.sort((a, b) => (a.sort < b.sort ? -1 : 1));
 					data.push({
+						sort: cat.id,
 						title: cat.name,
 						data: items
 					});
 			  })
 			: [];
 		// return null;
+		// console.log({ nestedData });
+		Object.keys(nestedData).forEach(id => {
+            nestedData[id].data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
+			data.push({
+				sort: id,
+				title: nestedData[id].title,
+				data: nestedData[id].data
+			});
+		});
+		data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
+		// console.log({ data });
+
 		return (
 			<SectionList
 				// ListHeaderComponent={this.props.getHeader}
@@ -201,7 +262,6 @@ export default class CatalogCategories extends Component<any, any> {
 						search={this.props.search}
 						navigation={this.props.navigation}
 					></InputSearch>
-                    
 				}
 				sections={data}
 				keyExtractor={(item: any, index) => item.id + index}
