@@ -7,7 +7,7 @@ import {
 	TouchableHighlight,
 	TouchableOpacity,
 	SafeAreaView,
-    StyleSheet
+	StyleSheet
 } from "react-native";
 import Colors from "../constants/Colors.js";
 import months from "../constants/months.js";
@@ -85,6 +85,7 @@ export default class Order extends React.Component<any, State> {
 	openDatePicker() {
 		this.setState({ DatePickerIsOpen: true });
 		setTimeout(() => {
+			console.log("openDatePicker2", this.state.DatePickerIsOpen);
 			this.setState({ DatePickerIsOpen: false });
 		}, 300);
 	}
@@ -224,17 +225,14 @@ export default class Order extends React.Component<any, State> {
 					<Text style={appStyles.sectTitle}>
 						Для оформления заказа нужна авторизация
 					</Text>
-                    <TouchableOpacity 
-                    onPress={() => {
-                        this.props.navigation.navigate("User");
-                    }}
-                    style={appStyles.button}>
-                        <Text style={appStyles.buttonText}>
-						Вход
-					</Text>
-                        
-                    </TouchableOpacity>
-
+					<TouchableOpacity
+						onPress={() => {
+							this.props.navigation.navigate("User");
+						}}
+						style={appStyles.button}
+					>
+						<Text style={appStyles.buttonText}>Вход</Text>
+					</TouchableOpacity>
 				</View>
 			);
 		}
@@ -267,6 +265,9 @@ export default class Order extends React.Component<any, State> {
 							width: "100%"
 						}}
 					>
+                        {/* if (nextProps.isOpen) {
+                            this.setModalVisible(true)
+                        } */}
 						<View style={{ marginLeft: 5, marginTop: 5 }}>
 							<DatePicker
 								isOpen={this.state.DatePickerIsOpen}

@@ -195,7 +195,9 @@ export default class CatalogCategories extends Component<any, any> {
 					<InputSearch
 						initialText={this.props.searchText}
 						search={this.props.search}
+						navigation={this.props.navigation}
 					></InputSearch>
+                    
 				}
 				sections={data}
 				keyExtractor={(item: any, index) => item.id + index}

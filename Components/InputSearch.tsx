@@ -4,13 +4,15 @@ import {
 	Image,
 	TextInput,
 	TouchableOpacity,
-	StyleSheet
+	StyleSheet,
+	Text
 } from "react-native";
 import appStyles from "./appStyles";
 
 interface Props {
 	initialText?: string;
 	search: (text: string) => void;
+	navigation: any;
 }
 
 const InputSearch = (props: Props) => {
@@ -22,12 +24,41 @@ const InputSearch = (props: Props) => {
 		return () => {
 			clearTimeout(timer);
 		};
-    }, [text]);
-    useEffect(() => {
-        if(props.initialText === ''){
-            setText('');
-        }
+	}, [text]);
+	useEffect(() => {
+		if (props.initialText === "") {
+			setText("");
+		}
 	}, [props.initialText]);
+	const resetfilter = (
+		<TouchableOpacity
+			style={{
+				margin: 'auto',
+				marginBottom: 20,
+				marginTop: 15,
+				flexDirection: "row",
+				// justifyContent:'center',
+				height: "auto",
+				padding: 2
+			}}
+			onPress={() => {
+				props.navigation.navigate("Catalog", {
+					catId: 0,
+					reset: Math.floor(Math.random() * 100) + 1
+				});
+			}}
+		>
+			<Image
+				style={{
+					width: 20.91,
+					height: 18.98,
+					marginRight: 20
+				}}
+				source={require("../img/ico-menu-close.png")}
+			/>
+			<Text>Сбросить фильтр</Text>
+		</TouchableOpacity>
+	);
 	return (
 		<View style={styles.cont}>
 			<View style={styles.wrap}>
@@ -52,6 +83,7 @@ const InputSearch = (props: Props) => {
 					/>
 				</TouchableOpacity>
 			</View>
+            {text || props.navigation.state?.params?.catId ? resetfilter : null}
 		</View>
 	);
 };
@@ -65,27 +97,28 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		position: "relative"
-    },
-    input:{
-        height: 40,
-        backgroundColor: "#F1F1F1",
-        borderWidth: 0,
-        borderRadius: 50,
-        maxWidth: 335,
-        width: "100%",
-        paddingLeft: 25
-        // color: appStyles.input.color,
-    },
-    button:{
-        position: "absolute",
-        zIndex: 3,
-        right: 0,
-        height: 40,
-        width: 40,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    img:{
-        width: 18, height: 18 
-    }
+	},
+	input: {
+		height: 40,
+		backgroundColor: "#F1F1F1",
+		borderWidth: 0,
+		borderRadius: 50,
+		maxWidth: 335,
+		width: "100%",
+		paddingLeft: 25
+		// color: appStyles.input.color,
+	},
+	button: {
+		position: "absolute",
+		zIndex: 3,
+		right: 0,
+		height: 40,
+		width: 40,
+		justifyContent: "center",
+		alignItems: "center"
+	},
+	img: {
+		width: 18,
+		height: 18
+	}
 });
