@@ -21,12 +21,14 @@ export default class CatalogCategories extends Component<any, any> {
 	shouldComponentUpdate(nextProps, nextState) {
         const reset = nextProps.navigation?.state?.params?.reset || false;
         // console.log("shouldComponentUpdate10" , this.props.searchText.length , reset);
-        if(reset && this.props.searchText.length){
-            if(reset !== this.state.reset){
-                this.setState({reset: reset})
-                this.props.search('');
-            }
+        if(reset !== this.state.reset){
+            this.setState({reset: reset})
+            this.props.search('');
+            
         }
+        // return true;
+        // if(reset && this.props.searchText.length){
+        // }
 		// return true;
 		// console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
 		// if(nextProps.favorite.length !== this.props.favorite.length){
@@ -77,8 +79,10 @@ export default class CatalogCategories extends Component<any, any> {
     }
     componentDidUpdate(prevProps , prevState){
         console.log('componentDidUpdate' , this.state.search)
+        console.log('componentDidUpdate catId' , this.props.navigation?.state?.params?.catId)
         if(this.state.search){
             if(this.props.navigation?.state?.params?.catId === 0){
+
                 this.setState({ search: '' });
                 
             }

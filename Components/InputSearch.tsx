@@ -43,7 +43,8 @@ const InputSearch = (props: Props) => {
 			}}
 			onPress={() => {
 				props.navigation.navigate("Catalog", {
-					catId: 0,
+                    catId: 0,
+                    innerCatId: 0,
 					reset: Math.floor(Math.random() * 100) + 1
 				});
 			}}
