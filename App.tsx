@@ -1,13 +1,13 @@
 import React from "react";
-import { View, ShadowPropTypesIOS, Text, Alert } from "react-native";
+import { View, Alert , StatusBar} from "react-native";
 
 import * as Font from "expo-font";
-import LoginForm from "./Components/LoginForm";
+// import LoginForm from "./Components/LoginForm";
 import AppContainer from "./Components/AppContainer";
 import Loading from "./Components/Loading";
 
 // import AsyncStorage from '@react-native-community/async-storage';
-import { AsyncStorage } from "react-native";
+import { AsyncStorage  } from "react-native";
 import CryptoJS from "crypto-js";
 
 import { MakeOrderData, tsBasketApi, tsBasket , LoginData} from "./interfaces";
@@ -375,6 +375,9 @@ export default class App extends React.Component<any, State> {
 		// 	);
 		// }
 		return this.state.fontLoaded ? (
+            <>
+<StatusBar barStyle="dark-content" /> 
+
 			<AppContainer
 				key="app"
 				screenProps={{
@@ -396,6 +399,8 @@ export default class App extends React.Component<any, State> {
                     saveLoginData: this.saveLoginData,
 				}}
 			/>
+               
+            </>
 		) : null;
 	}
 }

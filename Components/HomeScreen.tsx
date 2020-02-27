@@ -7,7 +7,7 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	ScrollView,
-	Dimensions
+    Dimensions,
 } from "react-native";
 
 import Colors from "../constants/Colors.js";
