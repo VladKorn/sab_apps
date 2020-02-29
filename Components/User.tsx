@@ -72,7 +72,7 @@ export default class User extends Component<any, any> {
 		if (!this.props.screenProps.user?.id) {
 			return (
 				<LoginForm
-					login={this.props.screenProps.login}
+                    login={this.props.screenProps.login}
 					userError={this.state.userError}
 				/>
 			);

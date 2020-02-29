@@ -127,7 +127,7 @@ export default class App extends React.Component<any, State> {
 	getCatalog() {}
 	async getData(loginData: LoginData) {
         // let res = false;
-		const getData = async loginData => {
+		const getData = async (loginData:LoginData) => {
 			// console.log("getData", loginData);
 			return await fetch("https://subexpress.ru/apps_api/", {
 				method: "post",
@@ -151,7 +151,7 @@ export default class App extends React.Component<any, State> {
 						stocks: res.stocks,
 						favorite: res.user.favorite || []
 					});
-					if (res.user && res.user.id && loginData.isSignUp && loginData.save) {
+					if (res.user && res.user.id && loginData.mode !== 'forgot' && loginData.save) {
 						this.saveLoginData(loginData.log, res.user.pas);
 					}
 
@@ -217,9 +217,7 @@ export default class App extends React.Component<any, State> {
 	}
 	
 	async login(loginData: LoginData) {
-		// console.log("login", loginData.log, loginData.pas);
-
-		if (loginData.save && !loginData.isSignUp) {
+		if (loginData.save && loginData.mode !== 'signUp') {
             this.saveLoginData(loginData.log, loginData.pas);
 			// console.log('storeData' , storeData);
 		}

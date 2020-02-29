@@ -13,6 +13,7 @@ import appStyles from "./appStyles";
 import Input from "./Input";
 import CheckBox from "./CheckBox";
 import Loading from "./Loading";
+import { LoginData } from "../interfaces";
 
 interface State {
 	log: string;
@@ -20,58 +21,88 @@ interface State {
 	name: string;
 	phone: string;
 	save: boolean;
-	isSignUp: boolean;
+	// isSignUp: boolean;
 	isLoading: boolean;
 	errorLog: boolean;
 	errorPas: boolean;
+	mode: "signIn" | "signUp" | "forgot";
+	loginPasForgot: string | null;
 }
 export default class LoginForm extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// log: null,
-			// pas: null,
 			log: "",
 			pas: "",
 			name: null,
 			phone: null,
 			save: true,
-			isSignUp: false,
 			isLoading: false,
 			errorLog: false,
-			errorPas: false
+			errorPas: false,
+			mode: "signIn",
+			loginPasForgot: null
 		};
 		this.login = this.login.bind(this);
 		this.onChange = this.onChange.bind(this);
 	}
 	login() {
 		this.setState({ isLoading: true });
-		// console.log("this.props.login", this.props.login);
-		this.props
-			.login({
-				isSignUp: this.state.isSignUp,
-				name: this.state.name,
-				phone: this.state.phone,
-				log: this.state.log,
-				pas: this.state.pas,
-				save: this.state.save
+		if (this.state.mode === "forgot") {
+			fetch(`https://subexpress.ru/apps_api/`, {
+				method: "post",
+				body: JSON.stringify({
+					loginData: { log: this.state.log, mode: this.state.mode }
+				})
 			})
-			.then(user => {
-				// console.log('form user' , user);
+				.then(res => res.json())
+				.then(res => {
+					if (res["error"]) {
+						alert(res["error"]);
+					}
+					this.setState({
+						loginPasForgot: "Новый пароль выслан на Вашу почту"
+					});
+					// console.log('res' , res)
+				});
+			this.setState({ isLoading: false });
+			return null;
+		}
 
-				if (user && user.error) {
-					if (user.error === "log") {
-						this.setState({ errorLog: true, isLoading: false });
-					}
-					if (user.error === "pas") {
-						this.setState({ errorPas: true, isLoading: false });
-					}
+		// console.log("this.props.login", this.props.login);
+		const loginData: LoginData = {
+			// isSignUp: this.state.isSignUp,
+			name: this.state.name,
+			phone: this.state.phone,
+			log: this.state.log,
+			pas: this.state.pas,
+			save: this.state.save,
+			mode: this.state.mode
+		};
+		this.props.login(loginData).then(user => {
+			// console.log('form user' , user);
+
+			if (user && user.error) {
+				if (user.error === "log") {
+					this.setState({ errorLog: true, isLoading: false });
 				}
-			});
+				if (user.error === "pas") {
+					this.setState({ errorPas: true, isLoading: false });
+				}
+			}
+		});
 	}
 	onChange(isChecked) {
 		console.log(isChecked);
 		this.setState({ save: !this.state.save });
+	}
+	componentDidUpdate(prevProps, prevState) {
+		if (
+			this.state.loginPasForgot !== prevState.loginPasForgot &&
+			this.state.mode !== "signIn"
+		) {
+			this.setState({ mode: "signIn", isLoading: false });
+		}
 	}
 	// userError
 	render() {
@@ -94,16 +125,18 @@ export default class LoginForm extends React.Component<any, State> {
 						source={require("../img/logo.png")}
 					/>
 				</View>
-				{this.state.isSignUp ? (
-					<Input
-						placeholder="Имя"
-						autoFocus={true}
-						center={true}
-						onChangeText={name => this.setState({ name })}
-						value={this.state.name}
-					/>
+				{this.state.mode === "signUp" ? (
+					<>
+						<Input
+							placeholder="Имя"
+							autoFocus={true}
+							center={true}
+							onChangeText={name => this.setState({ name })}
+							value={this.state.name}
+						/>
+					</>
 				) : null}
-				{this.state.isSignUp ? (
+				{this.state.mode === "signUp" ? (
 					<Input
 						placeholder="Телефон"
 						autoFocus={false}
@@ -113,14 +146,26 @@ export default class LoginForm extends React.Component<any, State> {
 					/>
 				) : null}
 				<Input
-					placeholder={this.state.isSignUp ? "Email" : "Логин"}
+					placeholder={
+						this.state.mode === "signUp" ||
+						this.state.mode === "forgot"
+							? "Email"
+							: "Логин"
+					}
 					autoFocus={true}
 					error={this.state.errorLog}
 					center={true}
 					onChangeText={log => this.setState({ log })}
 					value={this.state.log}
 				/>
-				{!this.state.isSignUp ? (
+				{this.state.mode === "signIn" && this.state.loginPasForgot ? (
+					<Text style={appStyles.text}>
+						{this.state.loginPasForgot}
+					</Text>
+				) : null}
+
+				{this.state.mode === "signIn" ||
+				this.state.mode === "signUp" ? (
 					<Input
 						placeholder="Пароль"
 						center={true}
@@ -129,12 +174,14 @@ export default class LoginForm extends React.Component<any, State> {
 						value={this.state.pas}
 					/>
 				) : null}
+				{this.state.mode !== "forgot" ? (
+					<CheckBox style={{ margin: 20 }} onChange={this.onChange}>
+						<Text style={[appStyles.text, { marginLeft: 20 }]}>
+							Запомнить меня
+						</Text>
+					</CheckBox>
+				) : null}
 
-				<CheckBox style={{ margin: 20 }} onChange={this.onChange}>
-					<Text style={[appStyles.text, { marginLeft: 20 }]}>
-						Запомнить меня
-					</Text>
-				</CheckBox>
 				{isLoading ? (
 					<Loading></Loading>
 				) : (
@@ -143,30 +190,74 @@ export default class LoginForm extends React.Component<any, State> {
 						// color={Colors.assent}
 						style={[
 							appStyles.button,
-							{ marginBottom: 10, marginTop: 20,}
+							{ marginBottom: 10, marginTop: 20 }
 						]}
 					>
 						<Text style={appStyles.buttonText}>
-							{this.state.isSignUp ? "Регистрация" : "Вход"}{" "}
+							{this.state.mode === "forgot" ? "Выслать" : null}
+							{this.state.mode === "signUp"
+								? "Регистрация"
+								: null}
+							{this.state.mode === "signIn" ? "Вход" : null}
 						</Text>
 					</TouchableOpacity>
 				)}
-				<View style={[appStyles.hr , {marginTop: 140}]} />
-
+				<View style={[appStyles.hr, { marginTop: 80 }]} />
 				<TouchableOpacity
 					onPress={() => {
 						this.setState({
-							isSignUp: !this.state.isSignUp
+							mode: "signIn"
 						});
 					}}
 				>
 					<Text
 						style={[
 							appStyles.text,
-							{ marginBottom: 40, marginTop: 20 }
+							{ marginBottom: 10, marginTop: 10 },
+							this.state.mode === "signIn"
+								? { color: Colors.assent3 }
+								: null
 						]}
 					>
-						{this.state.isSignUp ? "Вход" : "Регистрация"}
+						Вход
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => {
+						this.setState({
+							mode: "signUp"
+						});
+					}}
+				>
+					<Text
+						style={[
+							appStyles.text,
+							{ marginBottom: 10, marginTop: 10 },
+							this.state.mode === "signUp"
+								? { color: Colors.assent3 }
+								: null
+						]}
+					>
+						Регистрация
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => {
+						this.setState({
+							mode: "forgot"
+						});
+					}}
+				>
+					<Text
+						style={[
+							appStyles.text,
+							{ marginBottom: 30, marginTop: 10 },
+							this.state.mode === "forgot"
+								? { color: Colors.assent3 }
+								: null
+						]}
+					>
+						Забили пароль?
 					</Text>
 				</TouchableOpacity>
 			</SafeAreaView>

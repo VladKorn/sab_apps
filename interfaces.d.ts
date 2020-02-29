@@ -18,7 +18,8 @@ export interface LoginData {
 	save?: boolean;
 	name?: string;
 	phone?: string;
-	isSignUp?: false;
+    // isSignUp?: false;
+    mode?: "signIn" | "signUp" | "forgot";
 }
 export interface tsBasket{
     [id:number]: tsBasketItem
