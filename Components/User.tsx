@@ -28,7 +28,7 @@ export default class User extends Component<any, any> {
 		this.submit = this.submit.bind(this);
 	}
 	componentDidMount() {
-		console.log("aruser", this.props.screenProps.user);
+		// console.log("aruser", this.props.screenProps.user);
 	}
 	submit() {
 		const userData = {
@@ -45,7 +45,7 @@ export default class User extends Component<any, any> {
 		})
 			.then(res => res.json())
 			.then(res => {
-				console.log("userupdate res", res);
+				// console.log("userupdate res", res);
 				if (res.user && res.user.id && res.user.updated) {
 					if (this.state.log === "" && this.state.pas === "") {
 						this.props.screenProps.autoLogin();

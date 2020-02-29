@@ -39,14 +39,14 @@ export default class Catalog extends React.Component<any, State> {
 	}
 
 	search(text:string) {
-        console.log("search", text);
+        // console.log("search", text);
         this.setState({search: text});
 		fetch(
 			`https://subexpress.ru/apps_api/search.php/?search=${text}`
 		)
 			.then(res => res.json())
 			.then(res => {
-                console.log('res' , res)
+                // console.log('res' , res)
                 if(res.products){
                     this.setState({
                         searchRes: res.products.map(item => {

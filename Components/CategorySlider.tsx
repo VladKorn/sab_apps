@@ -103,7 +103,7 @@ export default class CategorySlider extends React.Component<any, State> {
         }
         // console.log('navigation' ,JSON.stringify( this.props.navigation  ))
         // console.log(this.props.screenProps.catalog.cats[this.props.screenProps.products[this.state.currentProduct].categoryId] )
-        console.log("render");
+        // console.log("render");
         // const isFavorite = this.state.isFavorite;
         const isFavorite = this.props.screenProps.favorite.includes( this.state.currentProductId );
         return (

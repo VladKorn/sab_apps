@@ -93,7 +93,7 @@ export default class LoginForm extends React.Component<any, State> {
 		});
 	}
 	onChange(isChecked) {
-		console.log(isChecked);
+		// console.log(isChecked);
 		this.setState({ save: !this.state.save });
 	}
 	componentDidUpdate(prevProps, prevState) {

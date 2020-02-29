@@ -77,11 +77,7 @@ export default class CatalogCategories extends Component<any, any> {
 		}, 100);
 	}
 	componentDidUpdate(prevProps, prevState) {
-		console.log("componentDidUpdate", this.state.search);
-		console.log(
-			"componentDidUpdate catId",
-			this.props.navigation?.state?.params?.catId
-		);
+		// console.log("componentDidUpdate", this.state.search);
 		if (this.state.search) {
 			if (this.props.navigation?.state?.params?.catId === 0) {
 				this.setState({ search: "" });
@@ -139,7 +135,7 @@ export default class CatalogCategories extends Component<any, any> {
 								let item = products[pkey];
 								let isIncludet = true;
 								let isNested = false;
-								console.log("item", item);
+								// console.log("item", item);
 
 								// is in search
 								if (this.props.searchRes.length > 0) {

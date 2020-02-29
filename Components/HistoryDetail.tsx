@@ -46,12 +46,12 @@ export default class HistoryDetail extends React.Component<any, State> {
 
 	_repeatOrder() {
 		const pageData = this.props.navigation.state.params.pageData;
-		console.log("pageData", pageData.products);
+		// console.log("pageData", pageData.products);
 		let products = {};
 		pageData.products.map(item => {
 			typeof item === 'object' && item.id ? products[item['id']] = { count: item.count }:null;
 		});
-		console.log("products", products);
+		// console.log("products", products);
 
 		const data: tsBasketApi = {
 			action: "setBasket",

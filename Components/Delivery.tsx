@@ -85,7 +85,7 @@ export default class Order extends React.Component<any, State> {
 	openDatePicker() {
 		this.setState({ DatePickerIsOpen: true });
 		setTimeout(() => {
-			console.log("openDatePicker2", this.state.DatePickerIsOpen);
+			// console.log("openDatePicker2", this.state.DatePickerIsOpen);
 			this.setState({ DatePickerIsOpen: false });
 		}, 300);
 	}

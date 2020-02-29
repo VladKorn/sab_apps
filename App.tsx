@@ -267,7 +267,7 @@ export default class App extends React.Component<any, State> {
 		getLoginData(loginData);
 	}
 	saveLoginData(log, pas) {
-		console.log("saveLoginData", log, pas);
+		// console.log("saveLoginData", log, pas);
 		const storeData = async (log, pas) => {
 			try {
                 if(log){
@@ -338,7 +338,7 @@ export default class App extends React.Component<any, State> {
 	async sendMail(data) {
 		let success: boolean = false;
 		data["userId"] = this.state.user.id;
-		console.log("sendMail", data);
+		// console.log("sendMail", data);
 		await fetch(`https://subexpress.ru/apps_api/email.php`, {
 			method: "POST",
 			headers: {
@@ -352,7 +352,7 @@ export default class App extends React.Component<any, State> {
 				// console.log('fetch res-', res.success);
 
 				if (res.success) {
-					console.log("fetch sucsess");
+					// console.log("fetch sucsess");
 					// if(prod.count === 0){delete state.inBasket[prod.id]}
 				}
 				success = res.success;
