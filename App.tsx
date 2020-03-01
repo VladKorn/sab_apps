@@ -138,7 +138,8 @@ export default class App extends React.Component<any, State> {
                     this.setState({isSavedLoginDataChecked: true});
 					if (res.user && res.user.error) {
                         // alert("getData fetch " + res.user.error);
-                        return res.user;
+                        // console.log('user' , res.user.error)
+                        // return res.user;
                         
 					}
 					// console.log("fetch res stocks", res.stocks);
@@ -155,7 +156,7 @@ export default class App extends React.Component<any, State> {
 						this.saveLoginData(loginData.log, res.user.pas);
 					}
 
-                    // console.log('getData res' , res);
+                    console.log('getData res' , res);
                     return res.user;
 				})
 				.catch(error => {
