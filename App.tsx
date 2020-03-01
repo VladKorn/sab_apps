@@ -156,7 +156,7 @@ export default class App extends React.Component<any, State> {
 						this.saveLoginData(loginData.log, res.user.pas);
 					}
 
-                    console.log('getData res' , res);
+                    // console.log('getData res' , res);
                     return res.user;
 				})
 				.catch(error => {
