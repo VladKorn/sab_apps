@@ -4,6 +4,7 @@ import ProductItem from "./ProductItem";
 import appStyles from "./appStyles";
 import Loading from "./Loading";
 import InputSearch from "./InputSearch";
+import { ScrollView } from "react-native-gesture-handler";
 export default class CatalogCategories extends Component<any, any> {
 	constructor(props) {
 		super(props);
@@ -71,7 +72,7 @@ export default class CatalogCategories extends Component<any, any> {
 	componentDidMount() {
 		setTimeout(() => {
 			this.setState({ isLoading: false });
-		}, 30);
+		}, 310);
 		setTimeout(() => {
 			this.forceUpdate();
 		}, 100);
@@ -86,8 +87,10 @@ export default class CatalogCategories extends Component<any, any> {
 	}
 
 	render() {
+        const asd = {width:'100%' , height: 500};
 		if (this.state.isLoading) {
 			return null;
+			return <ScrollView style={asd}></ScrollView>;
 		}
 		const catId = this.props.navigation.state.params
 			? this.props.navigation.state.params.catId
