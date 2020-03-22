@@ -39,6 +39,13 @@ const handleCustomTransition = ({ scenes }) => {
 		return fromRight();
 	}
 };
+const totalProductsCount = (basket): number => {
+	let totalProductsCount = 0;
+	Object.keys(basket).map(key => {
+		totalProductsCount = parseInt(basket[key].count) + totalProductsCount;
+	});
+	return totalProductsCount;
+};
 
 const Home = createStackNavigator(
 	{
@@ -81,12 +88,15 @@ const Home = createStackNavigator(
 							/>
 							<View style={appStyles.bottonToOrderCount}>
 								<Text style={appStyles.bottonToOrderCountText}>
-									{navigation.getScreenProps().basket
+									{/* {navigation.getScreenProps().basket
 										? Object.entries(
 												navigation.getScreenProps()
 													.basket
 										  ).length
-										: null}
+										: null} */}
+									{totalProductsCount(
+										navigation.getScreenProps().basket
+									)}
 								</Text>
 							</View>
 						</TouchableOpacity>

@@ -5,6 +5,7 @@ interface Props {
 	basket: object;
 	products: object;
 	navigation: any;
+	isVisible?: boolean;
 }
 interface State {
 	isVisible: boolean;
@@ -18,7 +19,7 @@ export default class Basket extends React.Component<Props, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isVisible: false,
+			isVisible: this.props.isVisible,
 			totalProductsCount: 0,
 			translateY: new Animated.Value(100)
 		};
@@ -31,28 +32,32 @@ export default class Basket extends React.Component<Props, State> {
 				parseInt(this.props.basket[key].count) + totalProductsCount;
 		});
 		this.setState({ totalProductsCount: totalProductsCount });
-    }
+	}
 	componentDidUpdate(prevProps, prevState) {
 		let totalProductsCount = 0;
 		Object.keys(this.props.basket).map(key => {
 			totalProductsCount =
 				parseInt(this.props.basket[key].count) + totalProductsCount;
 		});
-		if (this.state.totalProductsCount !== totalProductsCount) {
-			this.setState({
-				totalProductsCount: totalProductsCount,
-				isVisible: true
-			});
-			if (this.timer) {
-				clearTimeout(this.timer);
+		if (this.props.isVisible) {
+			this._show();
+		} else{
+			if (this.state.totalProductsCount !== totalProductsCount) {
+				this.setState({
+					totalProductsCount: totalProductsCount,
+					isVisible: true
+				});
+				if (this.timer) {
+					clearTimeout(this.timer);
+				}
+				this.timer = setTimeout(() => {
+					this.setState({ isVisible: false });
+				}, 3000);
 			}
-			this.timer = setTimeout(() => {
-				this.setState({ isVisible: false });
-			}, 3000);
-		}
 
-		if (prevState.isVisible !== this.state.isVisible) {
-			this.state.isVisible ? this._show() : this._hide();
+			if (prevState.isVisible !== this.state.isVisible) {
+				this.state.isVisible ? this._show() : this._hide();
+			}
 		}
 	}
 	_hide() {

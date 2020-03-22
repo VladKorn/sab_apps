@@ -17,7 +17,13 @@ import ImageSlider from "react-native-image-slider";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
-
+const totalProductsCount = (basket): number => {
+	let totalProductsCount = 0;
+	Object.keys(basket).map(key => {
+		totalProductsCount = parseInt(basket[key].count) + totalProductsCount;
+	});
+	return totalProductsCount;
+};
 export default class HomeScreen extends React.Component<any> {
 	static navigationOptions = {
 		header: null,
@@ -184,11 +190,12 @@ export default class HomeScreen extends React.Component<any> {
 						/>
 						<View style={appStyles.bottonToOrderCount}>
 							<Text style={appStyles.bottonToOrderCountText}>
-								{this.props.screenProps.basket
+								{/* {this.props.screenProps.basket
 									? Object.entries(
 											this.props.screenProps.basket
 									  ).length
-									: null}
+									: null} */}
+									{totalProductsCount(this.props.screenProps.basket)}
 							</Text>
 						</View>
 					</TouchableOpacity>

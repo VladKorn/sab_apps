@@ -61,13 +61,14 @@ export default class SwiperComponent extends Component {
 				>
 					{this._renderSlides()}
 				</Swiper>
-				{!this.state.isZoom ? (
+				{/* {!this.state.isZoom ? ( */}
 					<Basket
 						basket={this.props.basket}
 						products={this.props.products}
 						navigation={this.props.navigation}
+						isVisible={true}
 					/>
-				) : null}
+				{/* ) : null} */}
 			</View>
 		);
 	}
