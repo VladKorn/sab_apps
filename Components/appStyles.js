@@ -1,12 +1,15 @@
-import { StyleSheet, Platform, Modal } from "react-native";
+import { StyleSheet, Platform, Dimensions} from "react-native";
 import Colors from "../constants/Colors.js";
+const screenWidth = Math.round(Dimensions.get("window").width);
+const screenHeight = Math.round(Dimensions.get("window").height);
+console.log({ screenWidth, screenHeight });
 
 const appStyles = StyleSheet.create({
 	borderRadius: {
 		borderRadius: 10
 	},
 	SafeAreaView: {
-		flex: 1,
+		// flex: 1,
 		paddingTop: Platform.OS === "android" ? 25 : 0
 	},
 	page: {
@@ -22,7 +25,7 @@ const appStyles = StyleSheet.create({
 		shadowRadius: 0,
 		elevation: 0,
 
-		height: 70,
+		height: screenHeight > 600 ? 70 : 40,
 		marginLeft: 15,
 		marginRight: 15,
 		borderBottomWidth: 1,
@@ -30,12 +33,12 @@ const appStyles = StyleSheet.create({
 	},
 	headerTitle: {
 		fontFamily: "Neuron",
-		fontSize: 24,
+		fontSize: screenHeight > 600 ? 24 : 18,
 		color: Colors.text,
 		textAlign: "left",
 		width: "100%",
         flex: 1,
-        marginTop: 3
+        marginTop: 6
 	},
 	paddings: {
 		paddingLeft: 15,

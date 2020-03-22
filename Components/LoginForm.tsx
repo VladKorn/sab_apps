@@ -6,7 +6,10 @@ import {
 	TextInput,
 	TouchableOpacity,
 	Image,
-	SafeAreaView
+	SafeAreaView,
+	Keyboard,
+	Dimensions,
+	ScrollView
 } from "react-native";
 import Colors from "../constants/Colors";
 import appStyles from "./appStyles";
@@ -25,10 +28,13 @@ interface State {
 	isLoading: boolean;
 	errorLog: boolean;
 	errorPas: boolean;
+	keyboardHeight: number;
 	mode: "signIn" | "signUp" | "forgot";
 	loginPasForgot: string | null;
 }
 export default class LoginForm extends React.Component<any, State> {
+	keyboardDidShowListener: any;
+	keyboardDidHideListener: any;
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -41,10 +47,30 @@ export default class LoginForm extends React.Component<any, State> {
 			errorLog: false,
 			errorPas: false,
 			mode: "signIn",
-			loginPasForgot: null
+			loginPasForgot: null,
+			keyboardHeight: 0
 		};
 		this.login = this.login.bind(this);
 		this.onChange = this.onChange.bind(this);
+	}
+	componentDidMount() {
+		this.keyboardDidShowListener = Keyboard.addListener(
+			"keyboardWillShow",
+			event => {
+				console.log(
+					"event.endCoordinates.height",
+					event.endCoordinates.height,
+					Dimensions.get("window").height
+				);
+				this.setState({ keyboardHeight: event.endCoordinates.height });
+			}
+		);
+		this.keyboardDidHideListener = Keyboard.addListener(
+			"keyboardWillHide",
+			() => {
+				this.setState({ keyboardHeight: 0 });
+			}
+		);
 	}
 	login() {
 		this.setState({ isLoading: true });
@@ -109,19 +135,30 @@ export default class LoginForm extends React.Component<any, State> {
 		const isLoading = this.state.isLoading;
 		// const isLoading = true;
 		return (
-			<SafeAreaView
-				style={[
-					appStyles.page,
-					{
-						backgroundColor: "#F2F2F2",
-						justifyContent: "center",
-						alignItems: "center"
-					}
-				]}
+			// <SafeAreaView
+			// 	style={[
+			// 		appStyles.page,
+			// 		{
+			// 			backgroundColor: "#F2F2F2",
+			// 			justifyContent: "center",
+			// 			alignItems: "center"
+			// 		}
+			// 	]}
+			// >
+
+			<ScrollView
+				contentContainerStyle={{
+					// flex: 1,
+					minHeight: "100%",
+					backgroundColor: "#F2F2F2",
+					justifyContent: "flex-end",
+					alignItems: "center"
+					// height: 2000
+				}}
 			>
 				<View style={{ flex: 1, justifyContent: "center" }}>
 					<Image
-						style={{ width: 176.77, height: 69.27 }}
+						style={{ width: 176.77, height: 69.27, margin: 20 }}
 						source={require("../img/logo.png")}
 					/>
 				</View>
@@ -175,7 +212,7 @@ export default class LoginForm extends React.Component<any, State> {
 					/>
 				) : null}
 				{this.state.mode !== "forgot" ? (
-					<CheckBox style={{ margin: 20 }} onChange={this.onChange}>
+					<CheckBox style={{ margin: 10 }} onChange={this.onChange}>
 						<Text style={[appStyles.text, { marginLeft: 20 }]}>
 							Запомнить меня
 						</Text>
@@ -202,65 +239,73 @@ export default class LoginForm extends React.Component<any, State> {
 						</Text>
 					</TouchableOpacity>
 				)}
-				<View style={[appStyles.hr, { marginTop: 80 }]} />
-				<TouchableOpacity
-					onPress={() => {
-						this.setState({
-							mode: "signIn"
-						});
+				<View style={[appStyles.hr, { marginTop: 30 }]} />
+				<View
+					style={{
+						minHeight: this.state.keyboardHeight,
+						alignItems: "center"
 					}}
 				>
-					<Text
-						style={[
-							appStyles.text,
-							{ marginBottom: 10, marginTop: 10 },
-							this.state.mode === "signIn"
-								? { color: Colors.assent3 }
-								: null
-						]}
+					<TouchableOpacity
+						onPress={() => {
+							this.setState({
+								mode: "signIn"
+							});
+						}}
 					>
-						Вход
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => {
-						this.setState({
-							mode: "signUp"
-						});
-					}}
-				>
-					<Text
-						style={[
-							appStyles.text,
-							{ marginBottom: 10, marginTop: 10 },
-							this.state.mode === "signUp"
-								? { color: Colors.assent3 }
-								: null
-						]}
+						<Text
+							style={[
+								appStyles.text,
+								{ marginBottom: 10, marginTop: 10 },
+								this.state.mode === "signIn"
+									? { color: Colors.assent3 }
+									: null
+							]}
+						>
+							Вход
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							this.setState({
+								mode: "signUp"
+							});
+						}}
 					>
-						Регистрация
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => {
-						this.setState({
-							mode: "forgot"
-						});
-					}}
-				>
-					<Text
-						style={[
-							appStyles.text,
-							{ marginBottom: 30, marginTop: 10 },
-							this.state.mode === "forgot"
-								? { color: Colors.assent3 }
-								: null
-						]}
+						<Text
+							style={[
+								appStyles.text,
+								{ marginBottom: 10, marginTop: 10 },
+								this.state.mode === "signUp"
+									? { color: Colors.assent3 }
+									: null
+							]}
+						>
+							Регистрация
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							this.setState({
+								mode: "forgot"
+							});
+						}}
 					>
-						Забили пароль?
-					</Text>
-				</TouchableOpacity>
-			</SafeAreaView>
+						<Text
+							style={[
+								appStyles.text,
+								{ marginBottom: 30, marginTop: 10 },
+								this.state.mode === "forgot"
+									? { color: Colors.assent3 }
+									: null
+							]}
+						>
+							Забили пароль?
+						</Text>
+					</TouchableOpacity>
+				</View>
+			</ScrollView>
+			// </SafeAreaView>
 		);
 	}
 }
