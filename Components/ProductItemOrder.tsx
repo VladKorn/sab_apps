@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
         color: "#FF00FF"
     }
 });
-AppRegistry.registerComponent("subexpress", () => ProductItemOrder);
+AppRegistry.registerComponent("Subexpress", () => ProductItemOrder);

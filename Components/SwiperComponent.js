@@ -73,4 +73,4 @@ export default class SwiperComponent extends Component {
 	}
 }
 
-AppRegistry.registerComponent("subexpress", () => SwiperComponent);
+AppRegistry.registerComponent("Subexpress", () => SwiperComponent);

@@ -233,4 +233,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-AppRegistry.registerComponent("subexpress", () => ProductItem);
+AppRegistry.registerComponent("Subexpress", () => ProductItem);

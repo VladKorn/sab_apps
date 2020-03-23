@@ -296,4 +296,4 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     }
 });
-AppRegistry.registerComponent("subexpress", () => CategorySliderItem);
+AppRegistry.registerComponent("Subexpress", () => CategorySliderItem);
