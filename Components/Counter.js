@@ -9,7 +9,7 @@ export default class Counter extends Component {
 
         this.state = {
             number: parseInt(this.props.InitialValue),
-            isInitial: this.props.mode === 'v' ? false : true
+            isInitial: this.props.mode === 'v' || parseInt(this.props.InitialValue)>0 ? false : true
             // isInitial: false 
         };
 
@@ -17,7 +17,7 @@ export default class Counter extends Component {
         this.onPressMinus = this.onPressMinus.bind(this);
         this.onPressPlus = this.onPressPlus.bind(this);
         this.setValue = this.setValue.bind(this);
-    }
+	}
     setValue(value){
         this.setState({number: value});
     }
@@ -126,12 +126,6 @@ export default class Counter extends Component {
                 )}
             </TouchableOpacity>
         );
-    }
-    componentDidUpdate(prevProps, prevState){
-        if( this.state.isInitial && this.state.number > 0 ){
-            this.setState({isInitial: false});
-        }
-        
     }
     render() {
         const { number } = this.state;

@@ -14,10 +14,11 @@ import {
     Easing,
     StyleSheet
 } from "react-native";
-import Counter from "./Counter";
+// import Counter from "./Counter";
+import ProductCounter from "./ProductCounter";
 import Colors from "../constants/Colors.js";
 import appStyles from "./appStyles";
-import SwiperComponent from "./SwiperComponent";
+// import SwiperComponent from "./SwiperComponent";
 import Highlighter from 'react-native-highlight-words';
 
 
@@ -29,7 +30,6 @@ interface State {
     slides: Array<object>;
     catName: string;
     size: object;
-    count: number;
     isContentHidden: boolean;
     aminImg: any;
     opacityAnim: any;
@@ -48,7 +48,6 @@ export default class CategorySliderItem extends React.Component<any, State> {
         this.state = {
             currentProduct: parseInt(this.props.navigation.state.params.id),
             currentIndex: 0,
-            count: 0,
             isZoom: this.props.isZoom,
             size: { width, height },
             catId: 0,
@@ -60,10 +59,9 @@ export default class CategorySliderItem extends React.Component<any, State> {
             opacityAnim: new Animated.Value(1),
             animTranslateY: new Animated.Value(200),
         };
-        this.onChange = this.onChange.bind(this);
         this.onPositionChanged = this.onPositionChanged.bind(this);
         this.zoomToggle = this.zoomToggle.bind(this);
-    }
+	}
     zoomToggle() {
        
         this.setState({
@@ -122,17 +120,6 @@ export default class CategorySliderItem extends React.Component<any, State> {
         }
     }
 
-    onChange(number, type) {
-        // console.log('number, type' ,number, type);
-        this.setState({count: number});
-        this.props.basketApi({
-            action: "setProduct",
-            params: {
-                productId: this.state.currentProduct,
-                count: number
-            }
-        });
-    }
     onPositionChanged(index) {
         // console.log('onPositionChanged' , index);
         this.setState({ currentIndex: index });
@@ -204,10 +191,12 @@ export default class CategorySliderItem extends React.Component<any, State> {
                             >
                                 {this.props.item.price} руб.
                             </Text>
-                                <Counter
+                                {/* <Counter
                                     onChange={this.onChange}
                                     InitialValue={this.state.count}
-                                />
+                                /> */}
+								<ProductCounter id={this.props.item.id}/>
+
                             
                         </View>
                     </View>
@@ -254,7 +243,8 @@ export default class CategorySliderItem extends React.Component<any, State> {
                             ]
                         }}
                     >
-                        <Counter onChange={this.onChange} InitialValue={this.state.count}  />
+                        {/* <Counter onChange={this.onChange} InitialValue={this.state.count}  /> */}
+						<ProductCounter id={this.props.item.id}/>
                     </Animated.View>
                 </View>
             </View>

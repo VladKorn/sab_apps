@@ -20,8 +20,8 @@ export default class CatalogCategories extends Component<any, any> {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+		// console.log("shouldComponentUpdate12 navigation state", nextProps.navigation.state);
 		const reset = nextProps.navigation?.state?.params?.reset || false;
-		// console.log("shouldComponentUpdate10" , this.props.searchText.length , reset);
 		if (reset !== this.state.reset) {
 			this.setState({ reset: reset });
 			this.props.search("");
@@ -76,9 +76,26 @@ export default class CatalogCategories extends Component<any, any> {
 		setTimeout(() => {
 			this.forceUpdate();
 		}, 100);
+	
+		// const didBlurSubscription = this.props.navigation.addListener(
+		// 	'didFocus',
+		// 	payload => {
+		// 	  console.log('didFocus', payload);
+		// 	  setTimeout(()=>{
+		// 		    console.log('setTimeout forceUpdate');
+		// 		  this.forceUpdate()
+
+		// 	  },1350)
+		// 	//   console.log('didBlur', payload);
+		// 	}
+		//   );
+		  
+		  // Remove the listener when you are done
+		//   didBlurSubscription.remove();
+	  
 	}
 	componentDidUpdate(prevProps, prevState) {
-		// console.log("componentDidUpdate", this.state.search);
+		console.log("componentDidUpdate", this.state.search);
 		if (this.state.search) {
 			if (this.props.navigation?.state?.params?.catId === 0) {
 				this.setState({ search: "" });
@@ -87,10 +104,8 @@ export default class CatalogCategories extends Component<any, any> {
 	}
 
 	render() {
-        const asd = {width:'100%' , height: 500};
 		if (this.state.isLoading) {
 			return null;
-			return <ScrollView style={asd}></ScrollView>;
 		}
 		const catId = this.props.navigation.state.params
 			? this.props.navigation.state.params.catId
@@ -242,7 +257,7 @@ export default class CatalogCategories extends Component<any, any> {
 		// return null;
 		// console.log({ nestedData });
 		Object.keys(nestedData).forEach(id => {
-            nestedData[id].data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
+			nestedData[id].data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
 			data.push({
 				sort: id,
 				title: nestedData[id].title,
@@ -265,7 +280,9 @@ export default class CatalogCategories extends Component<any, any> {
 				sections={data}
 				keyExtractor={(item: any, index) => item.id + index}
 				stickySectionHeadersEnabled={false}
-				renderItem={({ item }) => <ProductItem {...item} />}
+				renderItem={({ item }) => (
+					<ProductItem {...item} basket={this.props.basket} />
+				)}
 				renderSectionHeader={({ section: { title } }) => (
 					<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
 						{title}

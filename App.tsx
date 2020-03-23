@@ -1,20 +1,20 @@
 import React from "react";
-import { View, Alert , StatusBar} from "react-native";
+import { View, Alert, StatusBar } from "react-native";
 
 import * as Font from "expo-font";
 // import LoginForm from "./Components/LoginForm";
 import AppContainer from "./Components/AppContainer";
 import Loading from "./Components/Loading";
+import {BasketContext} from  "./Components/BasketContext";
 
 // import AsyncStorage from '@react-native-community/async-storage';
-import { AsyncStorage  } from "react-native";
+import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
 
-import { MakeOrderData, tsBasketApi, tsBasket , LoginData} from "./interfaces";
+import { MakeOrderData, tsBasketApi, tsBasket, LoginData } from "./interfaces";
 interface User {
 	id: number;
 }
-
 
 interface State {
 	user: User;
@@ -27,8 +27,8 @@ interface State {
 	favorite: Array<number>;
 	userError: object;
 	comment: string;
-    promo: string;
-    isSavedLoginDataChecked: boolean;
+	promo: string;
+	isSavedLoginDataChecked: boolean;
 }
 export default class App extends React.Component<any, State> {
 	constructor(props) {
@@ -41,11 +41,11 @@ export default class App extends React.Component<any, State> {
 			stocks: {},
 			basket: null,
 			isLoading: false,
-            fontLoaded: false,
-            isSavedLoginDataChecked: false,
+			fontLoaded: false,
+			isSavedLoginDataChecked: false,
 			userError: {},
 			comment: "",
-            promo: "",
+			promo: ""
 		};
 
 		// bind functions..
@@ -59,18 +59,20 @@ export default class App extends React.Component<any, State> {
 		this.makeOrder = this.makeOrder.bind(this);
 		this.sendMail = this.sendMail.bind(this);
 		this.logout = this.logout.bind(this);
-        this.autoLogin = this.autoLogin.bind(this);
-        this.saveLoginData = this.saveLoginData.bind(this);
-        
-    }
- 
+		this.autoLogin = this.autoLogin.bind(this);
+		this.saveLoginData = this.saveLoginData.bind(this);
+	}
+
 	componentDidMount() {
-        // console.log('componentDidMount');
+		// console.log('componentDidMount');
+		// this.basketApi({action:'clear'})
 		this.loadAssetsAsync();
 		this.autoLogin();
 		const getBasket = async () => {
 			try {
-				const basket = await AsyncStorage.getItem("@basket") || JSON.stringify({});
+				const basket =
+					(await AsyncStorage.getItem("@basket")) ||
+					JSON.stringify({});
 				// console.log('basket1' , basket);
 				if (basket) {
 					this.setState({ basket: JSON.parse(basket) });
@@ -80,10 +82,10 @@ export default class App extends React.Component<any, State> {
 				Alert.alert(e);
 			}
 		};
-        getBasket();
-        setTimeout(()=>{
-            this.setState({isSavedLoginDataChecked: true});
-        }, 5000)
+		getBasket();
+		setTimeout(() => {
+			this.setState({ isSavedLoginDataChecked: true });
+		}, 5000);
 	}
 	loadAssetsAsync = async () => {
 		await Font.loadAsync({
@@ -126,8 +128,8 @@ export default class App extends React.Component<any, State> {
 	openProduct() {}
 	getCatalog() {}
 	async getData(loginData: LoginData) {
-        // let res = false;
-		const getData = async (loginData:LoginData) => {
+		// let res = false;
+		const getData = async (loginData: LoginData) => {
 			// console.log("getData", loginData);
 			return await fetch("https://subexpress.ru/apps_api/", {
 				method: "post",
@@ -135,12 +137,11 @@ export default class App extends React.Component<any, State> {
 			})
 				.then(res => res.json())
 				.then(res => {
-                    this.setState({isSavedLoginDataChecked: true});
+					this.setState({ isSavedLoginDataChecked: true });
 					if (res.user && res.user.error) {
-                        // alert("getData fetch " + res.user.error);
-                        // console.log('user' , res.user.error)
-                        // return res.user;
-                        
+						// alert("getData fetch " + res.user.error);
+						// console.log('user' , res.user.error)
+						// return res.user;
 					}
 					// console.log("fetch res stocks", res.stocks);
 					this.setState({
@@ -152,20 +153,25 @@ export default class App extends React.Component<any, State> {
 						stocks: res.stocks,
 						favorite: res.user.favorite || []
 					});
-					if (res.user && res.user.id && loginData.mode !== 'forgot' && loginData.save) {
+					if (
+						res.user &&
+						res.user.id &&
+						loginData.mode !== "forgot" &&
+						loginData.save
+					) {
 						this.saveLoginData(loginData.log, res.user.pas);
 					}
 
-                    // console.log('getData res' , res);
-                    return res.user;
+					// console.log('getData res' , res);
+					return res.user;
 				})
 				.catch(error => {
 					// console.error(error);
-                    alert("getData fetch error" + error);
+					alert("getData fetch error" + error);
 				});
 		};
-        return await getData(loginData);
-        // console.log('getData await res' , getData ,res);
+		return await getData(loginData);
+		// console.log('getData await res' , getData ,res);
 		// return res;
 	}
 	setOrderData(data) {
@@ -216,21 +222,20 @@ export default class App extends React.Component<any, State> {
 			});
 		return success;
 	}
-	
+
 	async login(loginData: LoginData) {
-		if (loginData.save && loginData.mode !== 'signUp') {
-            this.saveLoginData(loginData.log, loginData.pas);
+		if (loginData.save && loginData.mode !== "signUp") {
+			this.saveLoginData(loginData.log, loginData.pas);
 			// console.log('storeData' , storeData);
 		}
 		// const res = await this.getData(loginData);
-        return await this.getData(loginData);
-        
-        // return 'resasd';
+		return await this.getData(loginData);
 
+		// return 'resasd';
 	}
 	autoLogin() {
-        // console.log('_autoLogin');
-		let loginData: LoginData = { log: '', pas: '' };
+		// console.log('_autoLogin');
+		let loginData: LoginData = { log: "", pas: "" };
 		const getLoginData = async loginData => {
 			try {
 				const cryptedLog = await AsyncStorage.getItem("@log");
@@ -254,16 +259,13 @@ export default class App extends React.Component<any, State> {
 					if (!loginData.isSignUp) {
 						loginData["log"] = decryptedLog;
 						loginData["pas"] = decryptedPas;
-                    }
-                    
-                    
-                    
+					}
 				}
 			} catch (e) {
 				// alert("getLoginData" + e);
-            }
-            
-            this.login(loginData);
+			}
+
+			this.login(loginData);
 		};
 		getLoginData(loginData);
 	}
@@ -271,21 +273,21 @@ export default class App extends React.Component<any, State> {
 		// console.log("saveLoginData", log, pas);
 		const storeData = async (log, pas) => {
 			try {
-                if(log){
-                    const encryptedLog = CryptoJS.AES.encrypt(
-                        log,
-                        "F24czi3II092Xnrhc"
-                    ).toString();
-                    await AsyncStorage.setItem("@log", encryptedLog);
-                }
-                if(pas){
-                    const encryptedPas = CryptoJS.AES.encrypt(
-                        pas,
-                        "F24czi3II092Xnrhc"
-                    ).toString();
-                    // console.log('encryptedLog' , encryptedLog)
-                    await AsyncStorage.setItem("@pas", encryptedPas);
-                }
+				if (log) {
+					const encryptedLog = CryptoJS.AES.encrypt(
+						log,
+						"F24czi3II092Xnrhc"
+					).toString();
+					await AsyncStorage.setItem("@log", encryptedLog);
+				}
+				if (pas) {
+					const encryptedPas = CryptoJS.AES.encrypt(
+						pas,
+						"F24czi3II092Xnrhc"
+					).toString();
+					// console.log('encryptedLog' , encryptedLog)
+					await AsyncStorage.setItem("@pas", encryptedPas);
+				}
 			} catch (e) {
 				alert("saveLoginData error " + e);
 				// saving error
@@ -298,8 +300,8 @@ export default class App extends React.Component<any, State> {
 		AsyncStorage.setItem("@pas", "");
 		// this.login({pas: '' , log: ''});
 		this.setState({ user: { id: null } });
-    }
-    addToFavorite(id) {
+	}
+	addToFavorite(id) {
 		let favorite: Array<number> = this.state.favorite;
 		let prodId = parseInt(id);
 		if (favorite.includes(prodId)) {
@@ -362,7 +364,11 @@ export default class App extends React.Component<any, State> {
 	}
 	render() {
 		if (!this.state.fontLoaded || !this.state.isSavedLoginDataChecked) {
-			return (<View style={{flex:1 , justifyContent: 'center'}}><Loading></Loading></View>);
+			return (
+				<View style={{ flex: 1, justifyContent: "center" }}>
+					<Loading></Loading>
+				</View>
+			);
 		}
 
 		// if (!this.state.user.id) {
@@ -374,32 +380,32 @@ export default class App extends React.Component<any, State> {
 		// 	);
 		// }
 		return this.state.fontLoaded ? (
-            <>
-<StatusBar barStyle="dark-content" /> 
-
-			<AppContainer
-				key="app"
-				screenProps={{
-					catalog: this.state.catalog,
-					products: this.state.products,
-					basket: this.state.basket,
-					basketApi: this.basketApi,
-					getCatalog: this.getCatalog,
-					makeOrder: this.makeOrder,
-					user: this.state.user,
-					stocks: this.state.stocks,
-					favorite: this.state.favorite,
-					setOrderData: this.setOrderData,
-					addToFavorite: this.addToFavorite,
-					sendMail: this.sendMail,
-                    logout: this.logout,
-                    login: this.login,
-                    autoLogin: this.autoLogin,
-                    saveLoginData: this.saveLoginData,
-				}}
-			/>
-               
-            </>
+			<>
+				<StatusBar barStyle="dark-content" />
+				<BasketContext.Provider value={{basket: this.state.basket , basketApi: this.basketApi}}>
+					<AppContainer
+						key="app"
+						screenProps={{
+							catalog: this.state.catalog,
+							products: this.state.products,
+							basket: this.state.basket,
+							basketApi: this.basketApi,
+							getCatalog: this.getCatalog,
+							makeOrder: this.makeOrder,
+							user: this.state.user,
+							stocks: this.state.stocks,
+							favorite: this.state.favorite,
+							setOrderData: this.setOrderData,
+							addToFavorite: this.addToFavorite,
+							sendMail: this.sendMail,
+							logout: this.logout,
+							login: this.login,
+							autoLogin: this.autoLogin,
+							saveLoginData: this.saveLoginData
+						}}
+					/>
+				</BasketContext.Provider>
+			</>
 		) : null;
 	}
 }

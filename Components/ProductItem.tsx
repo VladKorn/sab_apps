@@ -9,9 +9,11 @@ import {
 	TouchableHighlight,
 	StyleSheet
 } from "react-native";
-import Counter from "./Counter";
+// import Counter from "./Counter";
+import ProductCounter from "./ProductCounter";
 import Colors from "../constants/Colors.js";
 import Highlighter from "react-native-highlight-words";
+
 
 interface State {
 	count: number;
@@ -22,13 +24,20 @@ export default class ProductItem extends React.Component<any, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			count: 0,
+			count: this.getCount(),
 			isFavorite: this.props.isFavorite
 		};
 		this.onChange = this.onChange.bind(this);
 		this.addToFavorite = this.addToFavorite.bind(this);
+		this.getCount = this.getCount.bind(this);
 	}
-
+	getCount() {
+		const item = this.props.basket[this.props.id];
+		if (item) {
+			return parseInt(item.count);
+		}
+		return 0;
+	}
 	addToFavorite = () => {
 		this.setState({ isFavorite: !this.state.isFavorite });
 		this.props.addToFavorite(parseInt(this.props.id));
@@ -157,10 +166,11 @@ export default class ProductItem extends React.Component<any, State> {
 							{this.props.price} руб.
 						</Text>
 						<View style={{ marginTop: -10 }}>
-							<Counter
+							<ProductCounter id={this.props.id} />
+							{/* <Counter
 								onChange={this.onChange}
 								InitialValue={this.state.count}
-							/>
+							/> */}
 						</View>
 					</View>
 				</View>

@@ -41,7 +41,6 @@ export default class SwiperComponent extends Component {
 					item={item}
 					zoom={this.zoom}
 					isZoom={this.state.isZoom}
-					basketApi={this.props.basketApi}
 					navigation={this.props.navigation}
 					searchWords={this.props.searchWords}
 				/>
@@ -68,7 +67,7 @@ export default class SwiperComponent extends Component {
 						navigation={this.props.navigation}
 						isVisible={true}
 					/>
-				{/* ) : null} */}
+				{/* ) : null}  */}
 			</View>
 		);
 	}
