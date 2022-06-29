@@ -203,7 +203,7 @@ export default class Sidebar extends React.Component<any, State> {
 							textAlign: "center",
 						}}
 					>
-						version: 1.0.9
+						version: 1.1.0
 					</Text>
 				</SafeAreaView>
 			</DrawerContentScrollView>

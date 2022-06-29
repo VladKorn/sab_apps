@@ -20,6 +20,7 @@ export const CategoriesList = (props: Props) => {
 	const route = useRoute();
 	const navigation = useNavigation();
 	// console.log("route.params.catId", route.params.catId);
+	if (!route?.params?.catId) return null;
 
 	const rootCat = appContex.catalog[route.params.catId] || null;
 	if (rootCat && !rootCat.cats) {

@@ -181,7 +181,6 @@ export default class App extends React.Component<any, State> {
 		this.setState({ comment: data.comment, promo: data.promo });
 	}
 	async makeOrder(obj: MakeOrderData) {
-		// console.log("makeOrder");
 		const data: MakeOrderData = {
 			userId: this.state.user.id,
 			promo: this.state.promo,
@@ -190,6 +189,8 @@ export default class App extends React.Component<any, State> {
 			address: obj.address,
 			deliveryDate: obj.date,
 		};
+		// console.log("makeOrder data", data);
+
 		// data.userId = this.state.user.id;
 		// data.promo = this.state.promo;
 		// data.comment = `(from mobile app) ` + this.state.comment;
@@ -343,7 +344,7 @@ export default class App extends React.Component<any, State> {
 	async sendMail(data) {
 		let success: boolean = false;
 		data["userId"] = this.state.user.id;
-		// console.log("sendMail", data);
+		console.log("sendMail", data);
 		await fetch(`https://subexpress.ru/apps_api/email.php`, {
 			method: "POST",
 			headers: {
@@ -354,7 +355,7 @@ export default class App extends React.Component<any, State> {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				// console.log('fetch res-', res.success);
+				console.log("fetch res-", res);
 
 				if (res.success) {
 					// console.log("fetch sucsess");

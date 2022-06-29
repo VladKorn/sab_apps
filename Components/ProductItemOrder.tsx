@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
 	View,
 	Text,
@@ -12,121 +12,115 @@ import {
 import Counter from "./Counter";
 import Colors from "../constants/colors";
 
-interface State {
-	count: number;
+interface Props {
+	id: number;
+	basketApi: any;
+	img: string;
+	name: string;
+	price: number;
+	initialCount: number;
 }
 
-export default class ProductItemOrder extends React.Component<any, State> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			count: 0,
-		};
-		this.onChange = this.onChange.bind(this);
-		this.deleteProduct = this.deleteProduct.bind(this);
-	}
-	deleteProduct() {
-		this.props.basketApi({
+export const ProductItemOrder = (props: Props) => {
+	const [count, setCount] = useState(0);
+
+	const deleteProduct = () => {
+		props.basketApi({
 			action: "setProduct",
 			params: {
-				productId: this.props.id,
+				productId: props.id,
 				count: 0,
 			},
 		});
-	}
-	onChange(number, type) {
+	};
+	const onChange = (number, type) => {
 		// console.log('number, type' ,number, type)
-		this.props.basketApi({
+		props.basketApi({
 			action: "setProduct",
 			params: {
-				productId: this.props.id,
+				productId: props.id,
 				count: number,
 			},
 		});
-	}
-	render() {
-		return (
-			<View style={styles.box}>
-				<TouchableOpacity
-					style={{
-						// flex: 1,
-						alignItems: "center",
-						justifyContent: "center",
-						width: 25,
-						height: "100%",
-						marginRight: 10,
-					}}
-					onPress={this.deleteProduct}
-				>
-					<Image
-						style={{}}
-						source={require("../img/ico-delete.png")}
-					/>
-				</TouchableOpacity>
-				<Image
-					style={styles.img}
-					source={{ uri: "https://subexpress.ru/" + this.props.img }}
-				/>
+	};
+	return (
+		<View style={styles.box}>
+			<TouchableOpacity
+				style={{
+					// flex: 1,
+					alignItems: "center",
+					justifyContent: "center",
+					width: 20,
+					height: "100%",
+					marginRight: 5,
+				}}
+				onPress={deleteProduct}
+			>
+				<Image style={{}} source={require("../img/ico-delete.png")} />
+			</TouchableOpacity>
+			<Image
+				style={styles.img}
+				source={{ uri: "https://subexpress.ru/" + props.img }}
+			/>
+			<View
+				style={{
+					flex: 1,
+					minHeight: 80,
+					alignItems: "flex-start",
+					justifyContent: "flex-start",
+					// flexDirection: "row"
+					// backgroundColor: "red",
+				}}
+			>
 				<View
 					style={{
 						flex: 1,
-						height: 80,
 						alignItems: "flex-start",
 						justifyContent: "flex-start",
-						// flexDirection: "row"
-						// backgroundColor: "red",
+						flexDirection: "row",
 					}}
 				>
-					<View
+					<Text
 						style={{
-							flex: 1,
-							alignItems: "flex-start",
-							justifyContent: "flex-start",
-							flexDirection: "row",
+							fontSize: 16,
+							fontFamily: "Neuron-Bold",
+							color: "#666774",
+							maxWidth: 150,
 						}}
 					>
-						<Text
-							style={{
-								fontSize: 16,
-								fontFamily: "Neuron-Bold",
-								color: "#666774",
-								maxWidth: 150,
-							}}
-						>
-							{this.props.name}
-						</Text>
-					</View>
-					<View
-						style={{
-							flex: 1,
-							flexGrow: 1,
+						{props.name}
+					</Text>
+				</View>
+				<View
+					style={{
+						flex: 1,
+						flexGrow: 1,
 
-							alignItems: "flex-end",
-							justifyContent: "flex-end",
-							flexDirection: "row",
+						alignItems: "flex-end",
+						justifyContent: "flex-end",
+						flexDirection: "row",
+					}}
+				>
+					<Text
+						style={{
+							color: "#666774",
+							fontFamily: "Neuron-Heavy",
+							fontSize: 18,
+							flexGrow: 1,
 						}}
 					>
-						<Text
-							style={{
-								color: "#666774",
-								fontFamily: "Neuron-Heavy",
-								fontSize: 18,
-								flexGrow: 1,
-							}}
-						>
-							{this.props.price} руб.
-						</Text>
-						<Counter
-							mode="v"
-							onChange={this.onChange}
-							InitialValue={this.props.count}
-						/>
-					</View>
+						{props.price} руб.
+					</Text>
 				</View>
 			</View>
-		);
-	}
-}
+			<Counter
+				mode="v"
+				onChange={onChange}
+				InitialValue={props.initialCount}
+			/>
+		</View>
+	);
+};
 
 const styles = StyleSheet.create({
 	box: {
@@ -135,16 +129,19 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		flexDirection: "row",
 		backgroundColor: "#ffffff",
-		paddingBottom: 15,
-		paddingTop: 15,
+		paddingBottom: 7,
+		paddingLeft: 7,
+		paddingRight: 7,
+		paddingTop: 7,
 		borderBottomColor: "#E2E2E2",
 		borderBottomWidth: 1,
+		marginBottom: 5,
 	},
 	img: {
-		width: 100,
+		width: 80,
 		borderRadius: 10,
-		height: 100,
-		marginRight: 15,
+		height: 80,
+		marginRight: 5,
 		alignSelf: "center",
 	},
 	countContainer: {
@@ -155,4 +152,5 @@ const styles = StyleSheet.create({
 		color: "#FF00FF",
 	},
 });
+export default ProductItemOrder;
 AppRegistry.registerComponent("Subexpress", () => ProductItemOrder);

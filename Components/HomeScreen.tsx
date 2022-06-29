@@ -15,7 +15,6 @@ import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/colors";
 import HomeCatalog from "./HomePage/Catalog";
 import appStyles from "./appStyles";
-import ImageSlider from "react-native-image-slider";
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
 const totalProductsCount = (basket): number => {

@@ -4,7 +4,7 @@
 		"slug": "Subexpress",
 		"privacy": "public",
 		"platforms": ["ios", "android", "web"],
-		"version": "1.0.9",
+		"version": "1.1.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -12,6 +12,7 @@
 			"resizeMode": "cover",
 			"backgroundColor": "#ffffff"
 		},
+		"userInterfaceStyle": "automatic",
 		"updates": {
 			"fallbackToCacheTimeout": 0
 		},
@@ -19,7 +20,7 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.vladkorn.subexpress",
-			"buildNumber": "1.0.9"
+			"buildNumber": "1.1.0"
 		},
 		"android": {
 			"package": "com.vladkorn.subexpress",

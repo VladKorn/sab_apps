@@ -24,6 +24,7 @@ import History from "./History";
 import HistoryDetail from "./HistoryDetail";
 import Addresses from "./Addresses";
 import User from "./User";
+import { Info } from "./Info/Info";
 
 import { TouchableOpacity, Image } from "react-native";
 
@@ -31,7 +32,7 @@ import appStyles from "./appStyles";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { useNavigation, NavigationContainer } from "@react-navigation/native";
+// import { useNavigation, NavigationContainer } from "@react-navigation/native";
 const handleCustomTransition = ({ scenes }) => {
 	const prevScene = scenes[scenes.length - 2];
 	const nextScene = scenes[scenes.length - 1];
@@ -272,17 +273,26 @@ const AppContainer = (_props) => {
 						<Stocks {...props} screenProps={_props.screenProps} />
 					)}
 				</Drawer.Screen>
-				<Drawer.Screen name="Favorites">
+				<Drawer.Screen
+					name="Favorites"
+					options={{ headerTitle: "Избранное" }}
+				>
 					{(props) => (
 						<Catalog {...props} screenProps={_props.screenProps} />
 					)}
 				</Drawer.Screen>
-				<Drawer.Screen name="OrderHistory">
+				<Drawer.Screen
+					name="OrderHistory"
+					options={{ headerTitle: "История заказов" }}
+				>
 					{(props) => (
 						<History {...props} screenProps={_props.screenProps} />
 					)}
 				</Drawer.Screen>
-				<Drawer.Screen name="Addresses">
+				<Drawer.Screen
+					name="Addresses"
+					options={{ headerTitle: "Ареса доставок" }}
+				>
 					{(props) => (
 						<Addresses
 							{...props}
@@ -290,17 +300,24 @@ const AppContainer = (_props) => {
 						/>
 					)}
 				</Drawer.Screen>
-				<Drawer.Screen name="User">
+				<Drawer.Screen
+					name="User"
+					options={{ headerTitle: "Пользователь" }}
+				>
 					{(props) => (
 						<User {...props} screenProps={_props.screenProps} />
 					)}
 				</Drawer.Screen>
-				<Drawer.Screen name="Info">
-					{(props) => (
-						<Contacts {...props} screenProps={_props.screenProps} />
-					)}
+				<Drawer.Screen
+					name="Info"
+					options={{ headerTitle: "Информация" }}
+				>
+					{(props) => <Info {...props} />}
 				</Drawer.Screen>
-				<Drawer.Screen name="Contacts">
+				<Drawer.Screen
+					name="Contacts"
+					options={{ headerTitle: "Контакты" }}
+				>
 					{(props) => (
 						<Contacts {...props} screenProps={_props.screenProps} />
 					)}
@@ -320,7 +337,10 @@ const AppContainer = (_props) => {
 						<Order {...props} screenProps={_props.screenProps} />
 					)}
 				</Drawer.Screen>
-				<Drawer.Screen name="Delivery">
+				<Drawer.Screen
+					name="Delivery"
+					options={{ headerTitle: "Оформление заказа" }}
+				>
 					{(props) => (
 						<Delivery {...props} screenProps={_props.screenProps} />
 					)}

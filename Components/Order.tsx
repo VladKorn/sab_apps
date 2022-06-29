@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect, useContext } from "react";
 import {
 	View,
 	ScrollView,
@@ -10,298 +10,296 @@ import {
 	SafeAreaView,
 	StyleSheet,
 } from "react-native";
+import { BasketContext } from "./BasketContext";
 import Colors from "../constants/colors";
 
 import Modals from "./Modal";
 
-import ProductItemOrder from "./ProductItemOrder";
 import appStyles from "./appStyles";
+import { ProductsList } from "./Order/ProductsList";
 
-interface State {
-	priceTotal: number;
-	comment: string;
-	promo: string;
-	modalIsOpen: boolean;
-	modalFirstIsOpen: boolean;
-}
-export default class Order extends React.Component<any, State> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			priceTotal: 0,
-			comment: "",
-			promo: "",
-			modalIsOpen: false,
-			modalFirstIsOpen: false,
-		};
-		this.setDate = this.setDate.bind(this);
-		this.makeOrder = this.makeOrder.bind(this);
-	}
+export const Order = (props) => {
+	const basketContext = useContext(BasketContext);
+	const [priceTotal, setPriceTotal] = useState(0);
+	const [basePrice, setBasePrice] = useState(0);
+	const [comment, setComment] = useState("");
+	const [promo, setPromo] = useState("");
+	const [modalIsOpen, setModalIsOpen] = useState(false);
+	const [modalFirstIsOpen, setModalFirstIsOpen] = useState(false);
 
-	componentDidMount() {
-		this._totalPrice();
-		const didBlurSubscription = this.props.navigation.addListener(
+	useEffect(() => {
+		getTotalPrice();
+		const didBlurSubscription = props.navigation.addListener(
 			"willBlur",
 			(payload) => {
 				//   console.debug('willBlur', payload);
-				this.setState({
-					modalIsOpen: false,
-					modalFirstIsOpen: false,
-				});
+
+				setModalIsOpen(false);
+				setModalFirstIsOpen(false);
 			}
 		);
-	}
+	}, []);
+	// componentDidUpdate
+	useEffect(() => {
+		getTotalPrice();
+		// getTotalPrice();
 
-	componentDidUpdate(prevProps, prevState) {
-		this._totalPrice();
-		const nav = this.props.navigation;
+		const nav = props.navigation;
 		if (nav && nav.state && nav.state.params && nav.state.params.action) {
-			// console.log(this.props.screenProps.basket)
+			// console.log(props.screenProps.basket)
 			if (
 				nav.state.params.action === "clear" &&
-				Object.keys(this.props.screenProps.basket).length > 0
+				Object.keys(props.screenProps.basket).length > 0
 			) {
-				this.props.screenProps.basketApi({ action: "clear" });
+				props.screenProps.basketApi({ action: "clear" });
 			}
 		}
-	}
-	_totalPrice() {
-		let price = 0;
-		const basket = this.props.screenProps.basket;
-		const products = this.props.screenProps.products;
-		Object.keys(basket).map((id) => {
-			const addToPrice =
-				parseInt(products[id].price) * parseInt(basket[id].count);
-			if (!isNaN(addToPrice)) {
-				price = price + addToPrice;
-			}
-		});
-		// console.log('basket' , basket, this.state.priceTotal , price);
-		if (this.state.priceTotal !== price && !isNaN(price)) {
-			this.setState({ priceTotal: price });
+	});
+
+	const getTotalPrice = async () => {
+		let data: any = {};
+		data.products = props.screenProps.basket;
+		data.userId = props.screenProps.user.id;
+
+		let headers = new Headers();
+		headers.set("Accept", "application/json");
+		let formData = new FormData();
+		formData.append("json", JSON.stringify(data));
+
+		const res = await fetch(`https://subexpress.ru/basket_api/index.php`, {
+			method: "POST",
+			headers,
+			body: formData,
+		}).then((res) => res.json());
+		if (res.price && priceTotal !== res.price && !isNaN(res.price)) {
+			setPriceTotal(res.price);
 		}
-	}
-	setDate(newDate) {
+		if (
+			res.basePrice &&
+			basePrice !== res.basePrice &&
+			!isNaN(res.basePrice)
+		) {
+			setBasePrice(res.basePrice);
+		}
+		// console.log("getTotalPrice res", res);
+	};
+
+	const setDate = (newDate) => {
 		// this.setState({chosenDate: newDate});
-		this.props.navigation.actions.goBack();
-	}
-	makeOrder() {}
-	render() {
-		const basket = this.props.screenProps.basket;
-		const products = this.props.screenProps.products;
-		// console.log("addresses", this.props.screenProps.user.addresses);
-		const items =
-			Object.entries(basket).length !== 0 &&
-			Object.entries(products).length !== 0 ? (
-				Object.keys(basket).map((key) => {
-					let item = products[key];
-					return (
-						<ProductItemOrder
-							key={item.id}
-							id={item.id}
-							name={item.name}
-							img={item.img}
-							price={item.price}
-							count={parseInt(basket[item.id].count)}
-							basketApi={this.props.screenProps.basketApi}
-						/>
-					);
-				})
-			) : (
-				<Text style={appStyles.text}>Корзина пуста</Text>
-			);
+		props.navigation.actions.goBack();
+	};
+	const basket = props.screenProps.basket;
+	const products = props.screenProps.products;
+	// console.log("addresses", props.screenProps.user.addresses);
 
-		return (
-			<SafeAreaView style={appStyles.page}>
-				<ScrollView
-					style={{
-						paddingVertical: 0,
-						paddingLeft: 15,
-						// paddingTop: 25,
-						flex: 1,
-						paddingRight: 15,
-						// marginTop: 35,
-					}}
-				>
-					<Text style={appStyles.sectTitle}>Ваш заказ</Text>
-					{items}
+	return (
+		<SafeAreaView style={appStyles.page}>
+			<ScrollView
+				style={{
+					paddingVertical: 0,
+					paddingLeft: 15,
+					// paddingTop: 25,
+					flex: 1,
+					paddingRight: 15,
+					// marginTop: 35,
+				}}
+			>
+				<Text style={appStyles.sectTitle}>Ваш заказ</Text>
+				<ProductsList
+					basketApi={props.screenProps.basketApi}
+					products={props.screenProps.products}
+				/>
 
-					<Text style={appStyles.sectTitle}>
-						Комментарий к заказу
-					</Text>
-					<TextInput
-						placeholder="Добавить комментарий к заказу"
-						style={appStyles.input}
-						onChangeText={(comment) =>
-							this.setState({ comment: comment })
-						}
-					/>
-					<Text style={appStyles.sectTitle}>Промокод</Text>
-					<TextInput
-						placeholder="Ввести промокод"
-						style={appStyles.input}
-						onChangeText={(promo) =>
-							this.setState({ promo: promo })
-						}
-					/>
-					<Text style={appStyles.sectTitle}>Сумма для оплаты</Text>
-					<View style={{ paddingBottom: 30 }}>
-						<View
+				<Text style={appStyles.sectTitle}>Комментарий к заказу</Text>
+				<TextInput
+					placeholder="Добавить комментарий к заказу"
+					style={appStyles.input}
+					onChangeText={(comment) => setComment(comment)}
+				/>
+				<Text style={appStyles.sectTitle}>Промокод</Text>
+				<TextInput
+					placeholder="Ввести промокод"
+					style={appStyles.input}
+					onChangeText={(promo) => setPromo(promo)}
+				/>
+				<Text style={appStyles.sectTitle}>Сумма для оплаты</Text>
+				<View style={{ paddingBottom: 30 }}>
+					<View
+						style={{
+							flex: 1,
+							flexDirection: "row",
+							justifyContent: "space-between",
+						}}
+					>
+						<Text>Сумма заказа</Text>
+						<Text
 							style={{
-								flex: 1,
-								flexDirection: "row",
-								justifyContent: "space-between",
+								fontFamily: "Neuron-Heavy",
+								marginLeft: "auto",
+								color: Colors.gray,
 							}}
 						>
-							<Text>Сумма заказа</Text>
-							<Text
-								style={{
-									fontFamily: "Neuron-Heavy",
-									marginLeft: "auto",
-									color: Colors.gray,
-								}}
-							>
-								{this.state.priceTotal} руб
-							</Text>
-						</View>
-						<View
-							style={{
-								flex: 1,
-								flexDirection: "row",
-								justifyContent: "space-between",
-							}}
-						>
-							<Text>Доставка </Text>
-							<Text
-								style={{
-									fontFamily: "Neuron-Heavy",
-									marginLeft: "auto",
-									color: Colors.gray,
-								}}
-							>
-								{this.state.priceTotal < 1500 ? 150 : 0} руб
-							</Text>
-						</View>
-						<View
-							style={{
-								flex: 1,
-								flexDirection: "row",
-								justifyContent: "space-between",
-							}}
-						>
-							<Text>Общая сумма</Text>
-							<Text
-								style={{
-									fontFamily: "Neuron-Heavy",
-									marginLeft: "auto",
-									color: Colors.gray,
-								}}
-							>
-								{this.state.priceTotal < 1500
-									? this.state.priceTotal + 150
-									: this.state.priceTotal}{" "}
-								руб
-							</Text>
-						</View>
+							{priceTotal.toFixed(2)} руб
+						</Text>
 					</View>
-				</ScrollView>
-				<TouchableOpacity
-					onPress={() => {
-						this.props.screenProps.setOrderData({
-							comment: this.state.comment,
-							promo: this.state.promo,
-						});
-						this.state.priceTotal < 1000
-							? this.setState({ modalFirstIsOpen: true })
-							: this.state.priceTotal < 1500
-							? this.setState({ modalIsOpen: true })
-							: this.props.navigation.navigate("Delivery");
-					}}
-					style={appStyles.buttonBottom}
-				>
-					<Text style={{ color: "white", fontSize: 20 }}>
-						Перейти к доставке
-					</Text>
-				</TouchableOpacity>
-
-				<Modals
-					height={390}
-					isOpen={this.state.modalIsOpen}
-					isOpenHendler={(isOpen) => {
-						this.setState({ modalIsOpen: isOpen });
-					}}
-				>
-					<Text style={appStyles.modalText}>
-						Ваш заказ менее {"\n"} 1500 рублей
-					</Text>
-					<Text style={appStyles.modalTextDesc}>
-						Вы можете добавить позиции {"\n"}до нужной суммы или
-						оформить заказ {"\n"}с доставкой 150 рублей
-					</Text>
-					<View style={{ flexDirection: "column" }}>
-						<TouchableOpacity
-							onPress={() => {
-								this.setState({ modalIsOpen: false });
+					{basePrice !== priceTotal && (
+						<View
+							style={{
+								flex: 1,
+								flexDirection: "row",
+								justifyContent: "space-between",
 							}}
+						>
+							<Text>Скидка</Text>
+							<Text
+								style={{
+									fontFamily: "Neuron-Heavy",
+									marginLeft: "auto",
+									color: Colors.gray,
+								}}
+							>
+								{(basePrice - priceTotal).toFixed(2)} руб
+							</Text>
+						</View>
+					)}
+					<View
+						style={{
+							flex: 1,
+							flexDirection: "row",
+							justifyContent: "space-between",
+						}}
+					>
+						<Text>Доставка </Text>
+						<Text
+							style={{
+								fontFamily: "Neuron-Heavy",
+								marginLeft: "auto",
+								color: Colors.gray,
+							}}
+						>
+							{priceTotal < 1500 ? 150 : 0} руб
+						</Text>
+					</View>
+					<View
+						style={{
+							flex: 1,
+							flexDirection: "row",
+							justifyContent: "space-between",
+						}}
+					>
+						<Text>Общая сумма</Text>
+						<Text
+							style={{
+								fontFamily: "Neuron-Heavy",
+								marginLeft: "auto",
+								color: Colors.gray,
+							}}
+						>
+							{priceTotal < 1500
+								? (priceTotal + 150).toFixed(2)
+								: priceTotal.toFixed(2)}{" "}
+							руб
+						</Text>
+					</View>
+				</View>
+			</ScrollView>
+			<TouchableOpacity
+				onPress={() => {
+					props.screenProps.setOrderData({
+						comment: comment,
+						promo: promo,
+					});
+					priceTotal < 1000
+						? setModalFirstIsOpen(true)
+						: priceTotal < 1500
+						? setModalIsOpen(true)
+						: props.navigation.navigate("Delivery");
+				}}
+				style={appStyles.buttonBottom}
+			>
+				<Text style={{ color: "white", fontSize: 20 }}>
+					Перейти к доставке
+				</Text>
+			</TouchableOpacity>
+
+			<Modals
+				height={390}
+				isOpen={modalIsOpen}
+				isOpenHendler={(isOpen) => {
+					setModalIsOpen(isOpen);
+				}}
+			>
+				<Text style={appStyles.modalText}>
+					Ваш заказ менее {"\n"} 1500 рублей
+				</Text>
+				<Text style={appStyles.modalTextDesc}>
+					Вы можете добавить позиции {"\n"}до нужной суммы или
+					оформить заказ {"\n"}с доставкой 150 рублей
+				</Text>
+				<View style={{ flexDirection: "column" }}>
+					<TouchableOpacity
+						onPress={() => {
+							setModalIsOpen(false);
+						}}
+						style={[
+							appStyles.modalButton,
+							{ backgroundColor: "white" },
+						]}
+					>
+						<Text style={appStyles.modalButtonText}>
+							Продолжить покупки
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							setModalIsOpen(false);
+							setTimeout(() => {
+								props.navigation.navigate("Delivery");
+							}, 500);
+						}}
+						style={appStyles.modalButton}
+					>
+						<Text
 							style={[
-								appStyles.modalButton,
-								{ backgroundColor: "white" },
+								appStyles.modalButtonText,
+								{ color: "white" },
 							]}
 						>
-							<Text style={appStyles.modalButtonText}>
-								Продолжить покупки
-							</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => {
-								this.setState({ modalIsOpen: false });
-								setTimeout(() => {
-									this.props.navigation.navigate("Delivery");
-								}, 500);
-							}}
-							style={appStyles.modalButton}
+							Добавить доставку
+						</Text>
+					</TouchableOpacity>
+				</View>
+			</Modals>
+			{/*  */}
+			<Modals
+				height={250}
+				isOpen={modalFirstIsOpen}
+				isOpenHendler={(isOpen) => {
+					setModalFirstIsOpen(isOpen);
+				}}
+			>
+				<Text style={appStyles.modalText}>
+					Ваш заказ менее {"\n"} 1000 рублей
+				</Text>
+				<View style={{ flexDirection: "column", marginTop: 10 }}>
+					<TouchableOpacity
+						onPress={() => {
+							setModalFirstIsOpen(false);
+						}}
+						style={appStyles.modalButton}
+					>
+						<Text
+							style={[
+								appStyles.modalButtonText,
+								{ color: "white" },
+							]}
 						>
-							<Text
-								style={[
-									appStyles.modalButtonText,
-									{ color: "white" },
-								]}
-							>
-								Добавить доставку
-							</Text>
-						</TouchableOpacity>
-					</View>
-				</Modals>
-				{/*  */}
-				<Modals
-					height={250}
-					isOpen={this.state.modalFirstIsOpen}
-					isOpenHendler={(isOpen) => {
-						this.setState({ modalFirstIsOpen: isOpen });
-					}}
-				>
-					<Text style={appStyles.modalText}>
-						Ваш заказ менее {"\n"} 1000 рублей
-					</Text>
-					<View style={{ flexDirection: "column", marginTop: 10 }}>
-						<TouchableOpacity
-							onPress={() => {
-								this.setState({ modalFirstIsOpen: false });
-							}}
-							style={appStyles.modalButton}
-						>
-							<Text
-								style={[
-									appStyles.modalButtonText,
-									{ color: "white" },
-								]}
-							>
-								Ок
-							</Text>
-						</TouchableOpacity>
-					</View>
-				</Modals>
-			</SafeAreaView>
-		);
-	}
-}
+							Ок
+						</Text>
+					</TouchableOpacity>
+				</View>
+			</Modals>
+		</SafeAreaView>
+	);
+};
+export default Order;

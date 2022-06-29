@@ -148,11 +148,11 @@ export const CatalogCategories = (props) => {
 
 					// inner category
 					if (innerCatId && cat?.cats) {
-						console.log(
-							"innerCatId",
-							innerCatId,
-							cat.cats[innerCatId]
-						);
+						// console.log(
+						// 	"innerCatId",
+						// 	innerCatId,
+						// 	cat.cats[innerCatId]
+						// );
 						if (
 							cat?.cats[innerCatId] &&
 							cat.cats[innerCatId]?.products &&
