@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity, StyleSheet , TextInput} from "react-native";
 import PropTypes from "prop-types";
-import Colors from "../constants/Colors.js"
+import Colors from "../constants/colors"
 
 export default class Counter extends Component {
     constructor(props) {

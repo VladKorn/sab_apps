@@ -5,9 +5,9 @@ import {
 	ScrollView,
 	SafeAreaView,
 	TouchableOpacity,
-	Image
+	Image,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "../constants/colors";
 import appStyles from "./appStyles";
 import Images from "../constants/Images";
 import { DrawerActions } from "react-navigation-drawer";
@@ -29,15 +29,15 @@ const style = {
 		marginBottom: 7,
 		paddingLeft: 5,
 		paddingRight: 5,
-		height: 30
-	}
+		height: 30,
+	},
 };
 export default class SidebarCatalog extends React.Component<any, State> {
 	render() {
 		// console.log(JSON.stringify(this.props.navigation ) );
 
 		const routes = Object.keys(this.props.screenProps.catalog).filter(
-			item => {
+			(item) => {
 				return (
 					item !== "Home" &&
 					item !== "Order" &&
@@ -53,7 +53,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 					<TouchableOpacity
 						onPress={() => {
 							this.props.navigation.navigate("Catalog", {
-								catId: key
+								catId: key,
 							});
 							this.props.navigation.dispatch(
 								DrawerActions.closeDrawer()
@@ -66,7 +66,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 								justifyContent: "center",
 								alignItems: "center",
 								width: 20,
-								height: 40
+								height: 40,
 							}}
 						>
 							{Images[key]}
@@ -79,14 +79,14 @@ export default class SidebarCatalog extends React.Component<any, State> {
 								height: 40,
 								marginBottom: 15,
 								width: 120,
-								justifyContent: "center"
+								justifyContent: "center",
 							}}
 						>
 							<Text
 								style={{
 									fontFamily: "Neuron-Heavy",
 									fontSize: 18,
-									color: Colors.text
+									color: Colors.text,
 								}}
 							>
 								{item.name}
@@ -96,14 +96,14 @@ export default class SidebarCatalog extends React.Component<any, State> {
 							style={{
 								marginLeft: "auto",
 								height: 40,
-								justifyContent: "center"
+								justifyContent: "center",
 							}}
 						>
 							<Text
 								style={{
 									fontFamily: "Segoe",
 									color: "#DCDCDC",
-									fontSize: 18
+									fontSize: 18,
 								}}
 							>
 								{item.products.length}
@@ -112,7 +112,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 					</TouchableOpacity>
 					<View style={{ flexWrap: "wrap", flexDirection: "row" }}>
 						{item.cats
-							? Object.keys(item.cats).map(key2 => {
+							? Object.keys(item.cats).map((key2) => {
 									// console.log(item.cats[key2]);
 
 									return (
@@ -122,7 +122,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 													"Catalog",
 													{
 														catId: key,
-														innerCatId: key2
+														innerCatId: key2,
 													}
 												);
 												this.props.navigation.dispatch(
@@ -152,7 +152,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 					style={{
 						paddingLeft: 25,
 						paddingRight: 25,
-						paddingTop: 30
+						paddingTop: 30,
 					}}
 				>
 					<View style={{ flexDirection: "row" }}>
@@ -165,14 +165,14 @@ export default class SidebarCatalog extends React.Component<any, State> {
 								flexDirection: "row",
 								// justifyContent:'center',
 								height: "auto",
-								padding: 2
+								padding: 2,
 							}}
 							onPress={() => {
 								this.props.navigation.navigate("Catalog", {
-                                    catId: 0,
-                                    innerCatId: 0,
-									reset: Math.floor(Math.random() * 100) + 1
-                                });
+									catId: 0,
+									innerCatId: 0,
+									reset: Math.floor(Math.random() * 100) + 1,
+								});
 								this.props.navigation.dispatch(
 									DrawerActions.closeDrawer()
 								);
@@ -182,7 +182,7 @@ export default class SidebarCatalog extends React.Component<any, State> {
 								style={{
 									width: 20.91,
 									height: 18.98,
-									marginRight: 20
+									marginRight: 20,
 								}}
 								source={require("../img/ico-menu-close.png")}
 							/>

@@ -7,21 +7,20 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Linking,
-	ScrollView
+	ScrollView,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "../constants/colors";
 import appStyles from "./appStyles";
-import Form from './Form'
-import {phone , phoneFormated} from '../constants/data.js';
+import Form from "./Form";
+import { phone, phoneFormated } from "../constants/data.js";
 
 export default class Addresses extends React.Component<any> {
-  
 	static navigationOptions = {
-		title: "Адреса доставок"
+		title: "Адреса доставок",
 	};
 	render() {
-        const addresses = this.props.screenProps.user.addresses || [];
-		const addressesItems = addresses.map(item => {
+		const addresses = this.props.screenProps.user.addresses || [];
+		const addressesItems = addresses.map((item) => {
 			const isCurrent = false;
 			return (
 				<TouchableHighlight
@@ -41,16 +40,27 @@ export default class Addresses extends React.Component<any> {
 							marginBottom: 10,
 							borderRadius: 10,
 							alignItems: "center",
-							padding: 15
+							padding: 15,
 						}}
 					>
 						<Image
 							style={{ marginRight: 20 }}
 							source={require("../img/ico-address.png")}
 						/>
-						<View style={{alignItems: 'flex-start' , minWidth: 200,justifyContent: 'flex-start' }}>
-						
-							<Text style={{...appStyles.text , fontSize: 16 , textAlign: 'left'}}>
+						<View
+							style={{
+								alignItems: "flex-start",
+								minWidth: 200,
+								justifyContent: "flex-start",
+							}}
+						>
+							<Text
+								style={{
+									...appStyles.text,
+									fontSize: 16,
+									textAlign: "left",
+								}}
+							>
 								{item.address}
 							</Text>
 						</View>
@@ -60,7 +70,7 @@ export default class Addresses extends React.Component<any> {
 									marginRight: 20,
 									marginLeft: "auto",
 									width: 19,
-									height: 22
+									height: 22,
 								}}
 								source={require("../img/ico-ok.png")}
 							/>
@@ -76,26 +86,28 @@ export default class Addresses extends React.Component<any> {
 						// backgroundColor: Colors.lightgray,
 						alignItems: "center",
 						paddingTop: 30,
-                        // paddingBottom: 30,
-                        ...appStyles.paddings,
+						// paddingBottom: 30,
+						...appStyles.paddings,
 					}}
 				>
-                    {addressesItems}
+					{addressesItems}
 					<Text
 						style={{
 							textAlign: "center",
-                            color: Colors.text,
-                            fontSize: 16,
-                            fontFamily: "Neuron",
-                            marginTop: 30,
-                            marginBottom: 30,
+							color: Colors.text,
+							fontSize: 16,
+							fontFamily: "Neuron",
+							marginTop: 30,
+							marginBottom: 30,
 						}}
 					>
-						Если вы хотите изменить текущий или добавить новый адрес, просьба оставить заявку в форму ниже или позвонить нам
+						Если вы хотите изменить текущий или добавить новый
+						адрес, просьба оставить заявку в форму ниже или
+						позвонить нам
 					</Text>
 					<TouchableOpacity
 						onPress={() => {
-                            Linking.openURL(`tel:${phone}`);
+							Linking.openURL(`tel:${phone}`);
 						}}
 					>
 						<Text
@@ -103,8 +115,8 @@ export default class Addresses extends React.Component<any> {
 								textAlign: "center",
 								fontSize: 28,
 								color: Colors.text,
-                                fontFamily: "Neuron-Bold",
-                                marginBottom: 10,
+								fontFamily: "Neuron-Bold",
+								marginBottom: 10,
 							}}
 						>
 							{phoneFormated}
@@ -120,7 +132,7 @@ export default class Addresses extends React.Component<any> {
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
-							fontFamily: "Neuron"
+							fontFamily: "Neuron",
 						}}
 					>
 						E-mail
@@ -135,7 +147,7 @@ export default class Addresses extends React.Component<any> {
 								textAlign: "center",
 								fontSize: 22,
 								color: Colors.text,
-								fontFamily: "Neuron-Bold"
+								fontFamily: "Neuron-Bold",
 							}}
 						>
 							ZAKAZ@SUBEXPRESS.RU
@@ -147,21 +159,17 @@ export default class Addresses extends React.Component<any> {
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
-							fontFamily: "Neuron"
+							fontFamily: "Neuron",
 						}}
-					>
-                        
-					</Text>
-                    
+					></Text>
 				</View>
-                    <Form 
-                        style={{paddingBottom: 50}}
-                        title='Добавлени/изменение адреса'
-                        fromPage='С страницы "Адреса доставок" '
-                        sendMail={this.props.screenProps.sendMail}
-                        
-                        navigation={this.props.navigation}
-                    />
+				<Form
+					style={{ paddingBottom: 50 }}
+					title="Добавлени/изменение адреса"
+					fromPage='С страницы "Адреса доставок" '
+					sendMail={this.props.screenProps.sendMail}
+					navigation={this.props.navigation}
+				/>
 			</ScrollView>
 		);
 	}

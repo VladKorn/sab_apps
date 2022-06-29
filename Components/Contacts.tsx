@@ -7,38 +7,36 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Linking,
-	ScrollView
+	ScrollView,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "./../constants/colors";
 import appStyles from "./appStyles";
-import Form from './Form';
-import {phone , phoneFormated} from '../constants/data.js';
+import Form from "./Form";
+import { phone, phoneFormated } from "../constants/data.js";
 export default class Contacts extends React.Component<any> {
-  
 	static navigationOptions = {
-		title: "Контакты"
+		title: "Контакты",
 	};
 	render() {
 		return (
 			<ScrollView>
 				<View
 					style={{
-                        backgroundColor: Colors.lightgray,
+						backgroundColor: Colors.lightgray,
 						alignItems: "center",
 						paddingTop: 30,
-						paddingBottom: 30
+						paddingBottom: 30,
 					}}
-                    >
-                    
+				>
 					<Image
-						style={{ width: 144, height: 56.43 , marginBottom: 20 }}
+						style={{ width: 144, height: 56.43, marginBottom: 20 }}
 						source={require("../img/logo.png")}
 					/>
 					<Text
 						style={{
 							...appStyles.text,
 							textAlign: "center",
-							fontSize: 16
+							fontSize: 16,
 						}}
 					>
 						ООО “ САБ ЭКСПРЕСС”{"\n"}ИНН 5018185048, КПП 501801001
@@ -49,8 +47,8 @@ export default class Contacts extends React.Component<any> {
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
-                            fontFamily: "Neuron",
-                            marginBottom: 10
+							fontFamily: "Neuron",
+							marginBottom: 10,
 						}}
 					>
 						Телефон для связи{phone}
@@ -65,8 +63,8 @@ export default class Contacts extends React.Component<any> {
 								textAlign: "center",
 								fontSize: 28,
 								color: Colors.text,
-                                fontFamily: "Neuron-Bold",
-                                marginBottom: 10,
+								fontFamily: "Neuron-Bold",
+								marginBottom: 10,
 							}}
 						>
 							{phoneFormated}
@@ -82,7 +80,7 @@ export default class Contacts extends React.Component<any> {
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
-							fontFamily: "Neuron"
+							fontFamily: "Neuron",
 						}}
 					>
 						E-mail
@@ -97,7 +95,7 @@ export default class Contacts extends React.Component<any> {
 								textAlign: "center",
 								fontSize: 22,
 								color: Colors.text,
-								fontFamily: "Neuron-Bold"
+								fontFamily: "Neuron-Bold",
 							}}
 						>
 							ZAKAZ@SUBEXPRESS.RU
@@ -109,21 +107,20 @@ export default class Contacts extends React.Component<any> {
 						style={{
 							textAlign: "center",
 							color: "#B8B8B8",
-							fontFamily: "Neuron"
+							fontFamily: "Neuron",
 						}}
 					>
 						Заполните форму обратной связи{"\n"}и мы свяжемся с вами
 						в ближайшее время
 					</Text>
-                    
 				</View>
-                    <Form 
-                        style={{paddingBottom: 50}}
-                        title='Форма обратной связи'
-                        fromPage='С страницы контакты'
-                        sendMail={this.props.screenProps.sendMail}
-                        navigation={this.props.navigation}
-                    />
+				<Form
+					style={{ paddingBottom: 50 }}
+					title="Форма обратной связи"
+					fromPage="С страницы контакты"
+					sendMail={this.props.screenProps.sendMail}
+					navigation={this.props.navigation}
+				/>
 			</ScrollView>
 		);
 	}

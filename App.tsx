@@ -1,14 +1,16 @@
 import React from "react";
+import "react-native-gesture-handler";
 import { View, Alert, StatusBar } from "react-native";
+import { AppContext } from "./Components/App/Context";
 
 import * as Font from "expo-font";
 // import LoginForm from "./Components/LoginForm";
 import AppContainer from "./Components/AppContainer";
 import Loading from "./Components/Loading";
-import {BasketContext} from  "./Components/BasketContext";
-
-// import AsyncStorage from '@react-native-community/async-storage';
-import { AsyncStorage } from "react-native";
+import { BasketContext } from "./Components/BasketContext";
+import { NavigationContainer } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { AsyncStorage } from "react-native";
 import CryptoJS from "crypto-js";
 
 import { MakeOrderData, tsBasketApi, tsBasket, LoginData } from "./interfaces";
@@ -45,7 +47,7 @@ export default class App extends React.Component<any, State> {
 			isSavedLoginDataChecked: false,
 			userError: {},
 			comment: "",
-			promo: ""
+			promo: "",
 		};
 
 		// bind functions..
@@ -79,7 +81,7 @@ export default class App extends React.Component<any, State> {
 				}
 				return basket;
 			} catch (e) {
-				Alert.alert(e);
+				// Alert.alert(e);
 			}
 		};
 		getBasket();
@@ -92,17 +94,17 @@ export default class App extends React.Component<any, State> {
 			Neuron: require("./assets/fonts/Neuron.otf"),
 			"Neuron-Bold": require("./assets/fonts/Neuron-Bold.otf"),
 			"Neuron-Heavy": require("./assets/fonts/Neuron-Heavy.otf"),
-			Segoe: require("./assets/fonts/segoe-ui.ttf")
+			Segoe: require("./assets/fonts/segoe-ui.ttf"),
 		});
 
 		this.setState({ fontLoaded: true });
 	};
 	basketApi(obj: tsBasketApi) {
-		const storeBasket = async basket => {
+		const storeBasket = async (basket) => {
 			try {
 				await AsyncStorage.setItem("@basket", JSON.stringify(basket));
 			} catch (e) {
-				Alert.alert(e);
+				// Alert.alert(e);
 			}
 		};
 		let basket = this.state.basket;
@@ -133,10 +135,10 @@ export default class App extends React.Component<any, State> {
 			// console.log("getData", loginData);
 			return await fetch("https://subexpress.ru/apps_api/", {
 				method: "post",
-				body: JSON.stringify({ loginData: loginData })
+				body: JSON.stringify({ loginData: loginData }),
 			})
-				.then(res => res.json())
-				.then(res => {
+				.then((res) => res.json())
+				.then((res) => {
 					this.setState({ isSavedLoginDataChecked: true });
 					if (res.user && res.user.error) {
 						// alert("getData fetch " + res.user.error);
@@ -151,7 +153,7 @@ export default class App extends React.Component<any, State> {
 						products: res.catalog.products,
 						user: res.user,
 						stocks: res.stocks,
-						favorite: res.user.favorite || []
+						favorite: res.user.favorite || [],
 					});
 					if (
 						res.user &&
@@ -165,9 +167,9 @@ export default class App extends React.Component<any, State> {
 					// console.log('getData res' , res);
 					return res.user;
 				})
-				.catch(error => {
+				.catch((error) => {
 					// console.error(error);
-					alert("getData fetch error" + error);
+					// alert("getData fetch error" + error);
 				});
 		};
 		return await getData(loginData);
@@ -186,7 +188,7 @@ export default class App extends React.Component<any, State> {
 			products: this.state.basket,
 			comment: `(from mobile app) ` + this.state.comment,
 			address: obj.address,
-			deliveryDate: obj.date
+			deliveryDate: obj.date,
 		};
 		// data.userId = this.state.user.id;
 		// data.promo = this.state.promo;
@@ -207,11 +209,11 @@ export default class App extends React.Component<any, State> {
 			{
 				method: "POST",
 				headers,
-				body: formData
+				body: formData,
 			}
 		)
-			.then(res => res.json())
-			.then(res => {
+			.then((res) => res.json())
+			.then((res) => {
 				// console.log("order fetch res-", res);
 				if (res.sucsess) {
 					return "success";
@@ -236,7 +238,7 @@ export default class App extends React.Component<any, State> {
 	autoLogin() {
 		// console.log('_autoLogin');
 		let loginData: LoginData = { log: "", pas: "" };
-		const getLoginData = async loginData => {
+		const getLoginData = async (loginData) => {
 			try {
 				const cryptedLog = await AsyncStorage.getItem("@log");
 				const cryptedPas = await AsyncStorage.getItem("@pas");
@@ -306,7 +308,7 @@ export default class App extends React.Component<any, State> {
 		let prodId = parseInt(id);
 		if (favorite.includes(prodId)) {
 			// console.log('favorite125' , typeof favorite);
-			favorite = favorite.filter(item => {
+			favorite = favorite.filter((item) => {
 				return item !== prodId;
 			});
 		} else {
@@ -326,10 +328,10 @@ export default class App extends React.Component<any, State> {
 		fetch(`https://subexpress.ru/apps_api/favorites.php`, {
 			method: "POST",
 			headers,
-			body: formData
+			body: formData,
 		})
-			.then(res => res.json())
-			.then(res => {
+			.then((res) => res.json())
+			.then((res) => {
 				// console.log('fetch res-', res);
 				if (res.sucsess) {
 					// if(prod.count === 0){delete state.inBasket[prod.id]}
@@ -346,12 +348,12 @@ export default class App extends React.Component<any, State> {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(data)
+			body: JSON.stringify(data),
 		})
-			.then(res => res.json())
-			.then(res => {
+			.then((res) => res.json())
+			.then((res) => {
 				// console.log('fetch res-', res.success);
 
 				if (res.success) {
@@ -362,6 +364,7 @@ export default class App extends React.Component<any, State> {
 			});
 		return success;
 	}
+
 	render() {
 		if (!this.state.fontLoaded || !this.state.isSavedLoginDataChecked) {
 			return (
@@ -379,31 +382,38 @@ export default class App extends React.Component<any, State> {
 		// 		/>
 		// 	);
 		// }
+		const context = {
+			catalog: this.state.catalog,
+			products: this.state.products,
+			basket: this.state.basket,
+			basketApi: this.basketApi,
+			getCatalog: this.getCatalog,
+			makeOrder: this.makeOrder,
+			user: this.state.user,
+			stocks: this.state.stocks,
+			favorite: this.state.favorite,
+			setOrderData: this.setOrderData,
+			addToFavorite: this.addToFavorite,
+			sendMail: this.sendMail,
+			logout: this.logout,
+			login: this.login,
+			autoLogin: this.autoLogin,
+			saveLoginData: this.saveLoginData,
+		};
 		return this.state.fontLoaded ? (
 			<>
 				<StatusBar barStyle="dark-content" />
-				<BasketContext.Provider value={{basket: this.state.basket , basketApi: this.basketApi}}>
-					<AppContainer
-						key="app"
-						screenProps={{
-							catalog: this.state.catalog,
-							products: this.state.products,
-							basket: this.state.basket,
-							basketApi: this.basketApi,
-							getCatalog: this.getCatalog,
-							makeOrder: this.makeOrder,
-							user: this.state.user,
-							stocks: this.state.stocks,
-							favorite: this.state.favorite,
-							setOrderData: this.setOrderData,
-							addToFavorite: this.addToFavorite,
-							sendMail: this.sendMail,
-							logout: this.logout,
-							login: this.login,
-							autoLogin: this.autoLogin,
-							saveLoginData: this.saveLoginData
-						}}
-					/>
+				<BasketContext.Provider
+					value={{
+						basket: this.state.basket,
+						basketApi: this.basketApi,
+					}}
+				>
+					<NavigationContainer>
+						<AppContext.Provider value={context}>
+							<AppContainer key="app" screenProps={context} />
+						</AppContext.Provider>
+					</NavigationContainer>
 				</BasketContext.Provider>
 			</>
 		) : null;

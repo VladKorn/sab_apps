@@ -4,9 +4,9 @@ import {
 	Text,
 	View,
 	TouchableOpacity,
-	TextInput
+	TextInput,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "../constants/colors";
 import { BasketContext } from "./BasketContext";
 import { tsBasketApi, tsBasket } from "../interfaces";
 
@@ -16,7 +16,7 @@ interface Props {
 }
 interface State {}
 
-const ProductCounter: React.FC<Props> = props => {
+const ProductCounter: React.FC<Props> = (props) => {
 	const ctx = useContext(BasketContext);
 	const item = ctx.basket[props.id];
 	const value = item ? item.count : 0;
@@ -26,8 +26,8 @@ const ProductCounter: React.FC<Props> = props => {
 			action: "setProduct",
 			params: {
 				count: count,
-				productId: props.id
-			}
+				productId: props.id,
+			},
 		};
 		basketApi(params);
 	};
@@ -43,7 +43,7 @@ const ProductCounter: React.FC<Props> = props => {
 				style={[
 					props.mode === "v"
 						? Styles.touchable_v
-						: Styles.touchable_minus
+						: Styles.touchable_minus,
 				]}
 				onPress={onPressMinus}
 			>
@@ -51,8 +51,8 @@ const ProductCounter: React.FC<Props> = props => {
 					style={[
 						Styles.iconText,
 						{
-							color: props.mode === "v" ? Colors.gray : "#DCDCDC"
-						}
+							color: props.mode === "v" ? Colors.gray : "#DCDCDC",
+						},
 					]}
 				>
 					-
@@ -68,7 +68,7 @@ const ProductCounter: React.FC<Props> = props => {
 						? Styles.touchable_v
 						: value > 0
 						? Styles.touchable_active
-						: Styles.touchable
+						: Styles.touchable,
 				]}
 				onPress={onPressPlus}
 			>
@@ -79,8 +79,8 @@ const ProductCounter: React.FC<Props> = props => {
 							color:
 								props.mode === "v" || value === 0
 									? Colors.gray
-									: "#ffffff"
-						}
+									: "#ffffff",
+						},
 					]}
 				>
 					+
@@ -98,12 +98,12 @@ const ProductCounter: React.FC<Props> = props => {
 					<TextInput
 						style={props.mode === "v" ? Styles.text_v : Styles.text}
 						keyboardType="numeric"
-						onChangeText={number => {
+						onChangeText={(number) => {
 							let value = parseInt(number) || 0;
 							if (value > 999) {
 								value = 999;
 							}
-							setCount(value)
+							setCount(value);
 							if (value !== 0) {
 								// this.props.onChange(value, "+");
 							}
@@ -122,14 +122,14 @@ export default ProductCounter;
 
 const Styles = StyleSheet.create({
 	container: {
-		flexDirection: "row"
+		flexDirection: "row",
 	},
 	container_v: {
 		flexDirection: "column",
 		borderColor: Colors.gray,
 		borderRadius: 50,
 		borderWidth: 1,
-		height: 78
+		height: 78,
 	},
 
 	text: {
@@ -138,7 +138,7 @@ const Styles = StyleSheet.create({
 		textAlign: "center",
 		fontFamily: "Neuron-Heavy",
 		fontSize: 18,
-		color: "#666774"
+		color: "#666774",
 	},
 	text_v: {
 		height: 25,
@@ -146,18 +146,18 @@ const Styles = StyleSheet.create({
 		textAlign: "center",
 		fontFamily: "Neuron-Heavy",
 		fontSize: 18,
-		color: "#666774"
+		color: "#666774",
 	},
 
 	iconText: {
 		fontSize: 22,
-		marginTop: -3
+		marginTop: -3,
 	},
 
 	number: {
 		minWidth: 40,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
 	},
 	touchable_minus: {
 		width: 40,
@@ -171,12 +171,12 @@ const Styles = StyleSheet.create({
 		borderWidth: 0,
 		shadowOffset: {
 			width: 0,
-			height: 1
+			height: 1,
 		},
 		shadowOpacity: 0.22,
 		shadowRadius: 2.22,
 
-		elevation: 3
+		elevation: 3,
 	},
 	touchable: {
 		width: 40,
@@ -185,7 +185,7 @@ const Styles = StyleSheet.create({
 		borderColor: "#DCDCDC",
 		borderWidth: 2,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
 	},
 
 	touchable_v: {
@@ -193,7 +193,7 @@ const Styles = StyleSheet.create({
 		height: 26,
 		borderRadius: 100,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
 	},
 	touchable_active: {
 		width: 40,
@@ -201,6 +201,6 @@ const Styles = StyleSheet.create({
 		borderRadius: 100,
 		backgroundColor: Colors.assent,
 		alignItems: "center",
-		justifyContent: "center"
-	}
+		justifyContent: "center",
+	},
 });

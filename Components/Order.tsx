@@ -8,9 +8,9 @@ import {
 	Image,
 	TouchableOpacity,
 	SafeAreaView,
-	StyleSheet
+	StyleSheet,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "../constants/colors";
 
 import Modals from "./Modal";
 
@@ -21,8 +21,8 @@ interface State {
 	priceTotal: number;
 	comment: string;
 	promo: string;
-    modalIsOpen: boolean;
-    modalFirstIsOpen: boolean;
+	modalIsOpen: boolean;
+	modalFirstIsOpen: boolean;
 }
 export default class Order extends React.Component<any, State> {
 	constructor(props) {
@@ -31,29 +31,27 @@ export default class Order extends React.Component<any, State> {
 			priceTotal: 0,
 			comment: "",
 			promo: "",
-            modalIsOpen: false,
-            modalFirstIsOpen: false
+			modalIsOpen: false,
+			modalFirstIsOpen: false,
 		};
 		this.setDate = this.setDate.bind(this);
 		this.makeOrder = this.makeOrder.bind(this);
 	}
-	static navigationOptions = {
-		title: "Оформление заказа"
-	};
+
 	componentDidMount() {
-        this._totalPrice();
-        const didBlurSubscription = this.props.navigation.addListener(
-            'willBlur',
-            payload => {
-            //   console.debug('willBlur', payload);
-                this.setState({
-                    modalIsOpen: false,
-                    modalFirstIsOpen: false
-                });
-            }
-        );
-    }
-    
+		this._totalPrice();
+		const didBlurSubscription = this.props.navigation.addListener(
+			"willBlur",
+			(payload) => {
+				//   console.debug('willBlur', payload);
+				this.setState({
+					modalIsOpen: false,
+					modalFirstIsOpen: false,
+				});
+			}
+		);
+	}
+
 	componentDidUpdate(prevProps, prevState) {
 		this._totalPrice();
 		const nav = this.props.navigation;
@@ -68,17 +66,18 @@ export default class Order extends React.Component<any, State> {
 		}
 	}
 	_totalPrice() {
-        let price = 0;
+		let price = 0;
 		const basket = this.props.screenProps.basket;
 		const products = this.props.screenProps.products;
-		Object.keys(basket).map(id => {
-            const addToPrice = parseInt(products[id].price) * parseInt(basket[id].count);
-            if(!isNaN(addToPrice)){
-                price = price + addToPrice;
-            }
+		Object.keys(basket).map((id) => {
+			const addToPrice =
+				parseInt(products[id].price) * parseInt(basket[id].count);
+			if (!isNaN(addToPrice)) {
+				price = price + addToPrice;
+			}
 		});
-        // console.log('basket' , basket, this.state.priceTotal , price);
-		if (this.state.priceTotal !== price && !isNaN(price) ) {
+		// console.log('basket' , basket, this.state.priceTotal , price);
+		if (this.state.priceTotal !== price && !isNaN(price)) {
 			this.setState({ priceTotal: price });
 		}
 	}
@@ -94,7 +93,7 @@ export default class Order extends React.Component<any, State> {
 		const items =
 			Object.entries(basket).length !== 0 &&
 			Object.entries(products).length !== 0 ? (
-				Object.keys(basket).map(key => {
+				Object.keys(basket).map((key) => {
 					let item = products[key];
 					return (
 						<ProductItemOrder
@@ -113,7 +112,6 @@ export default class Order extends React.Component<any, State> {
 			);
 
 		return (
-
 			<SafeAreaView style={appStyles.page}>
 				<ScrollView
 					style={{
@@ -121,7 +119,7 @@ export default class Order extends React.Component<any, State> {
 						paddingLeft: 15,
 						// paddingTop: 25,
 						flex: 1,
-						paddingRight: 15
+						paddingRight: 15,
 						// marginTop: 35,
 					}}
 				>
@@ -134,7 +132,7 @@ export default class Order extends React.Component<any, State> {
 					<TextInput
 						placeholder="Добавить комментарий к заказу"
 						style={appStyles.input}
-						onChangeText={comment =>
+						onChangeText={(comment) =>
 							this.setState({ comment: comment })
 						}
 					/>
@@ -142,16 +140,17 @@ export default class Order extends React.Component<any, State> {
 					<TextInput
 						placeholder="Ввести промокод"
 						style={appStyles.input}
-						onChangeText={promo => this.setState({ promo: promo })}
+						onChangeText={(promo) =>
+							this.setState({ promo: promo })
+						}
 					/>
 					<Text style={appStyles.sectTitle}>Сумма для оплаты</Text>
-					<View style={{paddingBottom: 30}}>
+					<View style={{ paddingBottom: 30 }}>
 						<View
 							style={{
 								flex: 1,
 								flexDirection: "row",
-                                justifyContent: "space-between",
-                                
+								justifyContent: "space-between",
 							}}
 						>
 							<Text>Сумма заказа</Text>
@@ -159,7 +158,7 @@ export default class Order extends React.Component<any, State> {
 								style={{
 									fontFamily: "Neuron-Heavy",
 									marginLeft: "auto",
-									color: Colors.gray
+									color: Colors.gray,
 								}}
 							>
 								{this.state.priceTotal} руб
@@ -169,7 +168,7 @@ export default class Order extends React.Component<any, State> {
 							style={{
 								flex: 1,
 								flexDirection: "row",
-								justifyContent: "space-between"
+								justifyContent: "space-between",
 							}}
 						>
 							<Text>Доставка </Text>
@@ -177,7 +176,7 @@ export default class Order extends React.Component<any, State> {
 								style={{
 									fontFamily: "Neuron-Heavy",
 									marginLeft: "auto",
-									color: Colors.gray
+									color: Colors.gray,
 								}}
 							>
 								{this.state.priceTotal < 1500 ? 150 : 0} руб
@@ -187,7 +186,7 @@ export default class Order extends React.Component<any, State> {
 							style={{
 								flex: 1,
 								flexDirection: "row",
-								justifyContent: "space-between"
+								justifyContent: "space-between",
 							}}
 						>
 							<Text>Общая сумма</Text>
@@ -195,7 +194,7 @@ export default class Order extends React.Component<any, State> {
 								style={{
 									fontFamily: "Neuron-Heavy",
 									marginLeft: "auto",
-									color: Colors.gray
+									color: Colors.gray,
 								}}
 							>
 								{this.state.priceTotal < 1500
@@ -210,7 +209,7 @@ export default class Order extends React.Component<any, State> {
 					onPress={() => {
 						this.props.screenProps.setOrderData({
 							comment: this.state.comment,
-							promo: this.state.promo
+							promo: this.state.promo,
 						});
 						this.state.priceTotal < 1000
 							? this.setState({ modalFirstIsOpen: true })
@@ -228,7 +227,7 @@ export default class Order extends React.Component<any, State> {
 				<Modals
 					height={390}
 					isOpen={this.state.modalIsOpen}
-					isOpenHendler={isOpen => {
+					isOpenHendler={(isOpen) => {
 						this.setState({ modalIsOpen: isOpen });
 					}}
 				>
@@ -246,7 +245,7 @@ export default class Order extends React.Component<any, State> {
 							}}
 							style={[
 								appStyles.modalButton,
-								{ backgroundColor: "white" }
+								{ backgroundColor: "white" },
 							]}
 						>
 							<Text style={appStyles.modalButtonText}>
@@ -265,7 +264,7 @@ export default class Order extends React.Component<any, State> {
 							<Text
 								style={[
 									appStyles.modalButtonText,
-									{ color: "white" }
+									{ color: "white" },
 								]}
 							>
 								Добавить доставку
@@ -273,29 +272,28 @@ export default class Order extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</Modals>
-                {/*  */}
-                <Modals
+				{/*  */}
+				<Modals
 					height={250}
 					isOpen={this.state.modalFirstIsOpen}
-					isOpenHendler={isOpen => {
+					isOpenHendler={(isOpen) => {
 						this.setState({ modalFirstIsOpen: isOpen });
 					}}
 				>
 					<Text style={appStyles.modalText}>
 						Ваш заказ менее {"\n"} 1000 рублей
 					</Text>
-					<View style={{ flexDirection: "column" , marginTop: 10}}>
+					<View style={{ flexDirection: "column", marginTop: 10 }}>
 						<TouchableOpacity
 							onPress={() => {
 								this.setState({ modalFirstIsOpen: false });
-								
 							}}
 							style={appStyles.modalButton}
 						>
 							<Text
 								style={[
 									appStyles.modalButtonText,
-									{ color: "white" }
+									{ color: "white" },
 								]}
 							>
 								Ок
@@ -303,7 +301,6 @@ export default class Order extends React.Component<any, State> {
 						</TouchableOpacity>
 					</View>
 				</Modals>
-                
 			</SafeAreaView>
 		);
 	}

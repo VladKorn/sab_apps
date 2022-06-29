@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useContext } from "react";
 import {
 	View,
 	Text,
@@ -7,11 +7,13 @@ import {
 	TextInput,
 	TouchableOpacity,
 	Image,
-	StyleSheet
+	StyleSheet,
 } from "react-native";
 // import {AppContext} from "./BasketContext"
+import { AppContext } from "./App/Context";
 
 import CatalogCategories from "./CatalogCategories";
+import CustomHeaderBackImage from "./customHeaderBackImage";
 
 import appStyles from "./appStyles";
 import Basket from "./Basket";
@@ -21,77 +23,60 @@ interface State {
 	searchRes: Array<number>;
 }
 
-export default class Catalog extends React.Component<any, State> {
-	timer: any;
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: [],
-			search: "",
-			searchRes: []
-			// searchRes: [1949 ,1946 ,1355],
-		};
-		this.timer = null;
-		this.search = this.search.bind(this);
-	}
+const Catalog = (props) => {
+	let timer: any = null;
+	const [data, setData] = useState([]);
+	const [searchText, setSearchText] = useState("");
+	const [searchRes, setSearchRes] = useState([]);
+	const appContext = useContext(AppContext);
 
-	search(text: string) {
+	const search = (text: string) => {
 		// console.log("search", text);
-		this.setState({ search: text });
+		setSearchText(text);
 		fetch(`https://subexpress.ru/apps_api/search.php/?search=${text}`)
-			.then(res => res.json())
-			.then(res => {
+			.then((res) => res.json())
+			.then((res) => {
 				// console.log('res' , res)
 				if (res.products) {
-					this.setState({
-						searchRes:
-							res.products.map(item => {
-								return parseInt(item);
-							}) || []
-					});
+					setSearchRes(
+						res.products.map((item) => {
+							return parseInt(item);
+						}) || []
+					);
 				} else {
-					this.setState({
-						searchRes: []
-					});
+					setSearchRes([]);
 				}
 				// console.log('searchRes' ,this.state.searchRes);
 			});
-	}
+	};
 	// componentDidUpdate(prevProps , prevState){
 	// 	console.log('componentDidUpdate navigation' , prevProps.navigation)
 	// }
-	render() {
-		return (
-			<View style={{ flex: 1 }}>
-				<View>
-					{/* {getHeader()} */}
-				{/* <AppContext.Provider value={this.props.screenProps.basket}> */}
+	const screenProps = appContext;
+	return (
+		<View style={{ flex: 1 }}>
+			<View>
+				{/* {getHeader()} */}
+				{/* <AppContext.Provider value={screenProps.basket}> */}
 
-					<CatalogCategories
-						// getHeader={getHeader}
-						navigation={this.props.navigation}
-						catalog={this.props.screenProps.catalog}
-						products={this.props.screenProps.products}
-						favorite={this.props.screenProps.favorite}
-						addToFavorite={this.props.screenProps.addToFavorite}
-						basketApi={this.props.screenProps.basketApi}
-						basket={this.props.screenProps.basket}
-						searchRes={this.state.searchRes}
-						searchText={this.state.search}
-						search={this.search}
-					/>
-
-
-					{/* {cats} */}
-				{/* </AppContext.Provider> */}
-
-				</View>
-				<Basket
-					basket={this.props.screenProps.basket}
-					products={this.props.screenProps.products}
-					navigation={this.props.navigation}
+				<CatalogCategories
+					// getHeader={getHeader}
+					catalog={screenProps.catalog}
+					products={screenProps.products}
+					favorite={screenProps.favorite}
+					addToFavorite={screenProps.addToFavorite}
+					basketApi={screenProps.basketApi}
+					basket={screenProps.basket}
+					searchRes={searchRes}
+					searchText={searchText}
+					search={search}
 				/>
+
+				{/* {cats} */}
+				{/* </AppContext.Provider> */}
 			</View>
-		);
-	}
-}
+			<Basket />
+		</View>
+	);
+};
+export default Catalog;

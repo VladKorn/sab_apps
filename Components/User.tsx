@@ -5,16 +5,16 @@ import {
 	View,
 	TouchableOpacity,
 	ScrollView,
-	Alert
+	Alert,
 } from "react-native";
-import appStyles from "./appStyles.js";
+import appStyles from "./appStyles";
 import Input from "./Input";
 import { LoginData } from "../interfaces";
 import LoginForm from "./LoginForm";
 
 export default class User extends Component<any, any> {
 	static navigationOptions = {
-		headerTitle: "Учетная запись"
+		headerTitle: "Учетная запись",
 	};
 	constructor(props) {
 		super(props);
@@ -23,7 +23,7 @@ export default class User extends Component<any, any> {
 			name: "",
 			lastName: "",
 			log: "",
-			pas: ""
+			pas: "",
 		};
 		this.submit = this.submit.bind(this);
 	}
@@ -37,14 +37,14 @@ export default class User extends Component<any, any> {
 			name: this.state.name,
 			lastName: this.state.lastName,
 			log: this.state.log,
-			pas: this.state.pas
+			pas: this.state.pas,
 		};
 		fetch(`https://subexpress.ru/apps_api/?get=userupdate`, {
 			method: "post",
-			body: JSON.stringify({ userData: userData })
+			body: JSON.stringify({ userData: userData }),
 		})
-			.then(res => res.json())
-			.then(res => {
+			.then((res) => res.json())
+			.then((res) => {
 				// console.log("userupdate res", res);
 				if (res.user && res.user.id && res.user.updated) {
 					if (this.state.log === "" && this.state.pas === "") {
@@ -53,7 +53,7 @@ export default class User extends Component<any, any> {
 					} else {
 						const loginData: LoginData = {
 							log: this.state.log || res.user.log,
-							pas: this.state.pas || res.user.pas
+							pas: this.state.pas || res.user.pas,
 						};
 						// Alert.alert("pas "+ loginData.pas);
 
@@ -72,7 +72,7 @@ export default class User extends Component<any, any> {
 		if (!this.props.screenProps.user?.id) {
 			return (
 				<LoginForm
-                    login={this.props.screenProps.login}
+					login={this.props.screenProps.login}
 					userError={this.state.userError}
 				/>
 			);
@@ -89,8 +89,8 @@ export default class User extends Component<any, any> {
 							paddingTop: 20,
 							paddingBottom: 20,
 							flex: 1,
-							alignItems: "center"
-						}
+							alignItems: "center",
+						},
 					]}
 				>
 					<Text style={[appStyles.text, { marginTop: 10 }]}>
@@ -100,7 +100,7 @@ export default class User extends Component<any, any> {
 						center={true}
 						value={this.state.company}
 						placeholder={this.props.screenProps.user.company}
-						onChangeText={text => {
+						onChangeText={(text) => {
 							this.setState({ company: text });
 						}}
 					/>
@@ -111,7 +111,7 @@ export default class User extends Component<any, any> {
 						center={true}
 						value={this.state.name}
 						placeholder={this.props.screenProps.user.name}
-						onChangeText={text => {
+						onChangeText={(text) => {
 							this.setState({ name: text });
 						}}
 					/>
@@ -122,7 +122,7 @@ export default class User extends Component<any, any> {
 						center={true}
 						value={this.state.lastName}
 						placeholder={this.props.screenProps.user.lastName}
-						onChangeText={text => {
+						onChangeText={(text) => {
 							this.setState({ lastName: text });
 						}}
 					/>
@@ -133,7 +133,7 @@ export default class User extends Component<any, any> {
 						center={true}
 						value={this.state.log}
 						placeholder={this.props.screenProps.user.log}
-						onChangeText={text => {
+						onChangeText={(text) => {
 							this.setState({ log: text });
 						}}
 					/>
@@ -143,7 +143,7 @@ export default class User extends Component<any, any> {
 					<Input
 						center={true}
 						placeholder={"Новый пароль"}
-						onChangeText={text => {
+						onChangeText={(text) => {
 							this.setState({ pas: text });
 						}}
 					/>
@@ -154,7 +154,7 @@ export default class User extends Component<any, any> {
 							}}
 							style={[
 								appStyles.button,
-								{ margin: 10, minWidth: 120 }
+								{ margin: 10, minWidth: 120 },
 							]}
 						>
 							<Text style={appStyles.buttonText}>Сохранить</Text>
@@ -165,7 +165,7 @@ export default class User extends Component<any, any> {
 							}}
 							style={[
 								appStyles.button,
-								{ margin: 10, minWidth: 120 }
+								{ margin: 10, minWidth: 120 },
 							]}
 						>
 							<Text style={appStyles.buttonText}>Отмена</Text>
@@ -178,7 +178,7 @@ export default class User extends Component<any, any> {
 						}}
 						style={[
 							appStyles.button,
-							{ margin: 10, marginTop: "auto" }
+							{ margin: 10, marginTop: "auto" },
 						]}
 					>
 						<Text style={appStyles.buttonText}>

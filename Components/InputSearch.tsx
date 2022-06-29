@@ -5,17 +5,19 @@ import {
 	TextInput,
 	TouchableOpacity,
 	StyleSheet,
-	Text
+	Text,
 } from "react-native";
 import appStyles from "./appStyles";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 interface Props {
 	initialText?: string;
 	search: (text: string) => void;
-	navigation: any;
 }
 
 const InputSearch = (props: Props) => {
+	const navigation = useNavigation();
+	const route = useRoute();
 	const [text, setText] = useState(props.initialText || "");
 	useEffect(() => {
 		let timer = setTimeout(() => {
@@ -33,19 +35,19 @@ const InputSearch = (props: Props) => {
 	const resetfilter = (
 		<TouchableOpacity
 			style={{
-				margin: 'auto',
+				margin: "auto",
 				marginBottom: 20,
 				marginTop: 15,
 				flexDirection: "row",
 				// justifyContent:'center',
 				height: "auto",
-				padding: 2
+				padding: 2,
 			}}
 			onPress={() => {
-				props.navigation.navigate("Catalog", {
-                    catId: 0,
-                    innerCatId: 0,
-					reset: Math.floor(Math.random() * 100) + 1
+				navigation.navigate("Catalog", {
+					catId: 0,
+					innerCatId: 0,
+					reset: Math.floor(Math.random() * 100) + 1,
 				});
 			}}
 		>
@@ -53,7 +55,7 @@ const InputSearch = (props: Props) => {
 				style={{
 					width: 20.91,
 					height: 18.98,
-					marginRight: 20
+					marginRight: 20,
 				}}
 				source={require("../img/ico-menu-close.png")}
 			/>
@@ -84,7 +86,8 @@ const InputSearch = (props: Props) => {
 					/>
 				</TouchableOpacity>
 			</View>
-            {text || props.navigation.state?.params?.catId ? resetfilter : null}
+			{/* TODO */}
+			{/* {text || route.params?.catId ? resetfilter : null} */}
 		</View>
 	);
 };
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
 		maxWidth: 335,
 		flexDirection: "row",
 		justifyContent: "center",
-		position: "relative"
+		position: "relative",
 	},
 	input: {
 		height: 40,
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
 		borderRadius: 50,
 		maxWidth: 335,
 		width: "100%",
-		paddingLeft: 25
+		paddingLeft: 25,
 		// color: appStyles.input.color,
 	},
 	button: {
@@ -116,10 +119,10 @@ const styles = StyleSheet.create({
 		height: 40,
 		width: 40,
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
 	},
 	img: {
 		width: 18,
-		height: 18
-	}
+		height: 18,
+	},
 });

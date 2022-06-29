@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "../constants/colors";
 import appStyles from "./appStyles";
 
 interface Props {
@@ -11,23 +11,23 @@ interface Props {
 	address: string;
 	date: string;
 	status: StatusTypes;
-    canceled: string;
-    desc: string;
-    products: Array<object>;
-    navigation: any;
-    basketApi: any;
+	canceled: string;
+	desc: string;
+	products: Array<object>;
+	navigation: any;
+	basketApi: any;
 }
 type StatusTypes = "N" | "P" | "F";
 
 // STATUS_ID == "N"  - принят
 // STATUS_ID == "P"  - оплачен
 // STATUS_ID == "F"  - выполнен
-const HistiryListItem: React.FC<Props> = props => {
+const HistiryListItem: React.FC<Props> = (props) => {
 	return (
 		<TouchableOpacity
 			onPress={() => {
 				props.navigation.navigate("HistoryDetail", {
-					pageData: props
+					pageData: props,
 				});
 			}}
 			style={{
@@ -42,7 +42,7 @@ const HistiryListItem: React.FC<Props> = props => {
 				paddingRight: 10,
 				marginBottom: 5,
 				marginTop: 5,
-				position: "relative"
+				position: "relative",
 			}}
 		>
 			<View
@@ -66,7 +66,7 @@ const HistiryListItem: React.FC<Props> = props => {
 					alignItems: "center",
 					paddingLeft: 5,
 					paddingRight: 5,
-					borderRadius: 5
+					borderRadius: 5,
 				}}
 			>
 				<Text
@@ -74,7 +74,7 @@ const HistiryListItem: React.FC<Props> = props => {
 						color: "white",
 						fontFamily: "Neuron-Heavy",
 						fontSize: 14,
-						letterSpacing: 1
+						letterSpacing: 1,
 					}}
 				>
 					{props.status === "N" && props.canceled === "N"
@@ -94,7 +94,7 @@ const HistiryListItem: React.FC<Props> = props => {
 					width: 80,
 					height: 80,
 					...appStyles.borderRadius,
-					backgroundColor: Colors.lightgray
+					backgroundColor: Colors.lightgray,
 				}}
 			>
 				<Image
@@ -108,7 +108,7 @@ const HistiryListItem: React.FC<Props> = props => {
 						fontFamily: "Neuron",
 						lineHeight: 17,
 						fontSize: 16,
-						color: Colors.text
+						color: Colors.text,
 					}}
 				>
 					Заказ №:{" "}
@@ -117,7 +117,7 @@ const HistiryListItem: React.FC<Props> = props => {
 							fontFamily: "Neuron-Heavy",
 							lineHeight: 17,
 							fontSize: 16,
-							color: Colors.text
+							color: Colors.text,
 						}}
 					>
 						{props.id}
@@ -129,7 +129,7 @@ const HistiryListItem: React.FC<Props> = props => {
 							fontFamily: "Neuron",
 							lineHeight: 17,
 							fontSize: 16,
-							color: Colors.text
+							color: Colors.text,
 						}}
 					>
 						Адрес:{" "}
@@ -139,7 +139,7 @@ const HistiryListItem: React.FC<Props> = props => {
 						style={{
 							fontFamily: "Neuron-Heavy",
 							fontSize: 16,
-							color: Colors.text
+							color: Colors.text,
 						}}
 					>
 						{props.address}
@@ -150,7 +150,7 @@ const HistiryListItem: React.FC<Props> = props => {
 						fontFamily: "Neuron-Bold",
 						lineHeight: 17,
 						fontSize: 16,
-						color: Colors.text
+						color: Colors.text,
 					}}
 				>
 					{props.count} шт. на {props.price} руб.
@@ -161,10 +161,10 @@ const HistiryListItem: React.FC<Props> = props => {
 						lineHeight: 17,
 						fontSize: 16,
 						color: "#C4C4C4",
-						marginTop: 5
+						marginTop: 5,
 					}}
 				>
-					{props.date.split(' ')[0]}
+					{props.date.split(" ")[0]}
 				</Text>
 			</View>
 		</TouchableOpacity>

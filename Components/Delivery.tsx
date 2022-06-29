@@ -7,13 +7,13 @@ import {
 	TouchableHighlight,
 	TouchableOpacity,
 	SafeAreaView,
-	StyleSheet
+	StyleSheet,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "../constants/colors";
 import months from "../constants/months.js";
 import Modals from "./Modal";
 
-import DatePicker from "react-native-datepicker";
+import DatePicker from "react-native-date-picker";
 
 import appStyles from "./appStyles";
 interface State {
@@ -41,7 +41,7 @@ export default class Order extends React.Component<any, State> {
 			modalOrderIsOpen: false,
 			DatePickerIsOpen: false,
 			isInitial: true,
-			isSunday: false
+			isSunday: false,
 		};
 		this.setAddress = this.setAddress.bind(this);
 		this.setDate = this.setDate.bind(this);
@@ -49,7 +49,7 @@ export default class Order extends React.Component<any, State> {
 		this.openDatePicker = this.openDatePicker.bind(this);
 	}
 	static navigationOptions = {
-		title: "Оформление заказа"
+		title: "Оформление заказа",
 	};
 
 	componentDidMount() {
@@ -63,11 +63,11 @@ export default class Order extends React.Component<any, State> {
 
 		const didBlurSubscription = this.props.navigation.addListener(
 			"willBlur",
-			payload => {
+			(payload) => {
 				//   console.debug('willBlur', payload);
 				this.setState({
 					modalIsOpen: false,
-					modalOrderIsOpen: false
+					modalOrderIsOpen: false,
 				});
 			}
 		);
@@ -135,7 +135,7 @@ export default class Order extends React.Component<any, State> {
 	async makeOrder() {
 		const success = await this.props.screenProps.makeOrder({
 			address: this.state.address,
-			date: this.state.date
+			date: this.state.date,
 		});
 		console.log("success", success);
 		if (success) {
@@ -146,7 +146,7 @@ export default class Order extends React.Component<any, State> {
 	}
 	renderAddresses = () => {
 		const addresses = this.props.screenProps.user.addresses || [];
-		const addressesItems = addresses.map(item => {
+		const addressesItems = addresses.map((item) => {
 			const isCurrent = item.address === this.state.address;
 			return (
 				<TouchableHighlight
@@ -166,7 +166,7 @@ export default class Order extends React.Component<any, State> {
 							marginBottom: 10,
 							borderRadius: 10,
 							alignItems: "center",
-							padding: 15
+							padding: 15,
 						}}
 					>
 						<Image
@@ -181,7 +181,7 @@ export default class Order extends React.Component<any, State> {
 							<Text
 								style={{
 									fontFamily: "Neuron-Bold",
-									color: "#000000"
+									color: "#000000",
 								}}
 							>
 								{item.address}
@@ -197,7 +197,7 @@ export default class Order extends React.Component<any, State> {
 									marginRight: 20,
 									marginLeft: "auto",
 									width: 19,
-									height: 22
+									height: 22,
 								}}
 								source={require("../img/ico-ok.png")}
 							/>
@@ -247,7 +247,7 @@ export default class Order extends React.Component<any, State> {
 						paddingLeft: 15,
 						// paddingTop: 25,
 						flex: 1,
-						paddingRight: 15
+						paddingRight: 15,
 						// marginTop: 35,
 					}}
 				>
@@ -262,40 +262,40 @@ export default class Order extends React.Component<any, State> {
 							flexDirection: "row",
 							justifyContent: "space-between",
 							alignItems: "center",
-							width: "100%"
+							width: "100%",
 						}}
 					>
-                        {/* if (nextProps.isOpen) {
+						{/* if (nextProps.isOpen) {
                             this.setModalVisible(true)
                         } */}
 						<View style={{ marginLeft: 5, marginTop: 5 }}>
 							<DatePicker
-								isOpen={this.state.DatePickerIsOpen}
+								open={this.state.DatePickerIsOpen}
 								style={{ width: 30 }}
-								date={this.state.date}
+								date={new Date(this.state.date)}
 								mode="date"
-								placeholder="select date"
-								format="YYYY-MM-DD"
-								minDate={minDate}
-								confirmBtnText="Принять"
-								cancelBtnText="Отмена"
-								iconSource={require("../img/ico-date.png")}
-								hideText="true"
-								customStyles={{
-									dateIcon: {
-										position: "absolute",
-										left: 0,
-										top: 4,
-										marginLeft: 0,
-										width: 18,
-										height: 21
-									},
-									dateInput: {
-										marginLeft: 30
-									}
-									// ... You can check the source to find the other keys.
-								}}
-								onDateChange={date => {
+								// placeholder="select date"
+								// format="YYYY-MM-DD"
+								// minDate={minDate}
+								// confirmBtnText="Принять"
+								// cancelBtnText="Отмена"
+								// iconSource={require("../img/ico-date.png")}
+								// hideText="true"
+								// customStyles={{
+								// 	dateIcon: {
+								// 		position: "absolute",
+								// 		left: 0,
+								// 		top: 4,
+								// 		marginLeft: 0,
+								// 		width: 18,
+								// 		height: 21,
+								// 	},
+								// 	dateInput: {
+								// 		marginLeft: 30,
+								// 	},
+								// 	// ... You can check the source to find the other keys.
+								// }}
+								onDateChange={(date) => {
 									this.setState({ date: date });
 									this.setState({ isInitial: false });
 								}}
@@ -347,7 +347,7 @@ export default class Order extends React.Component<any, State> {
 				<Modals
 					// height={310}
 					isOpen={this.state.modalIsOpen}
-					isOpenHendler={isOpen => {}}
+					isOpenHendler={(isOpen) => {}}
 				>
 					<Text style={appStyles.modalText}>
 						{this.state.isSunday
@@ -364,7 +364,7 @@ export default class Order extends React.Component<any, State> {
 								}}
 								style={[
 									appStyles.modalButton,
-									{ backgroundColor: "white" }
+									{ backgroundColor: "white" },
 								]}
 							>
 								<Text style={appStyles.modalButtonText}>
@@ -384,7 +384,7 @@ export default class Order extends React.Component<any, State> {
 							<Text
 								style={[
 									appStyles.modalButtonText,
-									{ color: "white" }
+									{ color: "white" },
 								]}
 							>
 								{!this.state.isInitial && !this.state.isSunday
@@ -397,7 +397,7 @@ export default class Order extends React.Component<any, State> {
 				<Modals
 					height={250}
 					isOpen={this.state.modalOrderIsOpen}
-					isOpenHendler={isOpen => {}}
+					isOpenHendler={(isOpen) => {}}
 				>
 					<Text style={appStyles.modalText}>
 						Спасибо!{"\n"}Ваш заказ принят
@@ -415,7 +415,7 @@ export default class Order extends React.Component<any, State> {
 							<Text
 								style={[
 									appStyles.modalButtonText,
-									{ color: "white" }
+									{ color: "white" },
 								]}
 							>
 								Ок
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		height: 50,
 		justifyContent: "center",
-		marginRight: 25
+		marginRight: 25,
 	},
-	dateLabelText: { fontFamily: "Neuron", fontSize: 30, color: Colors.text }
+	dateLabelText: { fontFamily: "Neuron", fontSize: 30, color: Colors.text },
 });

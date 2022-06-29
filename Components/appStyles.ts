@@ -1,27 +1,30 @@
-import { StyleSheet, Platform, Dimensions} from "react-native";
-import Colors from "../constants/Colors.js";
+import { StyleSheet, Platform, Dimensions } from "react-native";
+import Colors from "../constants/colors";
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
 console.log({ screenWidth, screenHeight });
 
 const appStyles = StyleSheet.create({
 	borderRadius: {
-		borderRadius: 10
+		borderRadius: 10,
 	},
 	SafeAreaView: {
 		// flex: 1,
-		paddingTop: Platform.OS === "android" ? 25 : 0
+		paddingTop: Platform.OS === "android" ? 25 : 0,
 	},
 	page: {
 		flex: 1,
-		paddingTop: Platform.OS === "android" ? 25 : 0
+		paddingTop: Platform.OS === "android" ? 25 : 0,
 	},
 	headerStyle: {
 		backgroundColor: "white",
 		shadowOpacity: 0,
 		// borderBottomWidth: 0,
-		shadowOpacity: 0,
-		shadowOffset: { height: 0 },
+
+		// TODO shadowOpacity
+		// shadowOpacity: 0,
+		// shadowOffset: { height: 0 },
+
 		shadowRadius: 0,
 		elevation: 0,
 
@@ -29,7 +32,7 @@ const appStyles = StyleSheet.create({
 		marginLeft: 15,
 		marginRight: 15,
 		borderBottomWidth: 1,
-        borderBottomColor: Colors.lightgray
+		borderBottomColor: Colors.lightgray,
 	},
 	headerTitle: {
 		fontFamily: "Neuron",
@@ -37,17 +40,17 @@ const appStyles = StyleSheet.create({
 		color: Colors.text,
 		textAlign: "left",
 		width: "100%",
-        flex: 1,
-        marginTop: 6
+		flex: 1,
+		marginTop: 6,
 	},
 	paddings: {
 		paddingLeft: 15,
-		paddingRight: 15
+		paddingRight: 15,
 	},
 	text: {
 		fontSize: 20,
 		fontFamily: "Neuron",
-		color: "#666774"
+		color: "#666774",
 	},
 	sectTitle: {
 		fontFamily: "Neuron-Heavy",
@@ -55,7 +58,7 @@ const appStyles = StyleSheet.create({
 		color: Colors.gray,
 		// color: '#666774',
 		marginTop: 25,
-		marginBottom: 5
+		marginBottom: 5,
 	},
 	input: {
 		borderBottomColor: "#E2E2E2",
@@ -75,10 +78,10 @@ const appStyles = StyleSheet.create({
 	},
 	inputFocus: {
 		borderBottomColor: Colors.assent,
-		borderBottomWidth: 5
+		borderBottomWidth: 5,
 	},
 	inputError: {
-		borderBottomColor: "red"
+		borderBottomColor: "red",
 	},
 	hr: {
 		borderBottomColor: "#E2E2E2",
@@ -86,7 +89,7 @@ const appStyles = StyleSheet.create({
 		width: "100%",
 		maxWidth: 336,
 		marginTop: 15,
-		marginBottom: 15
+		marginBottom: 15,
 	},
 	button: {
 		backgroundColor: Colors.assent,
@@ -94,12 +97,12 @@ const appStyles = StyleSheet.create({
 		minWidth: 290,
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 10
+		borderRadius: 10,
 	},
 	buttonText: {
 		color: "#353539",
 		fontSize: 20,
-		fontFamily: "Segoe"
+		fontFamily: "Segoe",
 	},
 	buttonBottom: {
 		backgroundColor: Colors.assent,
@@ -107,20 +110,21 @@ const appStyles = StyleSheet.create({
 		width: "100%",
 		height: 57,
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
 	},
 	shadow: {
 		marginTop: 100,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
-			height: 1
+			height: 1,
 		},
 		shadowOpacity: 0.22,
 		shadowRadius: 2.22,
 
 		elevation: 3,
-		marginTop: 5
+		// TODO marginTop err
+		// marginTop: 5,
 	},
 	breadCrumbs: {},
 	modalText: {
@@ -128,14 +132,14 @@ const appStyles = StyleSheet.create({
 		fontSize: 22,
 		color: Colors.text,
 		textAlign: "center",
-		lineHeight: 27
+		lineHeight: 27,
 	},
 	modalTextDesc: {
 		fontFamily: "Neuron",
 		fontSize: 16,
 		color: Colors.text,
 		textAlign: "center",
-		lineHeight: 19
+		lineHeight: 19,
 	},
 	modalButton: {
 		height: 48,
@@ -146,12 +150,12 @@ const appStyles = StyleSheet.create({
 		paddingLeft: 10,
 		paddingRight: 10,
 		backgroundColor: Colors.assent,
-		margin: 5
+		margin: 5,
 	},
 	modalButtonText: {
 		fontSize: 20,
 		fontFamily: "Neuron",
-		color: Colors.text
+		color: Colors.text,
 	},
 	bottonToOrderCount: {
 		backgroundColor: Colors.assent,
@@ -162,14 +166,14 @@ const appStyles = StyleSheet.create({
 		height: 23,
 		position: "absolute",
 		top: -11,
-		right: -11
+		right: -11,
 	},
 	bottonToOrderCountText: {
 		color: "white",
 		fontSize: 20,
 		fontFamily: "Neuron-Heavy",
-		lineHeight: 24
-	}
+		lineHeight: 24,
+	},
 });
 
 export default appStyles;

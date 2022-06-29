@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Dimensions } from "react-native";
 const screenHeight = Math.round(Dimensions.get("window").height);
-const customHeaderBackImage: React.FC = () => {
+const CustomHeaderBackImage: React.FC = () => {
 	const source = require("../img/back.png");
 	return (
 		<Image
@@ -13,10 +13,10 @@ const customHeaderBackImage: React.FC = () => {
 				marginRight: 12,
 				marginVertical: 12,
 				marginTop: 16,
-				resizeMode: "contain"
+				resizeMode: "contain",
 			}}
 		/>
 	);
 };
 
-export default customHeaderBackImage;
+export default CustomHeaderBackImage;

@@ -7,9 +7,9 @@ import {
 	SafeAreaView,
 	TouchableOpacity,
 	StyleSheet,
-	Linking
+	Linking,
 } from "react-native";
-import Colors from "../constants/Colors.js";
+import Colors from "../constants/colors";
 import appStyles from "./appStyles";
 import { phone } from "../constants/data.js";
 
@@ -37,27 +37,29 @@ export default class HistoryDetail extends React.Component<any, State> {
 		super(props);
 		this.state = {
 			navigation: {},
-			data: null
+			data: null,
 		};
 	}
 	static navigationOptions = {
-		header: null
+		header: null,
 	};
 
 	_repeatOrder() {
 		const pageData = this.props.navigation.state.params.pageData;
 		// console.log("pageData", pageData.products);
 		let products = {};
-		pageData.products.map(item => {
-			typeof item === 'object' && item.id ? products[item['id']] = { count: item.count }:null;
+		pageData.products.map((item) => {
+			typeof item === "object" && item.id
+				? (products[item["id"]] = { count: item.count })
+				: null;
 		});
 		// console.log("products", products);
 
 		const data: tsBasketApi = {
 			action: "setBasket",
 			params: {
-				products: products
-			}
+				products: products,
+			},
 		};
 		pageData.basketApi(data);
 		setTimeout(() => {
@@ -78,11 +80,11 @@ export default class HistoryDetail extends React.Component<any, State> {
 							backgroundColor: Colors.lightgray,
 							...appStyles.paddings,
 							paddingTop: 20,
-							paddingBottom: 25
+							paddingBottom: 25,
 						}}
 					>
 						<TouchableOpacity
-                            style={{paddingLeft: 20}}
+							style={{ paddingLeft: 20 }}
 							onPress={() => {
 								this.props.navigation.goBack();
 							}}
@@ -91,7 +93,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 								style={{
 									width: 20.91,
 									height: 18.98,
-									marginRight: 30
+									marginRight: 30,
 								}}
 								source={require("../img/ico-close.png")}
 							/>
@@ -99,7 +101,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 						<View
 							style={{
 								flexDirection: "row",
-								alignItems: "center"
+								alignItems: "center",
 							}}
 						>
 							<Text style={appStyles.sectTitle}>
@@ -124,7 +126,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 									paddingLeft: 5,
 									paddingRight: 5,
 									borderRadius: 5,
-									marginTop: 15
+									marginTop: 15,
 								}}
 							>
 								<Text
@@ -132,7 +134,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 										color: "white",
 										fontFamily: "Neuron-Heavy",
 										fontSize: 14,
-										letterSpacing: 1
+										letterSpacing: 1,
 									}}
 								>
 									{props.status === "N" &&
@@ -155,7 +157,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 							style={{
 								textAlign: "center",
 								marginTop: 30,
-								marginBottom: 15
+								marginBottom: 15,
 							}}
 						>
 							Предварительное время ожидания заказа
@@ -166,7 +168,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 								maxWidth: 265,
 								width: "100%",
 								marginLeft: "auto",
-								marginRight: "auto"
+								marginRight: "auto",
 							}}
 						>
 							<View style={styles.step}>
@@ -182,9 +184,9 @@ export default class HistoryDetail extends React.Component<any, State> {
 														props.status === "F"
 															? Colors.assent
 															: "white",
-													borderColor: Colors.assent
+													borderColor: Colors.assent,
 											  }
-											: null
+											: null,
 									]}
 								>
 									<Image
@@ -197,7 +199,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 										styles.steptext,
 										props.status === "N"
 											? { fontFamily: "Neuron-Heavy" }
-											: null
+											: null,
 									]}
 								>
 									Принят
@@ -208,7 +210,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 									styles.stepLine,
 									props.status === "P" || props.status === "F"
 										? { backgroundColor: Colors.assent }
-										: null
+										: null,
 								]}
 							/>
 							<View style={styles.step}>
@@ -222,9 +224,9 @@ export default class HistoryDetail extends React.Component<any, State> {
 														props.status === "F"
 															? Colors.assent
 															: "white",
-													borderColor: Colors.assent
+													borderColor: Colors.assent,
 											  }
-											: null
+											: null,
 									]}
 								>
 									<Image
@@ -237,7 +239,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 										styles.steptext,
 										props.status === "P"
 											? { fontFamily: "Neuron-Heavy" }
-											: null
+											: null,
 									]}
 								>
 									Готовим
@@ -248,7 +250,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 									styles.stepLine,
 									props.status === "F"
 										? { backgroundColor: Colors.assent }
-										: null
+										: null,
 								]}
 							/>
 							<View style={styles.step}>
@@ -259,9 +261,9 @@ export default class HistoryDetail extends React.Component<any, State> {
 											? {
 													backgroundColor:
 														Colors.assent,
-													borderColor: Colors.assent
+													borderColor: Colors.assent,
 											  }
-											: null
+											: null,
 									]}
 								>
 									<Image
@@ -276,7 +278,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 									styles.stepLine,
 									props.status === "F"
 										? { backgroundColor: Colors.assent }
-										: null
+										: null,
 								]}
 							/>
 							<View style={styles.step}>
@@ -285,9 +287,9 @@ export default class HistoryDetail extends React.Component<any, State> {
 										styles.stepImgWrap,
 										props.status === "F"
 											? {
-													borderColor: Colors.assent
+													borderColor: Colors.assent,
 											  }
-											: null
+											: null,
 									]}
 								>
 									<Image
@@ -301,7 +303,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 										styles.steptext,
 										props.status === "F"
 											? { fontFamily: "Neuron-Heavy" }
-											: null
+											: null,
 									]}
 								>
 									Доставлен
@@ -309,33 +311,33 @@ export default class HistoryDetail extends React.Component<any, State> {
 							</View>
 						</View>
 						{/* {props.status === "F" || props.canceled === "Y" ? ( */}
-							<TouchableOpacity
-								onPress={() => {
-									this._repeatOrder();
-								}}
-								style={[
-									appStyles.button,
-									{ marginTop: 20, marginBottom: 5 }
-								]}
-							>
-								<Text style={appStyles.buttonText}>
-                                    Повторить заказ
-								</Text>
-							</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								this._repeatOrder();
+							}}
+							style={[
+								appStyles.button,
+								{ marginTop: 20, marginBottom: 5 },
+							]}
+						>
+							<Text style={appStyles.buttonText}>
+								Повторить заказ
+							</Text>
+						</TouchableOpacity>
 						{/* ) : ( */}
-							<TouchableOpacity
-								onPress={() => {
-									Linking.openURL(`tel:${phone}`);
-								}}
-								style={[
-									appStyles.button,
-									{ marginTop: 10, marginBottom: 25 }
-								]}
-							>
-								<Text style={appStyles.buttonText}>
-									Позвонить нам
-								</Text>
-							</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								Linking.openURL(`tel:${phone}`);
+							}}
+							style={[
+								appStyles.button,
+								{ marginTop: 10, marginBottom: 25 },
+							]}
+						>
+							<Text style={appStyles.buttonText}>
+								Позвонить нам
+							</Text>
+						</TouchableOpacity>
 						{/* )} */}
 					</View>
 					{/*  */}
@@ -349,14 +351,14 @@ export default class HistoryDetail extends React.Component<any, State> {
 								transform: [{ translateY: -37 }],
 								justifyContent: "center",
 								paddingLeft: 25,
-								paddingRight: 25
+								paddingRight: 25,
 							}}
 						>
 							<Text
 								style={{
 									color: Colors.text,
 									fontFamily: "Neuron",
-									fontSize: 16
+									fontSize: 16,
 								}}
 							>
 								Оплачен{" "}
@@ -364,7 +366,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 									style={{
 										color: Colors.text,
 										fontFamily: "Neuron-Bold",
-										fontSize: 16
+										fontSize: 16,
 									}}
 								>
 									{props.payed ? "Наличными" : "Нет"}
@@ -374,7 +376,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 								style={{
 									color: "#C4C4C4",
 									fontFamily: "Neuron-Bold",
-									fontSize: 16
+									fontSize: 16,
 								}}
 							>
 								{props.date}
@@ -393,7 +395,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 										fontFamily: "Neuron-Heavy",
 										color: Colors.text,
 										marginTop: 15,
-										marginBottom: 5
+										marginBottom: 5,
 									}}
 								>
 									Адрес:
@@ -417,7 +419,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 										fontFamily: "Neuron-Heavy",
 										color: Colors.text,
 										marginTop: 15,
-										marginBottom: 5
+										marginBottom: 5,
 									}}
 								>
 									Комментарий к заказу:
@@ -430,7 +432,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 						{/* products */}
 						<View>
 							{props.products
-								? props.products.map(item => {
+								? props.products.map((item) => {
 										return (
 											<View
 												key={item.id}
@@ -440,13 +442,13 @@ export default class HistoryDetail extends React.Component<any, State> {
 													alignItems: "center",
 													borderBottomColor:
 														"#E2E2E2",
-													borderBottomWidth: 1
+													borderBottomWidth: 1,
 												}}
 											>
 												<View
 													style={{
 														width: 65,
-														alignItems: "center"
+														alignItems: "center",
 													}}
 												>
 													<Text
@@ -454,7 +456,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 															fontFamily:
 																"Neuron",
 															color:
-																Colors.lightText
+																Colors.lightText,
 														}}
 													>
 														X{item.count}
@@ -463,7 +465,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 												<Text
 													style={{
 														fontFamily: "Neuron",
-														color: Colors.lightText
+														color: Colors.lightText,
 													}}
 												>
 													{item.name}
@@ -472,7 +474,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 													style={{
 														fontFamily: "Neuron",
 														color: Colors.text,
-														marginLeft: "auto"
+														marginLeft: "auto",
 													}}
 												>
 													{item.price * item.count}{" "}
@@ -486,13 +488,13 @@ export default class HistoryDetail extends React.Component<any, State> {
 								<View
 									style={{
 										justifyContent: "space-between",
-										flexDirection: "row"
+										flexDirection: "row",
 									}}
 								>
 									<Text
 										style={{
 											fontFamily: "Neuron-Heavy",
-											color: Colors.text
+											color: Colors.text,
 										}}
 									>
 										{" "}
@@ -501,7 +503,7 @@ export default class HistoryDetail extends React.Component<any, State> {
 									<Text
 										style={{
 											fontFamily: "Neuron-Heavy",
-											color: Colors.text
+											color: Colors.text,
 										}}
 									>
 										{" "}
@@ -528,32 +530,32 @@ const styles = StyleSheet.create({
 		height: 48,
 		borderRadius: 50,
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
 	},
 	steptext: {
 		fontFamily: "Neuron",
 		fontSize: 14,
 		marginTop: 10,
 		color: Colors.text,
-		textAlign: "center"
+		textAlign: "center",
 	},
 	stepLine: {
 		height: 2,
 		backgroundColor: "white",
 		flex: 1,
-		marginTop: 22
+		marginTop: 22,
 	},
 	infoItem: {
 		flexDirection: "row",
 		height: 80,
 		borderBottomColor: "#E2E2E2",
-		borderBottomWidth: 1
+		borderBottomWidth: 1,
 	},
 	infoItemImgWrap: {
 		justifyContent: "center",
 		alignItems: "center",
 		height: 80,
 		width: 50,
-		marginRight: 15
-	}
+		marginRight: 15,
+	},
 });

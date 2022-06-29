@@ -9,9 +9,9 @@ import {
 	SafeAreaView,
 	Keyboard,
 	Dimensions,
-	ScrollView
+	ScrollView,
 } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "../constants/colors";
 import appStyles from "./appStyles";
 import Input from "./Input";
 import CheckBox from "./CheckBox";
@@ -48,7 +48,7 @@ export default class LoginForm extends React.Component<any, State> {
 			errorPas: false,
 			mode: "signIn",
 			loginPasForgot: null,
-			keyboardHeight: 0
+			keyboardHeight: 0,
 		};
 		this.login = this.login.bind(this);
 		this.onChange = this.onChange.bind(this);
@@ -56,7 +56,7 @@ export default class LoginForm extends React.Component<any, State> {
 	componentDidMount() {
 		this.keyboardDidShowListener = Keyboard.addListener(
 			"keyboardWillShow",
-			event => {
+			(event) => {
 				console.log(
 					"event.endCoordinates.height",
 					event.endCoordinates.height,
@@ -78,16 +78,16 @@ export default class LoginForm extends React.Component<any, State> {
 			fetch(`https://subexpress.ru/apps_api/`, {
 				method: "post",
 				body: JSON.stringify({
-					loginData: { log: this.state.log, mode: this.state.mode }
-				})
+					loginData: { log: this.state.log, mode: this.state.mode },
+				}),
 			})
-				.then(res => res.json())
-				.then(res => {
+				.then((res) => res.json())
+				.then((res) => {
 					if (res["error"]) {
 						alert(res["error"]);
 					}
 					this.setState({
-						loginPasForgot: "Новый пароль выслан на Вашу почту"
+						loginPasForgot: "Новый пароль выслан на Вашу почту",
 					});
 					// console.log('res' , res)
 				});
@@ -103,9 +103,9 @@ export default class LoginForm extends React.Component<any, State> {
 			log: this.state.log,
 			pas: this.state.pas,
 			save: this.state.save,
-			mode: this.state.mode
+			mode: this.state.mode,
 		};
-		this.props.login(loginData).then(user => {
+		this.props.login(loginData).then((user) => {
 			// console.log('form user' , user);
 
 			if (user && user.error) {
@@ -152,7 +152,7 @@ export default class LoginForm extends React.Component<any, State> {
 					minHeight: "100%",
 					backgroundColor: "#F2F2F2",
 					justifyContent: "flex-end",
-					alignItems: "center"
+					alignItems: "center",
 					// height: 2000
 				}}
 			>
@@ -168,7 +168,7 @@ export default class LoginForm extends React.Component<any, State> {
 							placeholder="Имя"
 							autoFocus={true}
 							center={true}
-							onChangeText={name => this.setState({ name })}
+							onChangeText={(name) => this.setState({ name })}
 							value={this.state.name}
 						/>
 					</>
@@ -178,7 +178,7 @@ export default class LoginForm extends React.Component<any, State> {
 						placeholder="Телефон"
 						autoFocus={false}
 						center={true}
-						onChangeText={phone => this.setState({ phone })}
+						onChangeText={(phone) => this.setState({ phone })}
 						value={this.state.phone}
 					/>
 				) : null}
@@ -192,7 +192,7 @@ export default class LoginForm extends React.Component<any, State> {
 					autoFocus={true}
 					error={this.state.errorLog}
 					center={true}
-					onChangeText={log => this.setState({ log })}
+					onChangeText={(log) => this.setState({ log })}
 					value={this.state.log}
 				/>
 				{this.state.mode === "signIn" && this.state.loginPasForgot ? (
@@ -207,7 +207,7 @@ export default class LoginForm extends React.Component<any, State> {
 						placeholder="Пароль"
 						center={true}
 						error={this.state.errorPas}
-						onChangeText={pas => this.setState({ pas })}
+						onChangeText={(pas) => this.setState({ pas })}
 						value={this.state.pas}
 					/>
 				) : null}
@@ -227,7 +227,7 @@ export default class LoginForm extends React.Component<any, State> {
 						// color={Colors.assent}
 						style={[
 							appStyles.button,
-							{ marginBottom: 10, marginTop: 20 }
+							{ marginBottom: 10, marginTop: 20 },
 						]}
 					>
 						<Text style={appStyles.buttonText}>
@@ -243,13 +243,13 @@ export default class LoginForm extends React.Component<any, State> {
 				<View
 					style={{
 						minHeight: this.state.keyboardHeight,
-						alignItems: "center"
+						alignItems: "center",
 					}}
 				>
 					<TouchableOpacity
 						onPress={() => {
 							this.setState({
-								mode: "signIn"
+								mode: "signIn",
 							});
 						}}
 					>
@@ -259,7 +259,7 @@ export default class LoginForm extends React.Component<any, State> {
 								{ marginBottom: 10, marginTop: 10 },
 								this.state.mode === "signIn"
 									? { color: Colors.assent3 }
-									: null
+									: null,
 							]}
 						>
 							Вход
@@ -268,7 +268,7 @@ export default class LoginForm extends React.Component<any, State> {
 					<TouchableOpacity
 						onPress={() => {
 							this.setState({
-								mode: "signUp"
+								mode: "signUp",
 							});
 						}}
 					>
@@ -278,7 +278,7 @@ export default class LoginForm extends React.Component<any, State> {
 								{ marginBottom: 10, marginTop: 10 },
 								this.state.mode === "signUp"
 									? { color: Colors.assent3 }
-									: null
+									: null,
 							]}
 						>
 							Регистрация
@@ -287,7 +287,7 @@ export default class LoginForm extends React.Component<any, State> {
 					<TouchableOpacity
 						onPress={() => {
 							this.setState({
-								mode: "forgot"
+								mode: "forgot",
 							});
 						}}
 					>
@@ -297,7 +297,7 @@ export default class LoginForm extends React.Component<any, State> {
 								{ marginBottom: 30, marginTop: 10 },
 								this.state.mode === "forgot"
 									? { color: Colors.assent3 }
-									: null
+									: null,
 							]}
 						>
 							Забили пароль?

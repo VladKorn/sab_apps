@@ -1,14 +1,14 @@
 import React from "react";
 import Input from "./Input";
 import { View, Text, TouchableOpacity } from "react-native";
-import appStyles from "./appStyles.js";
+import appStyles from "./appStyles";
 import Modals from "./Modal";
 interface Props {
 	title?: string;
 	fromPage: string;
 	sendMail: (data) => any;
-    style?: object;
-    navigation: any;
+	style?: object;
+	navigation: any;
 }
 interface State {
 	name: string;
@@ -23,41 +23,46 @@ export default class Form extends React.Component<Props, State> {
 			name: "",
 			contact: "",
 			comment: "",
-			modalIsOpen: false
+			modalIsOpen: false,
 		};
 		this.submit = this.submit.bind(this);
 		this.isOpenHendler = this.isOpenHendler.bind(this);
-    }
-    componentDidMount(){
-        const didBlurSubscription = this.props.navigation.addListener(
-            'willBlur',
-            payload => {
-            //   console.debug('willBlur', payload);
-                this.setState({
-                    modalIsOpen: false,
-                });
-            }
-        );
-    }
+	}
+	componentDidMount() {
+		const didBlurSubscription = this.props.navigation.addListener(
+			"willBlur",
+			(payload) => {
+				//   console.debug('willBlur', payload);
+				this.setState({
+					modalIsOpen: false,
+				});
+			}
+		);
+	}
 	isOpenHendler(isOpen) {
-        this.setState({ modalIsOpen: isOpen });
+		this.setState({ modalIsOpen: isOpen });
 	}
 	async submit() {
-        // console.log('submit');
-        
+		// console.log('submit');
+
 		const data: any = {
 			name: this.state.name,
 			contact: this.state.contact,
 			comment: this.state.comment,
-			fromPage: this.props.fromPage
+			fromPage: this.props.fromPage,
 		};
-        const success = await this.props.sendMail(data);
-        // console.log('submit-success' , success);
-        if(success){
-            this.setState({ modalIsOpen: true , name: "", contact: "", comment: "" });
-        } else{
-            alert('error');
-        }
+		const success = await this.props.sendMail(data);
+		// console.log('submit-success' , success);
+		if (success) {
+			this.setState({
+				modalIsOpen: true,
+				name: "",
+				contact: "",
+				comment: "",
+			});
+		} else {
+			alert("error");
+		}
 	}
 	render() {
 		return [
@@ -70,7 +75,7 @@ export default class Form extends React.Component<Props, State> {
 						...appStyles.sectTitle,
 						textAlign: "center",
 						marginTop: 15,
-						marginBottom: 10
+						marginBottom: 10,
 					}}
 				>
 					{this.props.title}
@@ -78,7 +83,7 @@ export default class Form extends React.Component<Props, State> {
 				<Input
 					center={true}
 					placeholder="Ваше имя"
-					onChangeText={text => {
+					onChangeText={(text) => {
 						this.setState({ name: text });
 					}}
 					value={this.state.name}
@@ -86,7 +91,7 @@ export default class Form extends React.Component<Props, State> {
 				<Input
 					center={true}
 					placeholder="Телефон или E-mail"
-					onChangeText={text => {
+					onChangeText={(text) => {
 						this.setState({ contact: text });
 					}}
 					value={this.state.contact}
@@ -94,7 +99,7 @@ export default class Form extends React.Component<Props, State> {
 				<Input
 					center={true}
 					placeholder="Комментарий"
-					onChangeText={text => {
+					onChangeText={(text) => {
 						this.setState({ comment: text });
 					}}
 					value={this.state.comment}
@@ -103,7 +108,7 @@ export default class Form extends React.Component<Props, State> {
 					onPress={this.submit}
 					style={[
 						appStyles.button,
-						{ marginBottom: 20, marginTop: 10 }
+						{ marginBottom: 20, marginTop: 10 },
 					]}
 				>
 					<Text style={appStyles.buttonText}>Отправить</Text>
@@ -131,7 +136,7 @@ export default class Form extends React.Component<Props, State> {
 						Ок
 					</Text>
 				</TouchableOpacity>
-			</Modals>
+			</Modals>,
 		];
 	}
 }

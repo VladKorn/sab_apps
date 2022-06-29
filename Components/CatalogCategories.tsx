@@ -1,294 +1,254 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, SectionList } from "react-native";
 import ProductItem from "./ProductItem";
 import appStyles from "./appStyles";
 import Loading from "./Loading";
 import InputSearch from "./InputSearch";
 import { ScrollView } from "react-native-gesture-handler";
-export default class CatalogCategories extends Component<any, any> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isLoading: true,
-			data: [],
-			search: "",
-			searchRes: [],
-			reset: 0
-			// searchRes: [1949 ,1946 ,1355],
-		};
-		// this.search = this.search.bind(this);
-	}
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { CategoriesList } from "./Catalog/CategoriesList";
 
-	shouldComponentUpdate(nextProps, nextState) {
-		// console.log("shouldComponentUpdate12 navigation state", nextProps.navigation.state);
-		const reset = nextProps.navigation?.state?.params?.reset || false;
-		if (reset !== this.state.reset) {
-			this.setState({ reset: reset });
-			this.props.search("");
-		}
-		// return true;
-		// if(reset && this.props.searchText.length){
-		// }
-		// return true;
-		// console.log(nextProps.screenProps.favorite.length , this.props.screenProps.favorite.length);
-		// if(nextProps.favorite.length !== this.props.favorite.length){
-		//     return true
-		// }
-		const isFavorites = this.props.navigation.state.params
-			? this.props.navigation.state.params.isFavorite || false
-			: false;
-		if (isFavorites) {
-			return true;
-		}
-		// return true;
-		// if (Object.keys(nextProps.screenProps.basket).length !== Object.keys(this.props.screenProps.basket).length) {
-		// 	return true;
-		// }
-		// console.log(this.props.navigation.state);
-		if (nextProps.searchRes.length !== this.props.searchRes.length) {
-			return true;
-		}
-		if (this.props.navigation.state.params) {
-			if (
-				nextProps.navigation.state.params.innerCatId !==
-					this.props.navigation.state.params.innerCatId ||
-				nextProps.navigation.state.params.catId !==
-					this.props.navigation.state.params.catId
-			) {
-				return true;
-			}
-		} else {
-			if (
-				nextProps.navigation.state.params &&
-				!this.props.navigation.state.params
-			) {
-				return true;
-			}
-			return this.state.isLoading;
-		}
-		return false;
-	}
+export const CatalogCategories = (props) => {
+	const navigation = useNavigation();
+	const route = useRoute();
+	const [isLoading, setIsLoading] = useState(true);
+	const [data, setData] = useState([]);
+	const [search, setSearch] = useState("");
+	const [searchRes, setSearchRes] = useState([]);
+	const [reset, setReset] = useState(0);
 
-	componentDidMount() {
+	// shouldComponentUpdate(nextProps, nextState) {
+	// 	return true;
+	// 	// 	const params = navigation.getState().params;
+	// 	// 	const nextParams = nextProps.navigation.getState().params;
+	// 	// TODO
+	// 	// // console.log("shouldComponentUpdate12 navigation state", nextProps.navigation.state);
+	// 	// const reset = nextProps.navigation?.state?.params?.reset || false;
+	// 	// if (reset !== reset) {
+	// 	// 	this.setState({ reset: reset });
+	// 	// 	props.search("");
+	// 	// }
+	// 	// // return true;
+	// 	// // if(reset && props.searchText.length){
+	// 	// // }
+	// 	// // return true;
+	// 	// // console.log(nextProps.screenProps.favorite.length , props.screenProps.favorite.length);
+	// 	// // if(nextProps.favorite.length !== props.favorite.length){
+	// 	// //     return true
+	// 	// // }
+	// 	// const isFavorites = navigation.state.params
+	// 	// 	? navigation.state.params.isFavorite || false
+	// 	// 	: false;
+	// 	// if (isFavorites) {
+	// 	// 	return true;
+	// 	// }
+	// 	// // return true;
+	// 	// // if (Object.keys(nextProps.screenProps.basket).length !== Object.keys(props.screenProps.basket).length) {
+	// 	// // 	return true;
+	// 	// // }
+	// 	// // console.log(navigation.state);
+	// 	// if (nextProps.searchRes.length !== props.searchRes.length) {
+	// 	// 	return true;
+	// 	// }
+	// 	// if (navigation.state.params) {
+	// 	// 	if (
+	// 	// 		nextProps.navigation.state.params.innerCatId !==
+	// 	// 			navigation.state.params.innerCatId ||
+	// 	// 		nextProps.navigation.state.params.catId !==
+	// 	// 			navigation.state.params.catId
+	// 	// 	) {
+	// 	// 		return true;
+	// 	// 	}
+	// 	// } else {
+	// 	// 	if (
+	// 	// 		nextProps.navigation.state.params &&
+	// 	// 		!navigation.state.params
+	// 	// 	) {
+	// 	// 		return true;
+	// 	// 	}
+	// 	// 	return isLoading;
+	// 	// }
+	// 	// return false;
+	// }
+	useEffect(() => {
 		setTimeout(() => {
-			this.setState({ isLoading: false });
+			setIsLoading(false);
 		}, 310);
 		setTimeout(() => {
-			this.forceUpdate();
+			// TODO
+			// this.forceUpdate();
 		}, 100);
-	
-		// const didBlurSubscription = this.props.navigation.addListener(
-		// 	'didFocus',
-		// 	payload => {
-		// 	  console.log('didFocus', payload);
-		// 	  setTimeout(()=>{
-		// 		    console.log('setTimeout forceUpdate');
-		// 		  this.forceUpdate()
+	}, []);
+	useEffect(() => {
+		// console.log("componentDidUpdate", search);
 
-		// 	  },1350)
-		// 	//   console.log('didBlur', payload);
-		// 	}
-		//   );
-		  
-		  // Remove the listener when you are done
-		//   didBlurSubscription.remove();
-	  
-	}
-	componentDidUpdate(prevProps, prevState) {
-		console.log("componentDidUpdate", this.state.search);
-		if (this.state.search) {
-			if (this.props.navigation?.state?.params?.catId === 0) {
-				this.setState({ search: "" });
+		if (search) {
+			if (route.params?.catId === 0) {
+				setSearch("");
 			}
 		}
+	});
+
+	// console.log("navState", navState, catState);
+	if (isLoading) {
+		return null;
 	}
+	const catId = route.params ? route.params.catId : false;
+	const innerCatId = route.params ? route.params.innerCatId : false;
+	// console.log('nav',props.catalog[123]);
 
-	render() {
-		if (this.state.isLoading) {
-			return null;
+	let catalog = {};
+	if (catId && props.catalog[catId]) {
+		catalog[catId] = props.catalog[catId];
+	} else {
+		catalog = props.catalog;
+	}
+	const isFavorites = route.params ? route.params.isFavorite || false : false;
+	// console.log('isFavorites' , isFavorites);
+
+	const products = props.products;
+	let _data = [];
+	let nestedData = {};
+	// console.log('products' , products);
+	// console.log("catalog", catalog);
+	if (!catalog) return null;
+	Object.keys(catalog).forEach((key) => {
+		let cat = catalog[key];
+		let items = [];
+
+		if (cat.cats) {
+			Object.keys(cat.cats).forEach((id) => {
+				const catNested = cat.cats[id];
+				nestedData[id] = {
+					title: catNested.name,
+					data: [],
+				};
+			});
 		}
-		const catId = this.props.navigation.state.params
-			? this.props.navigation.state.params.catId
-			: false;
-		const innerCatId = this.props.navigation.state.params
-			? this.props.navigation.state.params.innerCatId
-			: false;
-		// console.log('nav',this.props.catalog[123]);
+		cat.products
+			? cat.products.map((pkey) => {
+					let item = products[pkey];
+					let isIncludet = true;
+					let isNested = false;
+					// console.log("item", item);
 
-		let catalog = {};
-		if (catId && this.props.catalog[catId]) {
-			catalog[catId] = this.props.catalog[catId];
-		} else {
-			catalog = this.props.catalog;
-		}
-		const isFavorites = this.props.navigation.state.params
-			? this.props.navigation.state.params.isFavorite || false
-			: false;
-		// console.log('isFavorites' , isFavorites);
+					// is in search
+					if (props.searchRes.length > 0) {
+						if (!props.searchRes.includes(parseInt(pkey))) {
+							isIncludet = false;
+						}
+					}
+					// is in favorites
+					if (
+						isFavorites &&
+						!props.favorite.includes(parseInt(item.id))
+					) {
+						isIncludet = false;
+					}
 
-		const products = this.props.products;
-		let data = [];
-		let nestedData = {};
-		// console.log('products' , products);
-		// console.log("catalog", catalog);
-
-		catalog
-			? Object.keys(catalog).map(key => {
-					let cat = catalog[key];
-					let items = [];
-
-					if (cat.cats) {
-						Object.keys(cat.cats).forEach(id => {
-							if (![114, 115, 119, 121].includes(parseInt(id))) {
-								const catNested = cat.cats[id];
-								nestedData[id] = {
-									title: catNested.name,
-									data: []
-								};
-							}
+					// inner category
+					if (innerCatId && cat?.cats) {
+						console.log(
+							"innerCatId",
+							innerCatId,
+							cat.cats[innerCatId]
+						);
+						if (
+							cat?.cats[innerCatId] &&
+							cat.cats[innerCatId]?.products &&
+							!cat.cats[innerCatId].products.includes(
+								parseInt(item.id)
+							)
+						) {
+							isIncludet = false;
+						}
+					}
+					//   remove an item if it is contained in a nested category
+					if (cat?.cats) {
+						const cats = Object.keys(cat?.cats) || [];
+						cats.forEach((id) => {
+							cat.cats[id].products.includes(parseInt(item.id))
+								? (isNested = true)
+								: null;
 						});
 					}
-					cat.products
-						? cat.products.map(pkey => {
-								let item = products[pkey];
-								let isIncludet = true;
-								let isNested = false;
-								// console.log("item", item);
+					//End remove an item if it is contained in a nested category
 
-								// is in search
-								if (this.props.searchRes.length > 0) {
-									if (
-										!this.props.searchRes.includes(
-											parseInt(pkey)
-										)
-									) {
-										isIncludet = false;
-									}
-								}
-								// is in favorites
-								if (
-									isFavorites &&
-									!this.props.favorite.includes(
-										parseInt(item.id)
-									)
-								) {
-									isIncludet = false;
-								}
-
-								// inner category
-								if (innerCatId && cat?.cats) {
-									// console.log('innerCatId' , innerCatId, cat.cats[innerCatId]);
-									if (
-										cat?.cats[innerCatId] &&
-										cat.cats[innerCatId]?.products &&
-										!cat.cats[innerCatId].products.includes(
-											parseInt(item.id)
-										)
-									) {
-										isIncludet = false;
-									}
-								}
-								//   remove an item if it is contained in a nested category
-								if (cat?.cats) {
-									const cats = Object.keys(cat?.cats) || [];
-									cats.forEach(id => {
-										cat.cats[id].products.includes(
-											parseInt(item.id)
-										)
-											? (isNested = true)
-											: null;
-									});
-								}
-								//End remove an item if it is contained in a nested category
-
-								//
-								const isFavorite = this.props.favorite.includes(
-									parseInt(item.id)
-								);
-								// console.log('render' , item.id);
-								const itemFields = {
-									key: item.id,
-									id: item.id,
-									name: item.name,
-									img: item.img,
-									sort: item.sort,
-									price: item.price,
-									basketApi: this.props.basketApi,
-									addToFavorite: this.props.addToFavorite,
-									navigation: this.props.navigation,
-									isFavorite: isFavorite,
-									searchWords: this.props.searchText.split(
-										" "
-									)
-								};
-								if (isIncludet) {
-									if (!isNested) {
-										items.push(itemFields);
-									} else {
-										if (item.parentCategoryId === 114) {
-											item.parentCategoryId = 113;
-										}
-										if (item.parentCategoryId === 115) {
-											item.parentCategoryId = 113;
-										}
-										if (item.parentCategoryId === 119) {
-											item.parentCategoryId = 118;
-										}
-										if (item.parentCategoryId === 121) {
-											item.parentCategoryId = 120;
-										}
-										nestedData[
-											item.parentCategoryId
-										]?.data.push(itemFields);
-										// itemsNested.push(itemFields);
-									}
-								}
-						  })
-						: [];
-
-					items.sort((a, b) => (a.sort < b.sort ? -1 : 1));
-					data.push({
-						sort: cat.id,
-						title: cat.name,
-						data: items
-					});
+					//
+					const isFavorite = props.favorite.includes(
+						parseInt(item.id)
+					);
+					// console.log('render' , item.id);
+					const itemFields = {
+						key: item.id,
+						id: item.id,
+						name: item.name,
+						img: item.img,
+						sort: item.sort,
+						price: item.price,
+						basketApi: props.basketApi,
+						addToFavorite: props.addToFavorite,
+						isFavorite: isFavorite,
+						searchWords: props.searchText.split(" "),
+					};
+					if (isIncludet) {
+						if (!isNested) {
+							items.push(itemFields);
+						} else {
+							nestedData[item.parentCategoryId]?.data.push(
+								itemFields
+							);
+							// itemsNested.push(itemFields);
+						}
+					}
 			  })
 			: [];
-		// return null;
-		// console.log({ nestedData });
-		Object.keys(nestedData).forEach(id => {
-			nestedData[id].data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
-			data.push({
-				sort: id,
-				title: nestedData[id].title,
-				data: nestedData[id].data
-			});
-		});
-		data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
-		// console.log({ data });
 
-		return (
-			<SectionList
-				// ListHeaderComponent={this.props.getHeader}
-				ListHeaderComponent={
+		items.sort((a, b) => (a.sort < b.sort ? -1 : 1));
+		_data.push({
+			sort: cat.id,
+			title: cat.name,
+			data: items,
+		});
+	});
+	// return null;
+	// console.log({ nestedData });
+	Object.keys(nestedData).forEach((id) => {
+		nestedData[id].data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
+		_data.push({
+			sort: id,
+			title: nestedData[id].title,
+			data: nestedData[id].data,
+		});
+	});
+	_data.sort((a, b) => (a.sort < b.sort ? -1 : 1));
+	_data = _data.filter((x) => x.data.length > 0);
+	// console.log({ _data });
+
+	return (
+		<SectionList
+			// ListHeaderComponent={props.getHeader}
+			ListHeaderComponent={
+				<>
 					<InputSearch
-						initialText={this.props.searchText}
-						search={this.props.search}
-						navigation={this.props.navigation}
+						initialText={props.searchText}
+						search={props.search}
 					></InputSearch>
-				}
-				sections={data}
-				keyExtractor={(item: any, index) => item.id + index}
-				stickySectionHeadersEnabled={false}
-				renderItem={({ item }) => (
-					<ProductItem {...item} basket={this.props.basket} />
-				)}
-				renderSectionHeader={({ section: { title } }) => (
-					<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
-						{title}
-					</Text>
-				)}
-			/>
-		);
-	}
-}
+					<CategoriesList mode="horizontal" />
+				</>
+			}
+			sections={_data}
+			keyExtractor={(item: any, index) => item.id + index}
+			stickySectionHeadersEnabled={false}
+			renderItem={({ item }) => (
+				<ProductItem {...item} basket={props.basket} />
+			)}
+			renderSectionHeader={({ section: { title } }) => (
+				<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
+					{title}
+				</Text>
+			)}
+		/>
+	);
+};
+export default CatalogCategories;

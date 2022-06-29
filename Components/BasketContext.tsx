@@ -1,3 +1,2 @@
-import React from "react";
-export const BasketContext = 
-  React.createContext<Partial<any>>({});
+import { createContext } from "react";
+export const BasketContext = createContext<Partial<any>>({});
