@@ -19,17 +19,6 @@ import { Addresses } from "./Order/Addresses";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import appStyles from "./appStyles";
-interface State {
-	priceTotal: number;
-	address: string;
-	date: string;
-	modalIsOpen: boolean;
-	modalOrderIsOpen: boolean;
-	DatePickerIsOpen: boolean;
-	isInitial: boolean;
-	isSunday: boolean;
-	// data: any;
-}
 
 export const Order = (props) => {
 	const navigation = useNavigation();
@@ -46,7 +35,7 @@ export const Order = (props) => {
 	const minDate = _date;
 	const [date, setDate] = useState<Date>(minDate);
 	const [modalIsOpen, setModalIsOpen] = useState(false);
-	const [modalOrderIsOpen, setModalOrderIsOpen] = useState(true);
+	const [modalOrderIsOpen, setModalOrderIsOpen] = useState(false);
 	const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
 	const [isInitial, setIsInitial] = useState(true);
 	const [isSunday, setIsSunday] = useState(false);
@@ -70,6 +59,9 @@ export const Order = (props) => {
 			}
 		);
 	}, []);
+	useEffect(() => {
+		setIsSunday(date.getDay() === 6);
+	}, [date]);
 
 	// componentDidUpdate(prevProps, prevState) {
 	// 	// const datestr = this.state.date.replace('-', ',').replace('-', ',');
@@ -90,63 +82,20 @@ export const Order = (props) => {
 		)} 00:00:00`;
 	};
 
-	const _checkDate = () => {
-		if (isInitial) {
-			return false;
-		}
-		// const date = new Date();
-		// const dateArr = date.split("-");
-
-		// disable for sunday
-		// TODO
-		// const selectedDate = new Date();
-		// selectedDate.setFullYear(parseInt(dateArr[0]));
-		// selectedDate.setMonth(parseInt(dateArr[1]), 0);
-		// selectedDate.setDate(parseInt(dateArr[2]));
-		// console.log('selectedDate'  , selectedDate.getMonth() ,'-',selectedDate.toUTCString(),'-', selectedDate.getDate() , selectedDate.getDay());
-		// if (selectedDate.getDay() === 0) {
-		// 	// console.log('FALSE');
-		// 	setIsSunday(true);
-		// 	return false;
-		// } else {
-		// 	setIsSunday(false);
-		// }
-		// END disable for sunday
-
-		// const selectedDay = parseInt(dateArr[2]);
-
-		if (
-			true
-			// TODO
-			// parseInt(dateArr[0]) === date.getFullYear() &&
-			// parseInt(dateArr[1]) === date.getMonth() + 1 &&
-			// parseInt(dateArr[2]) === date.getDate() &&
-			// date.getHours() > 17
-		) {
-			return false;
-		} else {
-			return true;
-		}
-	};
 	const _setDate = (newDate) => {
 		// this.setState({chosenDate: newDate});
 		// props.navigation.actions.goBack();
 	};
 	const makeOrder = async () => {
-		navigation.navigate("OrderHistory", {
-			screen: "HistoryDetail",
-			params: { pageData: { id: 48643 } },
+		const res = await props.screenProps.makeOrder({
+			address: address,
+			date: formatDate(date),
 		});
-
-		// const res = await props.screenProps.makeOrder({
-		// 	address: address,
-		// 	date: formatDate(date),
-		// });
-		// console.log("Order makeOrder res", res);
-		// if (res.success) {
-		// 	setOrderId(res.orderId);
-		// 	setModalOrderIsOpen(true);
-		// }
+		console.log("Order makeOrder res", res);
+		if (res.success) {
+			setOrderId(res.orderId);
+			setModalOrderIsOpen(true);
+		}
 	};
 
 	if (!props.screenProps.user?.id) {
@@ -274,7 +223,7 @@ export const Order = (props) => {
 			</ScrollView>
 			<TouchableOpacity
 				onPress={() => {
-					_checkDate() ? makeOrder() : setModalIsOpen(true);
+					!isSunday ? makeOrder() : setModalIsOpen(true);
 				}}
 				style={appStyles.buttonBottom}
 			>
@@ -343,7 +292,7 @@ export const Order = (props) => {
 							setTimeout(() => {
 								navigation.navigate("OrderHistory", {
 									screen: "HistoryDetail",
-									params: { pageData: { id: 48643 } },
+									params: { pageData: { id: orderId } },
 								});
 							}, 500);
 						}}

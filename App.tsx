@@ -216,7 +216,7 @@ export default class App extends React.Component<any, State> {
 			.then((res) => res.json())
 			.then((res) => {
 				// console.log("order fetch res-", res);
-				if (res.sucsess) {
+				if (res.success) {
 					// return "success";
 					// alert("ok");
 				} else {
@@ -336,7 +336,7 @@ export default class App extends React.Component<any, State> {
 			.then((res) => res.json())
 			.then((res) => {
 				// console.log('fetch res-', res);
-				if (res.sucsess) {
+				if (res.success) {
 					// if(prod.count === 0){delete state.inBasket[prod.id]}
 				}
 			});
@@ -360,7 +360,7 @@ export default class App extends React.Component<any, State> {
 				console.log("fetch res-", res);
 
 				if (res.success) {
-					// console.log("fetch sucsess");
+					// console.log("fetch success");
 					// if(prod.count === 0){delete state.inBasket[prod.id]}
 				}
 				success = res.success;
