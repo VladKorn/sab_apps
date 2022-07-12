@@ -9,6 +9,7 @@ import {
 	SafeAreaView,
 	StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/colors";
 import months from "../constants/months.js";
 import Modals from "./Modal";
@@ -31,6 +32,8 @@ interface State {
 }
 
 export const Order = (props) => {
+	const navigation = useNavigation();
+	const [orderId, setOrderId] = useState(null);
 	const [priceTotal, setPriceTotal] = useState(0);
 	const [address, setAddress] = useState(
 		props.screenProps.user.addresses
@@ -43,7 +46,7 @@ export const Order = (props) => {
 	const minDate = _date;
 	const [date, setDate] = useState<Date>(minDate);
 	const [modalIsOpen, setModalIsOpen] = useState(false);
-	const [modalOrderIsOpen, setModalOrderIsOpen] = useState(false);
+	const [modalOrderIsOpen, setModalOrderIsOpen] = useState(true);
 	const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
 	const [isInitial, setIsInitial] = useState(true);
 	const [isSunday, setIsSunday] = useState(false);
@@ -57,7 +60,7 @@ export const Order = (props) => {
 		// // console.log("formatedDate", formatedDate);
 		// setDate(formatedDate);
 
-		const didBlurSubscription = props.navigation.addListener(
+		const didBlurSubscription = navigation.addListener(
 			"willBlur",
 			(payload) => {
 				//   console.debug('willBlur', payload);
@@ -130,16 +133,20 @@ export const Order = (props) => {
 		// props.navigation.actions.goBack();
 	};
 	const makeOrder = async () => {
-		const success = await props.screenProps.makeOrder({
-			address: address,
-			date: formatDate(date),
+		navigation.navigate("OrderHistory", {
+			screen: "HistoryDetail",
+			params: { pageData: { id: 48643 } },
 		});
-		console.log("success", success);
-		if (success) {
-			setModalOrderIsOpen(true);
-		} else {
-			alert("error");
-		}
+
+		// const res = await props.screenProps.makeOrder({
+		// 	address: address,
+		// 	date: formatDate(date),
+		// });
+		// console.log("Order makeOrder res", res);
+		// if (res.success) {
+		// 	setOrderId(res.orderId);
+		// 	setModalOrderIsOpen(true);
+		// }
 	};
 
 	if (!props.screenProps.user?.id) {
@@ -334,7 +341,10 @@ export const Order = (props) => {
 						onPress={() => {
 							setModalOrderIsOpen(false);
 							setTimeout(() => {
-								props.navigation.navigate("Home");
+								navigation.navigate("OrderHistory", {
+									screen: "HistoryDetail",
+									params: { pageData: { id: 48643 } },
+								});
 							}, 500);
 						}}
 						style={appStyles.modalButton}

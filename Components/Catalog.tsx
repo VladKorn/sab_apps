@@ -16,7 +16,7 @@ import CatalogCategories from "./CatalogCategories";
 import CustomHeaderBackImage from "./customHeaderBackImage";
 
 import appStyles from "./appStyles";
-import Basket from "./Basket";
+import Basket from "./Basket/Basket";
 interface State {
 	data: object;
 	search: string;
@@ -65,7 +65,6 @@ const Catalog = (props) => {
 					products={screenProps.products}
 					favorite={screenProps.favorite}
 					addToFavorite={screenProps.addToFavorite}
-					basketApi={screenProps.basketApi}
 					basket={screenProps.basket}
 					searchRes={searchRes}
 					searchText={searchText}

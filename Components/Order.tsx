@@ -10,7 +10,7 @@ import {
 	SafeAreaView,
 	StyleSheet,
 } from "react-native";
-import { BasketContext } from "./BasketContext";
+import { BasketContext } from "./Basket/BasketContext";
 import Colors from "../constants/colors";
 
 import Modals from "./Modal";
@@ -42,6 +42,10 @@ export const Order = (props) => {
 	// componentDidUpdate
 	useEffect(() => {
 		getTotalPrice();
+	}, [basketContext.basket]);
+
+	useEffect(() => {
+		getTotalPrice();
 		// getTotalPrice();
 
 		const nav = props.navigation;
@@ -49,16 +53,16 @@ export const Order = (props) => {
 			// console.log(props.screenProps.basket)
 			if (
 				nav.state.params.action === "clear" &&
-				Object.keys(props.screenProps.basket).length > 0
+				Object.keys(basketContext.basket).length > 0
 			) {
-				props.screenProps.basketApi({ action: "clear" });
+				basketContext.basketApi({ action: "clear" });
 			}
 		}
 	});
 
 	const getTotalPrice = async () => {
 		let data: any = {};
-		data.products = props.screenProps.basket;
+		data.products = basketContext.basket;
 		data.userId = props.screenProps.user.id;
 
 		let headers = new Headers();
@@ -88,8 +92,6 @@ export const Order = (props) => {
 		// this.setState({chosenDate: newDate});
 		props.navigation.actions.goBack();
 	};
-	const basket = props.screenProps.basket;
-	const products = props.screenProps.products;
 	// console.log("addresses", props.screenProps.user.addresses);
 
 	return (
@@ -105,10 +107,7 @@ export const Order = (props) => {
 				}}
 			>
 				<Text style={appStyles.sectTitle}>Ваш заказ</Text>
-				<ProductsList
-					basketApi={props.screenProps.basketApi}
-					products={props.screenProps.products}
-				/>
+				<ProductsList products={props.screenProps.products} />
 
 				<Text style={appStyles.sectTitle}>Комментарий к заказу</Text>
 				<TextInput

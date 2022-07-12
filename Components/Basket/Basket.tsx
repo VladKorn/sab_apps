@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { View, Image, Text, TouchableOpacity, Animated } from "react-native";
-import Colors from "../constants/colors";
+import Colors from "../../constants/colors";
 import { BasketContext } from "./BasketContext";
 import { useNavigation } from "@react-navigation/native";
-import { AppContext } from "./App/Context";
+import { AppContext } from "../App/Context";
 
 // const Dimensions = require("Dimensions");
 // const { width, height } = Dimensions.get("window");
@@ -107,7 +107,7 @@ const Basket = () => {
 						marginBottom: 5,
 						// marginTop: 10
 					}}
-					source={require("../img/ico-basket2.png")}
+					source={require("../../img/ico-basket2.png")}
 				/>
 				<Text
 					style={{

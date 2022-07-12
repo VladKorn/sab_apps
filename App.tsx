@@ -7,7 +7,7 @@ import * as Font from "expo-font";
 // import LoginForm from "./Components/LoginForm";
 import AppContainer from "./Components/AppContainer";
 import Loading from "./Components/Loading";
-import { BasketContext } from "./Components/BasketContext";
+import { BasketContext } from "./Components/Basket/BasketContext";
 import { NavigationContainer } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { AsyncStorage } from "react-native";
@@ -217,11 +217,13 @@ export default class App extends React.Component<any, State> {
 			.then((res) => {
 				// console.log("order fetch res-", res);
 				if (res.sucsess) {
-					return "success";
+					// return "success";
 					// alert("ok");
 				} else {
-					return "error";
+					// return "error";
+					alert(res.error);
 				}
+				return res;
 			});
 		return success;
 	}
@@ -387,7 +389,6 @@ export default class App extends React.Component<any, State> {
 			catalog: this.state.catalog,
 			products: this.state.products,
 			basket: this.state.basket,
-			basketApi: this.basketApi,
 			getCatalog: this.getCatalog,
 			makeOrder: this.makeOrder,
 			user: this.state.user,

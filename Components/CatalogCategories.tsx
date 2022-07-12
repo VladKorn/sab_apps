@@ -186,7 +186,6 @@ export const CatalogCategories = (props) => {
 						img: item.img,
 						sort: item.sort,
 						price: item.price,
-						basketApi: props.basketApi,
 						addToFavorite: props.addToFavorite,
 						isFavorite: isFavorite,
 						searchWords: props.searchText.split(" "),

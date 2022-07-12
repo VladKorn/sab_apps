@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { BasketContext } from "./Basket/BasketContext";
 import {
 	View,
 	Text,
@@ -14,7 +15,6 @@ import Colors from "../constants/colors";
 
 interface Props {
 	id: number;
-	basketApi: any;
 	img: string;
 	name: string;
 	price: number;
@@ -22,10 +22,11 @@ interface Props {
 }
 
 export const ProductItemOrder = (props: Props) => {
+	const basketContext = useContext(BasketContext);
 	const [count, setCount] = useState(0);
 
 	const deleteProduct = () => {
-		props.basketApi({
+		basketContext.basketApi({
 			action: "setProduct",
 			params: {
 				productId: props.id,
@@ -35,7 +36,7 @@ export const ProductItemOrder = (props: Props) => {
 	};
 	const onChange = (number, type) => {
 		// console.log('number, type' ,number, type)
-		props.basketApi({
+		basketContext.basketApi({
 			action: "setProduct",
 			params: {
 				productId: props.id,

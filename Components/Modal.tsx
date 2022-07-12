@@ -1,15 +1,15 @@
-import React from "react";
-import Modal ,{
+import { useState, useEffect, useRef } from "react";
+import Modal, {
 	ModalContent,
 	SlideAnimation,
-	ScaleAnimation
+	ScaleAnimation,
 } from "react-native-modals";
 import { View, Text, Animated, StyleSheet, Image } from "react-native";
 import { BlurView } from "expo-blur";
 
 interface Props {
 	isOpen: boolean;
-	isOpenHendler: (boolean)=> void;
+	isOpenHendler: (boolean) => void;
 	height?: number;
 }
 interface State {
@@ -19,60 +19,61 @@ interface State {
 }
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-export default class Modals extends React.Component<Props, State> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			visible: this.props.isOpen,
-			intensity: new Animated.Value(0),
-			visibleBlur: this.props.isOpen
-		};
-	}
-	_blur = () => {
-		let { intensity } = this.state;
-		Animated.timing(intensity, { duration: 400, toValue: 100 }).start();
+export const Modals = (props) => {
+	const [visible, setVisible] = useState(props.isOpen);
+	const [visibleBlur, setVisibleBlur] = useState(props.isOpen);
+	const intensity = useRef(new Animated.Value(0)).current;
+
+	const _blur = () => {
+		Animated.timing(intensity, {
+			duration: 400,
+			toValue: 100,
+			useNativeDriver: false,
+		}).start();
 	};
-	_blurOff = () => {
-		let { intensity } = this.state;
-		Animated.timing(intensity, { duration: 400, toValue: 0 }).start();
+	const _blurOff = () => {
+		Animated.timing(intensity, {
+			duration: 400,
+			toValue: 0,
+			useNativeDriver: false,
+		}).start();
 	};
-	componentDidMount() {
-		this.state.visibleBlur ? this._blur() : null;
-	}
-	componentDidUpdate(prevProps, prevState) {
-		if (this.props.isOpen !== prevProps.isOpen) {
-			if (this.props.isOpen) {
-				this.setState({ visibleBlur: true });
-			}
+	useEffect(() => {
+		visibleBlur ? _blur() : null;
+	}, []);
+	useEffect(() => {
+		if (props.isOpen) {
+			setVisibleBlur(true);
 		}
-		prevProps.isOpen ? this._blur() : null;
-	}
-	render() {
-		return [
-			this.state.visibleBlur ? (
+		// TODO ??
+		props.isOpen ? _blur() : null;
+	}, [props.isOpen]);
+	return (
+		<>
+			{visibleBlur ? (
 				<AnimatedBlurView
 					key={"AnimatedBlurView"}
 					style={StyleSheet.absoluteFill}
 					tint="light"
-					intensity={this.state.intensity}
+					intensity={intensity}
 					blurRadius={0}
 				/>
-			) : null,
+			) : null}
 			<View key={"modal"} style={{}}>
 				<Modal
 					overlayOpacity={0.1}
 					// hasOverlay={false}
 					width={300}
-					height={this.props.height || 310}
+					height={props.height || 310}
 					onDismiss={() => {
 						setTimeout(() => {
-							this.setState({ visibleBlur: false });
-						}, 300);
+							setVisibleBlur(false);
+						}, 100);
 					}}
-					visible={this.props.isOpen}
+					visible={props.isOpen}
 					onTouchOutside={() => {
-						this._blurOff();
-						this.props.isOpenHendler(false);
+						_blurOff();
+						props.isOpenHendler(false);
 						// this.setState({ visible: false })
 					}}
 					// modalAnimation={
@@ -83,14 +84,14 @@ export default class Modals extends React.Component<Props, State> {
 					// }
 					modalAnimation={
 						new SlideAnimation({
-							slideFrom: "bottom"
+							slideFrom: "bottom",
 						})
 					}
 					swipeDirection={["up", "down"]} // can be string or an array
 					swipeThreshold={200} // default 100
-					onSwipeOut={event => {
-						this.props.isOpenHendler(false);
-						this.setState({ visibleBlur: false });
+					onSwipeOut={(event) => {
+						props.isOpenHendler(false);
+						setVisibleBlur(false);
 					}}
 				>
 					<ModalContent>
@@ -100,15 +101,16 @@ export default class Modals extends React.Component<Props, State> {
 									width: 50,
 									height: 50,
 									marginBottom: 20,
-									marginTop: 10
+									marginTop: 10,
 								}}
 								source={require("../img/ico-clock.png")}
 							/>
-							{this.props.children}
+							{props.children}
 						</View>
 					</ModalContent>
 				</Modal>
 			</View>
-		];
-	}
-}
+		</>
+	);
+};
+export default Modals;

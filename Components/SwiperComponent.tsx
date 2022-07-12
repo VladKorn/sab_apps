@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppRegistry, StyleSheet, Text, View } from "react-native";
 import CategorySliderItem from "./CategorySliderItem";
-import Basket from "./Basket";
+import Basket from "./Basket/Basket";
 
 import Swiper from "react-native-swiper";
 

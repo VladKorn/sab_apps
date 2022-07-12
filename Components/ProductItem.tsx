@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { BasketContext } from "./Basket/BasketContext";
 import {
 	View,
 	Text,
@@ -16,6 +17,7 @@ import Highlighter from "react-native-highlight-words";
 import { useNavigation } from "@react-navigation/native";
 
 export const ProductItem = (props) => {
+	const basketContext = useContext(BasketContext);
 	const navigation = useNavigation();
 	// const getCount = () => {
 	// 	const item = props.basket[props.id];
@@ -33,7 +35,7 @@ export const ProductItem = (props) => {
 	};
 	const onChange = (number, type) => {
 		// console.log('number, type' ,number, type)
-		props.basketApi({
+		basketContext.basketApi({
 			action: "setProduct",
 			params: {
 				productId: props.id,

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect, useContext } from "react";
 import {
 	View,
 	Text,
@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 } from "react-native";
+import { BasketContext } from "./Basket/BasketContext";
 import appStyles from "./appStyles";
 import SwiperComponent from "./SwiperComponent";
 import Loading from "./Loading";
@@ -24,162 +25,142 @@ interface State {
 	catName: string;
 	isFavorite: boolean;
 }
-export default class CategorySlider extends React.Component<any, State> {
-	static navigationOptions = {
-		header: null,
-	};
+export const CategorySlider = (props) => {
+	const basketContext = useContext(BasketContext);
+	const [isLoading, setIsLoading] = useState(true);
+	const [currentProductId, setCurrentProductId] = useState(
+		parseInt(props.route.params.id)
+	);
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const [isFavorite, setIsFavorite] = useState(
+		props.screenProps.favorite.includes(currentProductId)
+	);
+	const [catId, setCatId] = useState(0);
+	const [slides, setSlides] = useState([]);
+	const [catName, setCatName] = useState("");
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			isLoading: true,
-			currentProductId: parseInt(this.props.route.params.id),
-			currentIndex: 0,
-			isFavorite: false,
-			catId: 0,
-			slides: [],
-			catName: "",
-		};
-		this.onChange = this.onChange.bind(this);
-		this.onPositionChanged = this.onPositionChanged.bind(this);
-		this.setFvorite = this.setFvorite.bind(this);
-	}
-
-	setFvorite = () => {
-		this.setState({
-			isFavorite: !this.state.isFavorite,
-		});
+	const setFvorite = () => {
+		setIsFavorite(!isFavorite);
 	};
-	onChange(number, type) {
+	const onChange = (number, type) => {
 		// console.log('number, type' ,number, type)
-		this.props.screenProps.basketApi({
+		basketContext.basketApi({
 			action: "setProduct",
 			params: {
-				productId: this.state.currentProductId,
+				productId: currentProductId,
 				count: number,
 			},
 		});
-	}
-	onPositionChanged(index) {
-		// const id = this.props.screenProps.products[this.state.currentProductId].id;
-		// console.log('onPositionChanged' , this.state.slides[index].id);
-		this.setState({
-			currentIndex: index,
-			currentProductId: parseInt(this.state.slides[index].id),
-		});
-	}
-
-	componentDidMount() {
-		const catId = this.props.screenProps.products[
-			this.state.currentProductId
-		].categoryId;
-		const productIndex = this.props.screenProps.catalog[
-			catId
-		].products.indexOf(this.state.currentProductId);
-		// .indexOf(this.state.currentProductId)
-		this.setState({ currentIndex: productIndex, catId: catId });
-		const catName = this.props.screenProps.catalog[catId].name;
+	};
+	const onPositionChanged = (index) => {
+		// const id = props.screenProps.products[currentProductId].id;
+		// console.log('onPositionChanged' , slides[index].id);
+		setCurrentIndex(index);
+		setCurrentProductId(parseInt(slides[index].id));
+	};
+	useEffect(() => {
+		const catId = props.screenProps.products[currentProductId].categoryId;
+		const productIndex = props.screenProps.catalog[catId].products.indexOf(
+			currentProductId
+		);
+		// .indexOf(currentProductId)
+		setCurrentIndex(productIndex);
+		setCatId(catId);
+		const catName = props.screenProps.catalog[catId].name;
 		const slides = [];
 
-		// console.log("this.props.screenProps.products", catId);
-		this.props.screenProps.catalog[catId].products.map((key) => {
-			const item = this.props.screenProps.products[key];
+		// console.log("props.screenProps.products", catId);
+		props.screenProps.catalog[catId].products.map((key) => {
+			const item = props.screenProps.products[key];
 			slides.push(item);
 		});
-		this.setState({ slides: slides, catName: catName });
+		setSlides(slides);
+		setCatName(catName);
 		setTimeout(() => {
-			this.setState({ isLoading: false });
+			setIsLoading(false);
 		}, 500);
-	}
+	}, []);
 
-	render() {
-		if (this.state.isLoading) {
-			return (
-				<View style={{ flex: 1, justifyContent: "center" }}>
-					<Loading></Loading>
-				</View>
-			);
-		}
-		let searchWords = [];
-		if (
-			this.props.navigation.state &&
-			this.props.route.params &&
-			this.props.route.params.searchWords
-		) {
-			searchWords = this.props.route.params.searchWords;
-		}
-		// console.log('navigation' ,JSON.stringify( this.props.navigation  ))
-		// console.log(this.props.screenProps.catalog.cats[this.props.screenProps.products[this.state.currentProduct].categoryId] )
-		// console.log("render");
-		// const isFavorite = this.state.isFavorite;
-		const isFavorite = this.props.screenProps.favorite.includes(
-			this.state.currentProductId
-		);
+	if (isLoading) {
 		return (
-			<SafeAreaView
-				style={[
-					appStyles.page,
-					// this.state.isZoom ? { backgroundColor: "#F2F2F2" } : {}
-				]}
-			>
-				<View style={styles.topBar}>
-					<TouchableOpacity
-						onPress={() => {
-							this.props.navigation.goBack();
-						}}
-					>
-						<Image
-							source={require("../img/ico-close.png")}
-							style={{
-								width: 20.91,
-								height: 18.98,
-								marginRight: 30,
-							}}
-						/>
-					</TouchableOpacity>
-					<Text style={{ fontFamily: "Neuron", fontSize: 24 }}>
-						{this.state.catName} {this.state.currentIndex + 1} /
-						{this.state.slides.length}
-					</Text>
-					<TouchableOpacity
-						onPress={() => {
-							this.props.screenProps.addToFavorite(
-								this.state.currentProductId
-							);
-						}}
-						style={{
-							alignItems: "center",
-							justifyContent: "center",
-							width: 30,
-							height: 30,
-							marginLeft: "auto",
-						}}
-					>
-						<Image
-							style={{ width: 20, height: 17.67 }}
-							source={
-								isFavorite
-									? require("../img/favorite-active.png")
-									: require("../img/favorite.png")
-							}
-						/>
-					</TouchableOpacity>
-				</View>
-				<SwiperComponent
-					slides={this.state.slides}
-					index={this.state.currentIndex}
-					navigation={this.props.navigation}
-					route={this.props.route}
-					onIndexChanged={this.onPositionChanged}
-					basketApi={this.props.screenProps.basketApi}
-					basket={this.props.screenProps.basket}
-					products={this.props.screenProps.products}
-					searchWords={searchWords}
-				/>
-			</SafeAreaView>
+			<View style={{ flex: 1, justifyContent: "center" }}>
+				<Loading></Loading>
+			</View>
 		);
 	}
-}
+	let searchWords = [];
+	if (
+		props.navigation.state &&
+		props.route.params &&
+		props.route.params.searchWords
+	) {
+		searchWords = props.route.params.searchWords;
+	}
+	// console.log('navigation' ,JSON.stringify( props.navigation  ))
+	// console.log(props.screenProps.catalog.cats[props.screenProps.products[currentProduct].categoryId] )
+	// console.log("render");
+	// const isFavorite = isFavorite;
+
+	return (
+		<SafeAreaView
+			style={[
+				appStyles.page,
+				// isZoom ? { backgroundColor: "#F2F2F2" } : {}
+			]}
+		>
+			<View style={styles.topBar}>
+				<TouchableOpacity
+					onPress={() => {
+						props.navigation.goBack();
+					}}
+				>
+					<Image
+						source={require("../img/ico-close.png")}
+						style={{
+							width: 20.91,
+							height: 18.98,
+							marginRight: 30,
+						}}
+					/>
+				</TouchableOpacity>
+				<Text style={{ fontFamily: "Neuron", fontSize: 24 }}>
+					{catName} {currentIndex + 1} /{slides.length}
+				</Text>
+				<TouchableOpacity
+					onPress={() => {
+						props.screenProps.addToFavorite(currentProductId);
+					}}
+					style={{
+						alignItems: "center",
+						justifyContent: "center",
+						width: 30,
+						height: 30,
+						marginLeft: "auto",
+					}}
+				>
+					<Image
+						style={{ width: 20, height: 17.67 }}
+						source={
+							isFavorite
+								? require("../img/favorite-active.png")
+								: require("../img/favorite.png")
+						}
+					/>
+				</TouchableOpacity>
+			</View>
+			<SwiperComponent
+				slides={slides}
+				index={currentIndex}
+				navigation={props.navigation}
+				route={props.route}
+				onIndexChanged={onPositionChanged}
+				basket={props.screenProps.basket}
+				products={props.screenProps.products}
+				searchWords={searchWords}
+			/>
+		</SafeAreaView>
+	);
+};
 
 const styles = StyleSheet.create({
 	topBar: {
@@ -216,4 +197,5 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 	},
 });
+export default CategorySlider;
 AppRegistry.registerComponent("Subexpress", () => CategorySlider);

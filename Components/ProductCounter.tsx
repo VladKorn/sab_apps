@@ -7,7 +7,7 @@ import {
 	TextInput,
 } from "react-native";
 import Colors from "../constants/colors";
-import { BasketContext } from "./BasketContext";
+import { BasketContext } from "./Basket/BasketContext";
 import { tsBasketApi, tsBasket } from "../interfaces";
 
 interface Props {

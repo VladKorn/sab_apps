@@ -30,6 +30,7 @@ import { Categories } from "./Catalog/Categories";
 import { CategoriesList } from "./Catalog/CategoriesList";
 import HeaderRight from "./Catalog/HeaderRight";
 import Catalog from "./Catalog";
+import { OrderHistoryNav } from "./Order/History";
 
 const HomeScreen = (props) => {
 	const appContext = useContext(AppContext);
@@ -267,6 +268,7 @@ const HomeNav = (_props) => {
 			>
 				{(props) => <Catalog {...props} name={"Catalog"} />}
 			</Stack.Screen>
+			{OrderHistoryNav}
 		</Stack.Navigator>
 	);
 };

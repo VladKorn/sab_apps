@@ -2,7 +2,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import appStyles from "./../appStyles";
 import { useContext } from "react";
-import { BasketContext } from "./../BasketContext";
+import { BasketContext } from "../Basket/BasketContext";
 
 const totalProductsCount = (basket): number => {
 	let totalProductsCount = 0;

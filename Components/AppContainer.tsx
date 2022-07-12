@@ -20,8 +20,7 @@ import CategorySlider from "./CategorySlider";
 import Sidebar from "./Sidebar";
 import SidebarCatalog from "./SidebarCatalog";
 import Contacts from "./Contacts";
-import History from "./History";
-import HistoryDetail from "./HistoryDetail";
+import History from "./Order/History";
 import Addresses from "./Addresses";
 import User from "./User";
 import { Info } from "./Info/Info";
@@ -32,7 +31,6 @@ import appStyles from "./appStyles";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-// import { useNavigation, NavigationContainer } from "@react-navigation/native";
 const handleCustomTransition = ({ scenes }) => {
 	const prevScene = scenes[scenes.length - 2];
 	const nextScene = scenes[scenes.length - 1];
@@ -283,7 +281,10 @@ const AppContainer = (_props) => {
 				</Drawer.Screen>
 				<Drawer.Screen
 					name="OrderHistory"
-					options={{ headerTitle: "История заказов" }}
+					options={{
+						headerTitle: "История заказов",
+						// headerShown: false,
+					}}
 				>
 					{(props) => (
 						<History {...props} screenProps={_props.screenProps} />

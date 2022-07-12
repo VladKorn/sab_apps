@@ -2,10 +2,9 @@ import { Text } from "react-native";
 import ProductItemOrder from "./../ProductItemOrder";
 import appStyles from "./../appStyles";
 import { useContext } from "react";
-import { BasketContext } from "./../BasketContext";
+import { BasketContext } from "../Basket/BasketContext";
 
 interface Props {
-	basketApi: any;
 	products: any;
 }
 
@@ -27,7 +26,6 @@ export const ProductsList = (props: Props) => {
 						initialCount={parseInt(
 							basketContext.basket[item.id].count
 						)}
-						basketApi={props.basketApi}
 					/>
 				);
 			})

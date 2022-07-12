@@ -1,7 +1,8 @@
-import React from "react";
+import {} from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import Colors from "../constants/colors";
-import appStyles from "./appStyles";
+import Colors from "../../constants/colors";
+import appStyles from "../appStyles";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 interface Props {
 	id: number;
@@ -14,8 +15,7 @@ interface Props {
 	canceled: string;
 	desc: string;
 	products: Array<object>;
-	navigation: any;
-	basketApi: any;
+	payData: any;
 }
 type StatusTypes = "N" | "P" | "F";
 
@@ -23,10 +23,13 @@ type StatusTypes = "N" | "P" | "F";
 // STATUS_ID == "P"  - оплачен
 // STATUS_ID == "F"  - выполнен
 const HistiryListItem: React.FC<Props> = (props) => {
+	const navigation = useNavigation();
+	// console.log("HistiryListItem payData", props.payData);
+
 	return (
 		<TouchableOpacity
 			onPress={() => {
-				props.navigation.navigate("HistoryDetail", {
+				navigation.navigate("HistoryDetail", {
 					pageData: props,
 				});
 			}}
