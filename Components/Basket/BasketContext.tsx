@@ -56,7 +56,7 @@ export const BasketContainer = ({ children }) => {
 			const __basket = clearEmpty(_basket);
 			// console.log("storeBasket __basket", __basket);
 			try {
-				await AsyncStorage.setItem("@basket", JSON.stringify(__basket));
+				AsyncStorage.setItem("@basket", JSON.stringify(__basket));
 			} catch (e) {
 				// Alert.alert(e);
 			}
