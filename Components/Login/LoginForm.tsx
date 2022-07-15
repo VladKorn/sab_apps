@@ -11,12 +11,12 @@ import {
 	Dimensions,
 	ScrollView,
 } from "react-native";
-import Colors from "../constants/colors";
-import appStyles from "./appStyles";
-import Input from "./Input";
-import CheckBox from "./CheckBox";
-import Loading from "./Loading";
-import { LoginData } from "../interfaces";
+import Colors from "../../constants/colors";
+import appStyles from "../appStyles";
+import Input from "../Input";
+import CheckBox from "../CheckBox";
+import Loading from "../Loading";
+import { LoginData } from "../../interfaces";
 
 interface State {
 	log: string;
@@ -159,7 +159,7 @@ export default class LoginForm extends React.Component<any, State> {
 				<View style={{ flex: 1, justifyContent: "center" }}>
 					<Image
 						style={{ width: 176.77, height: 69.27, margin: 20 }}
-						source={require("../img/logo.png")}
+						source={require("./../../img/logo.png")}
 					/>
 				</View>
 				{this.state.mode === "signUp" ? (

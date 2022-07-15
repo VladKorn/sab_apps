@@ -10,7 +10,7 @@ import {
 	StyleSheet,
 } from "react-native";
 // import Counter from "./Counter";
-import ProductCounter from "./ProductCounter";
+import ProductCounter from "./Product/ProductCounter";
 import Colors from "../constants/colors";
 import appStyles from "./appStyles";
 import { useRoute } from "@react-navigation/native";

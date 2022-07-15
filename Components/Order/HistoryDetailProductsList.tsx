@@ -37,14 +37,19 @@ export const HistoryDetailProductsList = (props: Props) => {
 										X{item.count}
 									</Text>
 								</View>
-								<Text
-									style={{
-										fontFamily: "Neuron",
-										color: Colors.lightText,
-									}}
-								>
-									{item.name}
-								</Text>
+								<View style={{ width: 240 }}>
+									<Text
+										style={{
+											fontFamily: "Neuron",
+											color: Colors.lightText,
+											// borderColor: "red",
+											// borderWidth: 1,
+											width: "auto",
+										}}
+									>
+										{item.name}
+									</Text>
+								</View>
 								<Text
 									style={{
 										fontFamily: "Neuron",

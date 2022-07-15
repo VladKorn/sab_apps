@@ -17,9 +17,11 @@ import Modals from "./Modal";
 
 import appStyles from "./appStyles";
 import { ProductsList } from "./Order/ProductsList";
+import { AuthContext } from "./Login/Login";
 
 export const Order = (props) => {
 	const basketContext = useContext(BasketContext);
+	const authContext = useContext(AuthContext);
 	const [priceTotal, setPriceTotal] = useState(0);
 	const [basePrice, setBasePrice] = useState(0);
 	const [comment, setComment] = useState("");
@@ -63,7 +65,7 @@ export const Order = (props) => {
 	const getTotalPrice = async () => {
 		let data: any = {};
 		data.products = basketContext.basket;
-		data.userId = props.screenProps.user.id;
+		data.userId = authContext.user.id;
 
 		let headers = new Headers();
 		headers.set("Accept", "application/json");
@@ -75,6 +77,7 @@ export const Order = (props) => {
 			headers,
 			body: formData,
 		}).then((res) => res.json());
+		// console.log("getTotalPrice", res);
 		if (res.price && priceTotal !== res.price && !isNaN(res.price)) {
 			setPriceTotal(res.price);
 		}

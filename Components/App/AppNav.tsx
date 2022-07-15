@@ -1,4 +1,4 @@
-import React from "react";
+import {} from "react";
 import "react-native-gesture-handler";
 
 import { Text, StyleSheet, View } from "react-native";
@@ -7,27 +7,27 @@ import { createAppContainer } from "react-navigation";
 // import { createDrawerNavigator } from "react-navigation-drawer";
 import { fromRight, fromBottom } from "react-navigation-transitions";
 import { Button } from "react-native";
-import HeaderRight from "./Catalog/HeaderRight";
+import HeaderRight from "../Catalog/HeaderRight";
 
-import HomeScreen from "./HomeScreen";
-import Catalog from "./Catalog";
-import News from "./News";
-import Stocks from "./Stocks";
-import Order from "./Order";
-import Delivery from "./Delivery";
+import HomeScreen from "../HomeScreen";
+import Catalog from "../Catalog";
+import News from "../News";
+import Stocks from "../Stocks";
+import Order from "../Order";
+import Delivery from "../Delivery";
 
-import CategorySlider from "./CategorySlider";
-import Sidebar from "./Sidebar";
-import SidebarCatalog from "./SidebarCatalog";
-import Contacts from "./Contacts";
-import History from "./Order/History";
-import Addresses from "./Addresses";
-import User from "./User";
-import { Info } from "./Info/Info";
+import CategorySlider from "../CategorySlider";
+import Sidebar from "../Sidebar";
+import SidebarCatalog from "../SidebarCatalog";
+import Contacts from "../Contacts";
+import History from "../Order/History";
+import Addresses from "../Addresses";
+import User from "../User";
+import { Info } from "../Info/Info";
 
 import { TouchableOpacity, Image } from "react-native";
 
-import appStyles from "./appStyles";
+import appStyles from "../appStyles";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -197,7 +197,7 @@ const Drawer = createDrawerNavigator();
 // 	</Stack.Screen>
 // </Stack.Navigator>;
 
-const AppContainer = (_props) => {
+const AppNav = (_props) => {
 	return (
 		<>
 			<Drawer.Navigator
@@ -351,4 +351,4 @@ const AppContainer = (_props) => {
 	);
 };
 // const AppContainer = createAppContainer(AppNavigator);
-export default AppContainer;
+export default AppNav;

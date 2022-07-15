@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo, useCallback } from "react";
 import { BasketContext } from "./Basket/BasketContext";
 import {
 	View,
@@ -10,7 +10,8 @@ import {
 	TouchableHighlight,
 	StyleSheet,
 } from "react-native";
-import Counter from "./Counter";
+// import Counter from "./UI/Counter";
+import ProductCounter from "./Product/ProductCounter";
 import Colors from "../constants/colors";
 
 interface Props {
@@ -23,9 +24,7 @@ interface Props {
 
 export const ProductItemOrder = (props: Props) => {
 	const basketContext = useContext(BasketContext);
-	const [count, setCount] = useState(0);
-
-	const deleteProduct = () => {
+	const deleteProduct = useCallback(() => {
 		basketContext.basketApi({
 			action: "setProduct",
 			params: {
@@ -33,94 +32,86 @@ export const ProductItemOrder = (props: Props) => {
 				count: 0,
 			},
 		});
-	};
-	const onChange = (number, type) => {
-		// console.log('number, type' ,number, type)
-		basketContext.basketApi({
-			action: "setProduct",
-			params: {
-				productId: props.id,
-				count: number,
-			},
-		});
-	};
-	return (
-		<View style={styles.box}>
-			<TouchableOpacity
-				style={{
-					// flex: 1,
-					alignItems: "center",
-					justifyContent: "center",
-					width: 20,
-					height: "100%",
-					marginRight: 5,
-				}}
-				onPress={deleteProduct}
-			>
-				<Image style={{}} source={require("../img/ico-delete.png")} />
-			</TouchableOpacity>
-			<Image
-				style={styles.img}
-				source={{ uri: "https://subexpress.ru/" + props.img }}
-			/>
-			<View
-				style={{
-					flex: 1,
-					minHeight: 80,
-					alignItems: "flex-start",
-					justifyContent: "flex-start",
-					// flexDirection: "row"
-					// backgroundColor: "red",
-				}}
-			>
+	}, []);
+
+	return useMemo(() => {
+		return (
+			<View style={styles.box}>
+				<TouchableOpacity
+					style={{
+						// flex: 1,
+						alignItems: "center",
+						justifyContent: "center",
+						width: 20,
+						height: "100%",
+						marginRight: 5,
+					}}
+					onPress={deleteProduct}
+				>
+					<Image
+						style={{}}
+						source={require("../img/ico-delete.png")}
+					/>
+				</TouchableOpacity>
+				<Image
+					style={styles.img}
+					source={{ uri: "https://subexpress.ru/" + props.img }}
+				/>
 				<View
 					style={{
 						flex: 1,
+						minHeight: 80,
 						alignItems: "flex-start",
 						justifyContent: "flex-start",
-						flexDirection: "row",
+						// flexDirection: "row"
+						// backgroundColor: "red",
 					}}
 				>
-					<Text
+					<View
 						style={{
-							fontSize: 16,
-							fontFamily: "Neuron-Bold",
-							color: "#666774",
-							maxWidth: 150,
+							flex: 1,
+							alignItems: "flex-start",
+							justifyContent: "flex-start",
+							flexDirection: "row",
 						}}
 					>
-						{props.name}
-					</Text>
-				</View>
-				<View
-					style={{
-						flex: 1,
-						flexGrow: 1,
-
-						alignItems: "flex-end",
-						justifyContent: "flex-end",
-						flexDirection: "row",
-					}}
-				>
-					<Text
+						<Text
+							style={{
+								fontSize: 16,
+								fontFamily: "Neuron-Bold",
+								color: "#666774",
+								maxWidth: 150,
+							}}
+						>
+							{props.name}
+						</Text>
+					</View>
+					<View
 						style={{
-							color: "#666774",
-							fontFamily: "Neuron-Heavy",
-							fontSize: 18,
+							flex: 1,
 							flexGrow: 1,
+
+							alignItems: "flex-end",
+							justifyContent: "flex-end",
+							flexDirection: "row",
 						}}
 					>
-						{props.price} руб.
-					</Text>
+						<Text
+							style={{
+								color: "#666774",
+								fontFamily: "Neuron-Heavy",
+								fontSize: 18,
+								flexGrow: 1,
+							}}
+						>
+							{props.price} руб.
+						</Text>
+					</View>
 				</View>
+				<ProductCounter mode="v" id={props.id} />
 			</View>
-			<Counter
-				mode="v"
-				onChange={onChange}
-				InitialValue={props.initialCount}
-			/>
-		</View>
-	);
+		);
+	}, [props.initialCount]);
 };
 
 const styles = StyleSheet.create({

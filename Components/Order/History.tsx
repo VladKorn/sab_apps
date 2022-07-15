@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/colors";
 import appStyles from "../appStyles";
 import HistoryListItem from "./HistoryListItem";
@@ -9,17 +10,25 @@ import HistoryDetail from "./HistoryDetail";
 // import { Stack } from "./../HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { getOrders } from "./getOrders";
+import { AuthContext } from "./../Login/Login";
 export const SidebarCatalog = (props) => {
+	const authContext = useContext(AuthContext);
+	const navigation = useNavigation();
 	const [items, setItems] = useState({});
 	const [active, setActive] = useState<number[]>([]);
 	const [week, setWeek] = useState<number[]>([]);
 	const [month, setMonth] = useState<number[]>([]);
 	const [year, setYear] = useState<number[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		if (!authContext.user.id) {
+			navigation.navigate("User");
+		}
+	}, []);
 
 	useEffect(() => {
 		const start = new Date().getTime();
-		getOrders({ userId: props.screenProps.user.id }).then((res) => {
+		getOrders({ userId: authContext.user.id }).then((res) => {
 			setItems(res.orders.all);
 			setActive(res.orders.active);
 			setWeek(res.orders.week);

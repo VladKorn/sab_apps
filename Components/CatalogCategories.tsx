@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { View, Text, StyleSheet, SectionList } from "react-native";
-import ProductItem from "./ProductItem";
+import ProductItem from "./Product/ProductItem";
 import appStyles from "./appStyles";
 import Loading from "./Loading";
 import InputSearch from "./InputSearch";
@@ -9,9 +9,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { CategoriesList } from "./Catalog/CategoriesList";
 
 export const CatalogCategories = (props) => {
+	// const basketContext = useContext(BasketContext);
+	console.log("CatalogCategories");
+
 	const navigation = useNavigation();
 	const route = useRoute();
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState([]);
 	const [search, setSearch] = useState("");
 	const [searchRes, setSearchRes] = useState([]);
@@ -71,13 +74,9 @@ export const CatalogCategories = (props) => {
 	// 	// return false;
 	// }
 	useEffect(() => {
-		setTimeout(() => {
-			setIsLoading(false);
-		}, 310);
-		setTimeout(() => {
-			// TODO
-			// this.forceUpdate();
-		}, 100);
+		// setTimeout(() => {
+		// 	setIsLoading(false);
+		// }, 310);
 	}, []);
 	useEffect(() => {
 		// console.log("componentDidUpdate", search);
@@ -184,6 +183,7 @@ export const CatalogCategories = (props) => {
 						id: item.id,
 						name: item.name,
 						img: item.img,
+						imgSmall: item.imgSmall,
 						sort: item.sort,
 						price: item.price,
 						addToFavorite: props.addToFavorite,
@@ -224,6 +224,12 @@ export const CatalogCategories = (props) => {
 	_data = _data.filter((x) => x.data.length > 0);
 	// console.log({ _data });
 
+	const renderItem = ({ item }) => {
+		// return useMemo(() => {
+		return <ProductItem {...item} />;
+		// }, []);
+	};
+
 	return (
 		<SectionList
 			// ListHeaderComponent={props.getHeader}
@@ -239,9 +245,7 @@ export const CatalogCategories = (props) => {
 			sections={_data}
 			keyExtractor={(item: any, index) => item.id + index}
 			stickySectionHeadersEnabled={false}
-			renderItem={({ item }) => (
-				<ProductItem {...item} basket={props.basket} />
-			)}
+			renderItem={renderItem}
 			renderSectionHeader={({ section: { title } }) => (
 				<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
 					{title}

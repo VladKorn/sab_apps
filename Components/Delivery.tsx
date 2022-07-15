@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
 	View,
 	ScrollView,
@@ -19,8 +19,10 @@ import { Addresses } from "./Order/Addresses";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import appStyles from "./appStyles";
+import { BasketContext } from "./Basket/BasketContext";
 
 export const Order = (props) => {
+	const basketContext = useContext(BasketContext);
 	const navigation = useNavigation();
 	const [orderId, setOrderId] = useState(null);
 	const [priceTotal, setPriceTotal] = useState(0);
@@ -87,7 +89,7 @@ export const Order = (props) => {
 		// props.navigation.actions.goBack();
 	};
 	const makeOrder = async () => {
-		const res = await props.screenProps.makeOrder({
+		const res = await basketContext.makeOrder({
 			address: address,
 			date: formatDate(date),
 		});

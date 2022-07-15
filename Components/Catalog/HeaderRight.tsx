@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { BasketContext } from "../Basket/BasketContext";
 
 const totalProductsCount = (basket): number => {
+	if (!basket) return 0;
 	let totalProductsCount = 0;
 	Object.keys(basket).map((key) => {
 		totalProductsCount = parseInt(basket[key].count) + totalProductsCount;
@@ -33,7 +34,7 @@ const HeaderRight = () => {
 				/>
 			</TouchableOpacity>
 			<TouchableOpacity
-				style={{ width: 40, height: 40 }}
+				style={{ width: 40, height: 40, marginRight: 25 }}
 				onPress={() => {
 					navigation.navigate("Order");
 				}}

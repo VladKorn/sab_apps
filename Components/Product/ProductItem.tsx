@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { BasketContext } from "./Basket/BasketContext";
+// import { BasketContext } from "./Basket/BasketContext";
 import {
 	View,
 	Text,
@@ -10,14 +10,24 @@ import {
 	TouchableHighlight,
 	StyleSheet,
 } from "react-native";
-// import Counter from "./Counter";
 import ProductCounter from "./ProductCounter";
-import Colors from "../constants/colors";
+import Colors from "../../constants/colors";
 import Highlighter from "react-native-highlight-words";
 import { useNavigation } from "@react-navigation/native";
 
-export const ProductItem = (props) => {
-	const basketContext = useContext(BasketContext);
+interface Props {
+	isFavorite: boolean;
+	addToFavorite: (x: number) => void;
+	id: number;
+	searchWords: any;
+	imgSmall: string;
+	img: string;
+	name: string;
+	price: any;
+}
+
+export const ProductItem = (props: Props) => {
+	// console.log("ProductItem props", props);
 	const navigation = useNavigation();
 	// const getCount = () => {
 	// 	const item = props.basket[props.id];
@@ -31,19 +41,8 @@ export const ProductItem = (props) => {
 
 	const addToFavorite = () => {
 		setIsFavorite(!isFavorite);
-		props.addToFavorite(parseInt(props.id));
+		props.addToFavorite(parseInt(props.id + ""));
 	};
-	const onChange = (number, type) => {
-		// console.log('number, type' ,number, type)
-		basketContext.basketApi({
-			action: "setProduct",
-			params: {
-				productId: props.id,
-				count: number,
-			},
-		});
-	};
-
 	return (
 		<View style={styles.box}>
 			<TouchableOpacity
@@ -58,7 +57,7 @@ export const ProductItem = (props) => {
 					<Image
 						style={styles.img}
 						source={{
-							uri: "https://subexpress.ru/" + props.img,
+							uri: "https://subexpress.ru/" + props.imgSmall,
 							cache: "force-cache",
 						}}
 					/>
@@ -126,8 +125,8 @@ export const ProductItem = (props) => {
 							style={{ width: 20, height: 17.67 }}
 							source={
 								isFavorite
-									? require("../img/favorite-active.png")
-									: require("../img/favorite.png")
+									? require("./../../img/favorite-active.png")
+									: require("./../../img/favorite.png")
 							}
 						/>
 					</TouchableHighlight>

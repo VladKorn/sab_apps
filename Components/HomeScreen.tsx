@@ -18,6 +18,7 @@ import appStyles from "./appStyles";
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
 const totalProductsCount = (basket): number => {
+	if (!basket) return 0;
 	let totalProductsCount = 0;
 	Object.keys(basket).map((key) => {
 		totalProductsCount = parseInt(basket[key].count) + totalProductsCount;
@@ -31,9 +32,11 @@ import { CategoriesList } from "./Catalog/CategoriesList";
 import HeaderRight from "./Catalog/HeaderRight";
 import Catalog from "./Catalog";
 import { OrderHistoryNav } from "./Order/History";
+import { BasketContext } from "./Basket/BasketContext";
 
 const HomeScreen = (props) => {
 	const appContext = useContext(AppContext);
+	const basketContext = useContext(BasketContext);
 	const navigation = useNavigation();
 
 	const sliderImages = [];
@@ -162,7 +165,7 @@ const HomeScreen = (props) => {
 											appContext.basket
 									  ).length
 									: null} */}
-							{totalProductsCount(appContext.basket)}
+							{totalProductsCount(basketContext.basket)}
 						</Text>
 					</View>
 				</TouchableOpacity>
