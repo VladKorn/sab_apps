@@ -9,6 +9,8 @@ export interface IAuthContext {
 	saveLoginData: (z: string, x: string) => void;
 	user: User;
 	loginData: LoginData;
+	autoLogin: any;
+	setUser: any;
 }
 interface User {
 	id: number;
@@ -19,9 +21,9 @@ export const AuthContainer = ({ children }) => {
 	const [user, setUser] = useState<User>({ id: null });
 	const [loginData, setLoginData] = useState<LoginData | null>(null);
 	useEffect(() => {
-		autoLogin();
+		// autoLogin();
 	}, []);
-	const autoLogin = () => {
+	const autoLogin = async () => {
 		let loginData: LoginData = { log: "", pas: "" };
 		const getLoginData = async (loginData) => {
 			try {
@@ -51,10 +53,12 @@ export const AuthContainer = ({ children }) => {
 			} catch (e) {
 				// alert("getLoginData" + e);
 			}
-
-			login(loginData);
+			return loginData;
 		};
-		getLoginData(loginData);
+		const _loginData = await getLoginData(loginData);
+		console.log("autoLogin  _loginData", _loginData);
+
+		login(_loginData);
 	};
 
 	const logout = () => {
@@ -64,6 +68,8 @@ export const AuthContainer = ({ children }) => {
 		setUser({ id: null });
 	};
 	const login = async (loginData: LoginData) => {
+		console.log("login loginData", loginData);
+
 		if (loginData.save && loginData.mode !== "signUp") {
 			saveLoginData(loginData.log, loginData.pas);
 			// console.log("login loginData", loginData);
@@ -74,7 +80,7 @@ export const AuthContainer = ({ children }) => {
 		setLoginData(loginData);
 		// return await getData(loginData);
 
-		// return 'resasd';
+		return user;
 	};
 	const saveLoginData = (log, pas) => {
 		// console.log("saveLoginData", log, pas);
@@ -109,6 +115,8 @@ export const AuthContainer = ({ children }) => {
 				logout: logout,
 				login: login,
 				saveLoginData: saveLoginData,
+				autoLogin: autoLogin,
+				setUser: setUser,
 				user: user,
 				loginData: loginData,
 			}}

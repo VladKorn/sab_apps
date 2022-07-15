@@ -95,7 +95,6 @@ export const Order = (props) => {
 		// this.setState({chosenDate: newDate});
 		props.navigation.actions.goBack();
 	};
-	// console.log("addresses", props.screenProps.user.addresses);
 
 	return (
 		<SafeAreaView style={appStyles.page}>
@@ -207,7 +206,7 @@ export const Order = (props) => {
 			</ScrollView>
 			<TouchableOpacity
 				onPress={() => {
-					props.screenProps.setOrderData({
+					basketContext.setOrderData({
 						comment: comment,
 						promo: promo,
 					});

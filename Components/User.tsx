@@ -66,7 +66,7 @@ export const User = (props) => {
 	if (!authContext.user?.id) {
 		return (
 			// TODO userError
-			<LoginForm login={props.screenProps.login} userError={null} />
+			<LoginForm login={authContext.login} userError={null} />
 		);
 	}
 	return (
@@ -88,7 +88,7 @@ export const User = (props) => {
 				<Input
 					center={true}
 					value={company}
-					placeholder={props.screenProps.user.company}
+					placeholder={authContext.user.company}
 					onChangeText={(text) => {
 						setCompany(text);
 					}}
@@ -97,7 +97,7 @@ export const User = (props) => {
 				<Input
 					center={true}
 					value={name}
-					placeholder={props.screenProps.user.name}
+					placeholder={authContext.user.name}
 					onChangeText={(text) => {
 						setName(text);
 					}}
@@ -108,7 +108,7 @@ export const User = (props) => {
 				<Input
 					center={true}
 					value={lastName}
-					placeholder={props.screenProps.user.lastName}
+					placeholder={authContext.user.lastName}
 					onChangeText={(text) => {
 						setLastName(text);
 					}}
@@ -119,7 +119,7 @@ export const User = (props) => {
 				<Input
 					center={true}
 					value={log}
-					placeholder={props.screenProps.user.log}
+					placeholder={authContext.user.log}
 					onChangeText={(text) => {
 						setLog(text);
 					}}
@@ -161,7 +161,7 @@ export const User = (props) => {
 
 				<TouchableOpacity
 					onPress={() => {
-						props.screenProps.logout();
+						authContext.logout();
 					}}
 					style={[
 						appStyles.button,

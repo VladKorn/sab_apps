@@ -27,11 +27,16 @@ export const App = () => {
 		false
 	);
 	const [userError, setUserError] = useState({});
+	useEffect(() => {
+		authContext.autoLogin();
+	}, []);
 
 	useEffect(() => {
 		if (authContext.loginData) {
-			console.log("App authContext", authContext);
-			getData(authContext.loginData);
+			console.log("App authContext", authContext.loginData);
+			if (authContext.loginData.log && authContext.loginData.pas) {
+				getData(authContext.loginData);
+			}
 		}
 	}, [authContext]);
 
@@ -57,7 +62,7 @@ export const App = () => {
 	const getData = async (loginData: LoginData) => {
 		// let res = false;
 		const getData = async (loginData: LoginData) => {
-			// console.log("getData", loginData);
+			console.log("getData", loginData);
 			return await fetch("https://subexpress.ru/apps_api/", {
 				method: "post",
 				body: JSON.stringify({ loginData: loginData }),
@@ -87,7 +92,10 @@ export const App = () => {
 						authContext.saveLoginData(loginData.log, res.user.pas);
 					}
 
-					// console.log("getData res.products", res.catalog.products);
+					console.log("getData res.user", res.user);
+					if (!authContext?.user?.id) {
+						authContext.setUser(res.user);
+					}
 					return res.user;
 				})
 				.catch((error) => {

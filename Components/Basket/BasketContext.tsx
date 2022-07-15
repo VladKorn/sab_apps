@@ -128,13 +128,13 @@ export const BasketContainer = ({ children }) => {
 		try {
 			const locBasket = await AsyncStorage.getItem("@basket");
 			const _basket = locBasket || JSON.stringify({});
-			console.log("locBasket , _basket", locBasket, _basket);
-			console.log("getBasket", await AsyncStorage.getItem("@basket"));
+			// console.log("locBasket , _basket", locBasket, _basket);
+			// console.log("getBasket", await AsyncStorage.getItem("@basket"));
 			setIsInit(true);
 			if (_basket) {
 				setBasket(JSON.parse(_basket));
 			}
-			console.log("getBasket", basket);
+			// console.log("getBasket", basket);
 			return basket;
 		} catch (e) {
 			// Alert.alert(e);

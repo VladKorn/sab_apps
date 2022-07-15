@@ -106,7 +106,7 @@ export default class LoginForm extends React.Component<any, State> {
 			mode: this.state.mode,
 		};
 		this.props.login(loginData).then((user) => {
-			// console.log('form user' , user);
+			console.log("form user", user);
 
 			if (user && user.error) {
 				if (user.error === "log") {

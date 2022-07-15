@@ -20,16 +20,17 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import appStyles from "./appStyles";
 import { BasketContext } from "./Basket/BasketContext";
+import { AuthContext } from "./Login/Login";
 
 export const Order = (props) => {
 	const basketContext = useContext(BasketContext);
+	const authContext = useContext(AuthContext);
+
 	const navigation = useNavigation();
 	const [orderId, setOrderId] = useState(null);
 	const [priceTotal, setPriceTotal] = useState(0);
 	const [address, setAddress] = useState(
-		props.screenProps.user.addresses
-			? props.screenProps.user.addresses[0]
-			: null
+		authContext.user?.addresses ? authContext.user.addresses[0] : null
 	);
 
 	const _date = new Date();
@@ -100,7 +101,7 @@ export const Order = (props) => {
 		}
 	};
 
-	if (!props.screenProps.user?.id) {
+	if (!authContext.user?.id) {
 		return (
 			<View style={appStyles.paddings}>
 				<Text style={appStyles.sectTitle}>
@@ -132,7 +133,7 @@ export const Order = (props) => {
 			>
 				<Text style={appStyles.sectTitle}>Адрес</Text>
 				<Addresses
-					user={props.screenProps.user}
+					user={authContext.user}
 					setAddress={setAddress}
 					address={address}
 				/>
