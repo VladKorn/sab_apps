@@ -98,7 +98,7 @@ const HomeScreen = (props) => {
 											color: Colors.text,
 										}}
 									>
-										{item.name}
+										{item.id} {item.name}
 									</Text>
 									<Text
 										style={{

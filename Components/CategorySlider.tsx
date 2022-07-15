@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import {
 	View,
 	Text,
@@ -8,78 +8,119 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 } from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { BasketContext } from "./Basket/BasketContext";
+import { AppContext } from "./App/Context";
+
 import appStyles from "./appStyles";
 import SwiperComponent from "./SwiperComponent";
 import Loading from "./Loading";
+import { Head } from "./Slider/Head";
 
-// interface Slides {
-//     id: number;
-// }
-interface State {
-	currentProductId: number;
-	currentIndex: number;
-	catId: number;
-	isLoading: boolean;
-	slides: Array<object>;
-	catName: string;
-	isFavorite: boolean;
+interface Props {
+	initialProductId: number;
+	searchWords?: string[];
 }
-export const CategorySlider = (props) => {
-	const basketContext = useContext(BasketContext);
-	const [isLoading, setIsLoading] = useState(true);
-	const [currentProductId, setCurrentProductId] = useState(
-		parseInt(props.route.params.id)
-	);
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const [isFavorite, setIsFavorite] = useState(
-		props.screenProps.favorite.includes(currentProductId)
-	);
-	const [catId, setCatId] = useState(0);
-	const [slides, setSlides] = useState([]);
-	const [catName, setCatName] = useState("");
+export const CategorySlider = (props: Props) => {
+	const appContext = useContext(AppContext);
 
-	const setFvorite = () => {
-		setIsFavorite(!isFavorite);
+	console.log("initialProductId", props.initialProductId);
+
+	const [isLoading, setIsLoading] = useState(false);
+
+	const catId = appContext.products[props.initialProductId].categoryId;
+
+	// const getProductByIndex = (id:number)=>{
+	//     appContext.catalog[catId].products.indexOf(props.initialProductId)
+	// }
+
+	const [productIndex, setProductIndex] = useState(
+		appContext.catalog[catId].products.indexOf(props.initialProductId)
+	);
+	console.log("CategorySlider productIndex", productIndex);
+
+	const [currentProductId, setCurrentProductId] = useState(
+		props.initialProductId
+	);
+
+	// const productIndex = appContext.catalog[catId].products.indexOf(
+	// 	currentProductId
+	// );
+
+	useEffect(() => {
+		const id = appContext.catalog[catId].products[productIndex];
+		// console.log("useEffect productIndex", productIndex, id);
+		setCurrentProductId(id);
+	}, [productIndex]);
+
+	// useEffect(() => {
+	// 	setProductIndex(
+	// 		appContext.catalog[catId].products.indexOf(currentProductId)
+	// 	);
+	// }, [currentProductId]);
+	useEffect(() => {
+		const index = appContext.catalog[catId].products.indexOf(
+			props.initialProductId
+		);
+		console.log(
+			"useEffect props.initialProductId",
+			props.initialProductId,
+			index
+		);
+		// setProductIndex(index);
+		// setCurrentProductId(props.initialProductId);
+	}, [props.initialProductId]);
+
+	const onClose = () => {
+		// setProductIndex(0);
 	};
-	const onChange = (number, type) => {
-		// console.log('number, type' ,number, type)
-		basketContext.basketApi({
-			action: "setProduct",
-			params: {
-				productId: currentProductId,
-				count: number,
-			},
-		});
-	};
+	// useEffect(() => {
+	// 	const unsubscribe = navigation.addListener("focus", () => {
+	// 		console.log("focus", initialProductId);
+	// 		setCurrentProductId(initialProductId);
+	// 	});
+	// 	return unsubscribe;
+	// }, [navigation, initialProductId, route.params.id]);
+	// useEffect(() => {
+	// 	console.log("currentProductId", currentProductId, currentIndex);
+	// 	if (isLoading) {
+	// 		setData();
+	// 	}
+	// }, [currentProductId]);
+	// useEffect(() => {
+	// 	console.log("useEffect initialProductId", initialProductId);
+	// 	// setData();
+	// }, [initialProductId]);
+
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		setIsLoading(false);
+	// 	}, 500);
+	// }, []);
+
+	// console.log("currentProductId2", currentProductId, productIndex);
+	const slides = appContext.catalog[catId].products.map((id) => {
+		return appContext.products[id];
+	});
+
 	const onPositionChanged = (index) => {
 		// const id = props.screenProps.products[currentProductId].id;
-		// console.log('onPositionChanged' , slides[index].id);
-		setCurrentIndex(index);
-		setCurrentProductId(parseInt(slides[index].id));
-	};
-	useEffect(() => {
-		const catId = props.screenProps.products[currentProductId].categoryId;
-		const productIndex = props.screenProps.catalog[catId].products.indexOf(
-			currentProductId
+		// setProductIndex(index);
+		console.log("====");
+		console.log(
+			"onPositionChanged",
+			index,
+			productIndex,
+			slides[index]?.id
 		);
-		// .indexOf(currentProductId)
-		setCurrentIndex(productIndex);
-		setCatId(catId);
-		const catName = props.screenProps.catalog[catId].name;
-		const slides = [];
-
-		// console.log("props.screenProps.products", catId);
-		props.screenProps.catalog[catId].products.map((key) => {
-			const item = props.screenProps.products[key];
-			slides.push(item);
-		});
-		setSlides(slides);
-		setCatName(catName);
-		setTimeout(() => {
-			setIsLoading(false);
-		}, 500);
-	}, []);
+		setProductIndex(index);
+	};
+	console.log(
+		"slide",
+		currentProductId,
+		productIndex,
+		slides[productIndex]?.name
+	);
 
 	if (isLoading) {
 		return (
@@ -88,75 +129,29 @@ export const CategorySlider = (props) => {
 			</View>
 		);
 	}
-	let searchWords = [];
-	if (
-		props.navigation.state &&
-		props.route.params &&
-		props.route.params.searchWords
-	) {
-		searchWords = props.route.params.searchWords;
-	}
+
 	// console.log('navigation' ,JSON.stringify( props.navigation  ))
 	// console.log(props.screenProps.catalog.cats[props.screenProps.products[currentProduct].categoryId] )
-	// console.log("render");
 	// const isFavorite = isFavorite;
+	console.log("productIndex", productIndex, props.initialProductId);
 
 	return (
 		<SafeAreaView
-			style={[
-				appStyles.page,
-				// isZoom ? { backgroundColor: "#F2F2F2" } : {}
-			]}
+			style={[appStyles.page, { paddingTop: 85, marginTop: 0 }]}
 		>
-			<View style={styles.topBar}>
-				<TouchableOpacity
-					onPress={() => {
-						props.navigation.goBack();
-					}}
-				>
-					<Image
-						source={require("../img/ico-close.png")}
-						style={{
-							width: 20.91,
-							height: 18.98,
-							marginRight: 30,
-						}}
-					/>
-				</TouchableOpacity>
-				<Text style={{ fontFamily: "Neuron", fontSize: 24 }}>
-					{catName} {currentIndex + 1} /{slides.length}
-				</Text>
-				<TouchableOpacity
-					onPress={() => {
-						props.screenProps.addToFavorite(currentProductId);
-					}}
-					style={{
-						alignItems: "center",
-						justifyContent: "center",
-						width: 30,
-						height: 30,
-						marginLeft: "auto",
-					}}
-				>
-					<Image
-						style={{ width: 20, height: 17.67 }}
-						source={
-							isFavorite
-								? require("../img/favorite-active.png")
-								: require("../img/favorite.png")
-						}
-					/>
-				</TouchableOpacity>
-			</View>
+			<Head
+				catName={appContext.catalog[catId].name}
+				productIndex={productIndex}
+				currentProductId={currentProductId}
+				slidesLength={slides.length}
+				onClose={onClose}
+			/>
 			<SwiperComponent
+				key={catId}
 				slides={slides}
-				index={currentIndex}
-				navigation={props.navigation}
-				route={props.route}
+				index={productIndex}
 				onIndexChanged={onPositionChanged}
-				basket={props.screenProps.basket}
-				products={props.screenProps.products}
-				searchWords={searchWords}
+				searchWords={props.searchWords}
 			/>
 		</SafeAreaView>
 	);
@@ -197,5 +192,21 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 	},
 });
-export default CategorySlider;
+const CategoryContainer = () => {
+	const route = useRoute();
+	const initialProductId = parseInt(route.params.id);
+
+	let searchWords = [];
+	if (route.params && route.params.searchWords) {
+		searchWords = route.params.searchWords;
+	}
+
+	return (
+		<CategorySlider
+			initialProductId={initialProductId}
+			searchWords={searchWords}
+		/>
+	);
+};
+export default CategoryContainer;
 AppRegistry.registerComponent("Subexpress", () => CategorySlider);

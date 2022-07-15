@@ -11,9 +11,14 @@ const styles = StyleSheet.create({
 		//   backgroundColor: 'gray'
 	},
 });
+interface Props {
+	slides: any[];
+	searchWords: string[];
+	onIndexChanged: any;
+	index: number;
+}
 
-const SwiperComponent = (props: any) => {
-	const [currentIndex, setCurrentIndex] = useState(0);
+const SwiperComponent = (props: Props) => {
 	const [isZoom, setIsZoom] = useState(false);
 
 	const zoom = (zoom: boolean) => {
@@ -23,6 +28,7 @@ const SwiperComponent = (props: any) => {
 		// console.log('onPositionChanged' , index);
 		// this.setState({ currentIndex: index });
 	};
+	// Swiper.sc
 	const slides = props.slides.map((item: any, index: any) => (
 		<CategorySliderItem
 			key={index}
@@ -32,6 +38,11 @@ const SwiperComponent = (props: any) => {
 			searchWords={props.searchWords}
 		/>
 	));
+	// console.log(
+	// 	"SwiperComponent props.slides",
+	// 	props.index,
+	// 	props.slides[props.index].name
+	// );
 
 	return (
 		<View style={{ flex: 1 }}>

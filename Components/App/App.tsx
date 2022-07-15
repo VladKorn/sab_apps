@@ -87,7 +87,7 @@ export const App = () => {
 						authContext.saveLoginData(loginData.log, res.user.pas);
 					}
 
-					console.log("getData res.products", res.catalog.products);
+					// console.log("getData res.products", res.catalog.products);
 					return res.user;
 				})
 				.catch((error) => {
@@ -150,7 +150,7 @@ export const App = () => {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				console.log("fetch res-", res);
+				// console.log("fetch res-", res);
 
 				if (res.success) {
 					// console.log("fetch success");

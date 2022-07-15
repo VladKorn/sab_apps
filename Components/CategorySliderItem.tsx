@@ -22,18 +22,15 @@ const ANIMTIME = 200;
 
 const IMGMIN = 333;
 const IMGMAX = 500;
-export const CategorySliderItem = (props) => {
-	// console.log("CategorySliderItem props", props);
-	const route = useRoute();
-	const [currentProduct, setCurrentProduct] = useState(
-		parseInt(route.params.id)
-	);
-	const [currentIndex, setCurrentIndex] = useState(0);
+interface Props {
+	isZoom: boolean;
+	item: any;
+	zoom: any;
+	searchWords: string[];
+}
+export const CategorySliderItem = (props: Props) => {
 	const [isZoom, setIsZoom] = useState(props.isZoom);
 	const [size, setSize] = useState({ width, height });
-	const [catId, setCatId] = useState(0);
-	const [slides, setSlides] = useState([]);
-	const [catName, setCatName] = useState("");
 	const [isAnimationEnded, setIsAnimationEnded] = useState(true);
 	const [isContentHidden, setIsContentHidden] = useState(false);
 	const aminImg = useRef(new Animated.Value(200)).current;
@@ -89,11 +86,6 @@ export const CategorySliderItem = (props) => {
 			});
 		}
 	};
-
-	const onPositionChanged = (index) => {
-		// console.log('onPositionChanged' , index);
-		setCurrentIndex(index);
-	};
 	return (
 		<View style={[size, isZoom ? { backgroundColor: "#F2F2F2" } : {}]}>
 			<TouchableWithoutFeedback onPress={zoomToggle}>
@@ -144,6 +136,7 @@ export const CategorySliderItem = (props) => {
 							color: Colors.gray,
 						}}
 					>
+						{props.item.id}{" "}
 						<Highlighter
 							highlightStyle={{
 								backgroundColor: "#DDDDDD",
