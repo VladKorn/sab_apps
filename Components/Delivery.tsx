@@ -21,8 +21,9 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import appStyles from "./appStyles";
 import { BasketContext } from "./Basket/BasketContext";
 import { AuthContext } from "./Login/Login";
+interface Props {}
 
-export const Order = (props) => {
+export const Delivery = (props: Props) => {
 	const basketContext = useContext(BasketContext);
 	const authContext = useContext(AuthContext);
 
@@ -315,7 +316,6 @@ export const Order = (props) => {
 		</SafeAreaView>
 	);
 };
-export default Order;
 const styles = StyleSheet.create({
 	dateLabel: {
 		borderBottomColor: "#E2E2E2",

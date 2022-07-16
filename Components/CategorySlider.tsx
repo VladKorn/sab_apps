@@ -21,7 +21,7 @@ interface Props {
 	initialProductId: number;
 	searchWords?: string[];
 }
-export const CategorySlider = (props: Props) => {
+const CategorySlider = (props: Props) => {
 	const appContext = useContext(AppContext);
 
 	console.log("initialProductId", props.initialProductId);

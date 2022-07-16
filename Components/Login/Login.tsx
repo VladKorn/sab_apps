@@ -5,7 +5,7 @@ import CryptoJS from "crypto-js";
 import { LoginData } from "../../interfaces";
 export interface IAuthContext {
 	logout: () => void;
-	login: (x: LoginData) => void;
+	login: (x: LoginData) => any;
 	saveLoginData: (z: string, x: string) => void;
 	user: User;
 	loginData: LoginData;
@@ -21,7 +21,7 @@ export const AuthContainer = ({ children }) => {
 	const [user, setUser] = useState<User>({ id: null });
 	const [loginData, setLoginData] = useState<LoginData | null>(null);
 	useEffect(() => {
-		// autoLogin();
+		autoLogin();
 	}, []);
 	const autoLogin = async () => {
 		let loginData: LoginData = { log: "", pas: "" };
@@ -56,7 +56,7 @@ export const AuthContainer = ({ children }) => {
 			return loginData;
 		};
 		const _loginData = await getLoginData(loginData);
-		console.log("autoLogin  _loginData", _loginData);
+		// console.log("autoLogin  _loginData", _loginData);
 
 		login(_loginData);
 	};
@@ -74,13 +74,22 @@ export const AuthContainer = ({ children }) => {
 			saveLoginData(loginData.log, loginData.pas);
 			// console.log("login loginData", loginData);
 		}
-		// const res = await getData(loginData);
-		// console.log("login loginData", loginData);
-
 		setLoginData(loginData);
-		// return await getData(loginData);
+		const res = await fetch(
+			"https://subexpress.ru/apps_api/login.php?action=login",
+			{
+				method: "post",
+				body: JSON.stringify({ loginData: loginData }),
+			}
+		).then((res) => res.json());
 
-		return user;
+		// console.log("login res", res);
+
+		if (res.user) {
+			setUser(res.user);
+		}
+
+		return res.user;
 	};
 	const saveLoginData = (log, pas) => {
 		// console.log("saveLoginData", log, pas);

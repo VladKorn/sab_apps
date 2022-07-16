@@ -12,19 +12,11 @@ interface Props {
 export const ProductsList = (props: Props) => {
 	const basketContext = useContext(BasketContext);
 	console.log("ProductsList");
-	const basketEmpty = !(Object.entries(basketContext.basket).length > 0);
-	const productsEmpty = !(Object.entries(props.products).length > 0);
 
 	const items = Object.keys(basketContext.basket).map((key) => {
 		let item = props.products[key];
 		const count = basketContext.basket[item.id].count;
-		// return useMemo(() => {
-		// if (basketEmpty) {
-		// 	return <Text style={appStyles.text}>Корзина пуста</Text>;
-		// }
-		// if (productsEmpty) {
-		// 	return null;
-		// }
+
 		return (
 			<ProductItemOrder
 				key={item.id}

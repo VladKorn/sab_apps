@@ -33,7 +33,7 @@ const Basket = () => {
 
 		const timer = setTimeout(() => {
 			setIsVisible(false);
-		}, 3000);
+		}, 6000);
 
 		return () => {
 			clearTimeout(timer);
@@ -90,7 +90,7 @@ const Basket = () => {
 				}}
 				style={{
 					backgroundColor: Colors.assent,
-					height: 55,
+					height: 75,
 					alignItems: "center",
 					justifyContent: "flex-start",
 					paddingLeft: 50,

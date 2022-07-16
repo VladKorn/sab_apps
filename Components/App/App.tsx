@@ -13,7 +13,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AppContainer } from "./AppContainer";
 import { AuthContext } from "./../Login/Login";
 import { BasketContainer } from "./../Basket/BasketContext";
-import { MakeOrderData, LoginData } from "../../interfaces";
+import { useGetData } from "./../../hooks/useGetData";
 
 export const App = () => {
 	const authContext = useContext(AuthContext);
@@ -21,24 +21,57 @@ export const App = () => {
 	const [favorite, setFavorite] = useState<number[]>([]);
 	const [products, setProducts] = useState({});
 	const [stocks, setStocks] = useState({});
-	const [isLoading, setIsLoading] = useState(false);
 	const [fontLoaded, setfontLoaded] = useState(false);
 	const [isSavedLoginDataChecked, setIsSavedLoginDataChecked] = useState(
 		false
 	);
 	const [userError, setUserError] = useState({});
+	const res = useGetData({
+		catalog: true,
+		stocks: true,
+	});
 	useEffect(() => {
-		authContext.autoLogin();
-	}, []);
-
-	useEffect(() => {
-		if (authContext.loginData) {
-			console.log("App authContext", authContext.loginData);
-			if (authContext.loginData.log && authContext.loginData.pas) {
-				getData(authContext.loginData);
-			}
+		if (res.isDataLoading) return;
+		if (res.error) {
+			console.log(res.error);
+			return;
 		}
-	}, [authContext]);
+
+		if (Object.keys(catalog).length === 0) {
+			if (res.data) {
+				console.log(
+					"App useEffect res.isDataLoading",
+					res.isDataLoading
+				);
+				setIsSavedLoginDataChecked(true);
+				// console.log("fetch res stocks", res.stocks);
+				setUserError(res.data.userError);
+				setCatalog(res.data.catalog.cats);
+				setProducts(res.data.catalog.products);
+				setStocks(res.data.stocks);
+				setFavorite(res.data.user.favorite || []);
+			}
+			// TODO forgot save
+			// if (
+			// 	data.user &&
+			// 	data.user.id &&
+			// 	loginData.mode !== "forgot" &&
+			// 	loginData.save
+			// ) {
+			// 	// authContext.saveLoginData(loginData.log, res.user.pas);
+			// }
+		}
+	}, [res.isDataLoading]);
+
+	// useEffect(() => {
+	// 	console.log("App useEffect authContext.user", authContext.user);
+	// 	if (authContext.loginData) {
+	// 		console.log("App authContext.loginData", authContext.loginData);
+	// 		if (authContext.loginData.log && authContext.loginData.pas) {
+	// 			getData(authContext.loginData);
+	// 		}
+	// 	}
+	// }, [authContext.user]);
 
 	useEffect(() => {
 		// basketApi({action:'clear'})
@@ -57,55 +90,6 @@ export const App = () => {
 		});
 
 		setfontLoaded(true);
-	};
-
-	const getData = async (loginData: LoginData) => {
-		// let res = false;
-		const getData = async (loginData: LoginData) => {
-			console.log("getData", loginData);
-			return await fetch("https://subexpress.ru/apps_api/", {
-				method: "post",
-				body: JSON.stringify({ loginData: loginData }),
-			})
-				.then((res) => res.json())
-				.then((res) => {
-					setIsSavedLoginDataChecked(true);
-					if (res.user && res.user.error) {
-						// alert("getData fetch " + res.user.error);
-						// console.log('user' , res.user.error)
-						// return res.user;
-					}
-					// console.log("fetch res stocks", res.stocks);
-					setIsLoading(false);
-					setUserError(res.userError);
-					setCatalog(res.catalog.cats);
-					setProducts(res.catalog.products);
-					// setUser(res.user);
-					setStocks(res.stocks);
-					setFavorite(res.user.favorite || []);
-					if (
-						res.user &&
-						res.user.id &&
-						loginData.mode !== "forgot" &&
-						loginData.save
-					) {
-						authContext.saveLoginData(loginData.log, res.user.pas);
-					}
-
-					console.log("getData res.user", res.user);
-					if (!authContext?.user?.id) {
-						authContext.setUser(res.user);
-					}
-					return res.user;
-				})
-				.catch((error) => {
-					// console.error(error);
-					// alert("getData fetch error" + error);
-				});
-		};
-		return await getData(loginData);
-		// console.log('getData await res' , getData ,res);
-		// return res;
 	};
 
 	const addToFavorite = (id) => {

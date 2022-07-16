@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
 	View,
 	Image,
@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import appStyles from "./appStyles";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
+import colors from "./../constants/colors";
 interface Props {
 	initialText?: string;
 	search: (text: string) => void;
@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
 	input: {
 		height: 40,
 		backgroundColor: "#F1F1F1",
-		borderWidth: 0,
+		borderWidth: 1,
+		borderColor: colors.gray,
 		borderRadius: 50,
 		maxWidth: 335,
 		width: "100%",

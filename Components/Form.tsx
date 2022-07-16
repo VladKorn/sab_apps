@@ -1,75 +1,59 @@
-import React from "react";
+import { useState, useEffect, useContext } from "react";
 import Input from "./Input";
 import { View, Text, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import appStyles from "./appStyles";
 import Modals from "./Modal";
+import { AppContext } from "./App/Context";
 interface Props {
 	title?: string;
 	fromPage: string;
-	sendMail: (data) => any;
 	style?: object;
-	navigation: any;
 }
-interface State {
-	name: string;
-	contact: string;
-	comment: string;
-	modalIsOpen: boolean;
-}
-export default class Form extends React.Component<Props, State> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			name: "",
-			contact: "",
-			comment: "",
-			modalIsOpen: false,
-		};
-		this.submit = this.submit.bind(this);
-		this.isOpenHendler = this.isOpenHendler.bind(this);
-	}
-	componentDidMount() {
-		const didBlurSubscription = this.props.navigation.addListener(
+export const Form = (props: Props) => {
+	const navigation = useNavigation();
+	const appContext = useContext(AppContext);
+
+	const [name, setName] = useState("");
+	const [contact, setContact] = useState("");
+	const [comment, setComment] = useState("");
+	const [modalIsOpen, setModalIsOpen] = useState(false);
+
+	useEffect(() => {
+		const didBlurSubscription = navigation.addListener(
 			"willBlur",
 			(payload) => {
-				//   console.debug('willBlur', payload);
-				this.setState({
-					modalIsOpen: false,
-				});
+				setModalIsOpen(false);
 			}
 		);
-	}
-	isOpenHendler(isOpen) {
-		this.setState({ modalIsOpen: isOpen });
-	}
-	async submit() {
+	}, []);
+
+	const isOpenHendler = (isOpen) => {
+		setModalIsOpen(isOpen);
+	};
+	const submit = async () => {
 		// console.log('submit');
 
 		const data: any = {
-			name: this.state.name,
-			contact: this.state.contact,
-			comment: this.state.comment,
-			fromPage: this.props.fromPage,
+			name: name,
+			contact: contact,
+			comment: comment,
+			fromPage: props.fromPage,
 		};
-		const success = await this.props.sendMail(data);
+		const success = await appContext.sendMail(data);
 		// console.log('submit-success' , success);
 		if (success) {
-			this.setState({
-				modalIsOpen: true,
-				name: "",
-				contact: "",
-				comment: "",
-			});
+			setModalIsOpen(true);
+			setName("");
+			setContact("");
+			setComment("");
 		} else {
 			alert("error");
 		}
-	}
-	render() {
-		return [
-			<View
-				key="form"
-				style={[{ alignItems: "center" }, this.props.style]}
-			>
+	};
+	return (
+		<>
+			<View key="form" style={[{ alignItems: "center" }, props.style]}>
 				<Text
 					style={{
 						...appStyles.sectTitle,
@@ -78,34 +62,34 @@ export default class Form extends React.Component<Props, State> {
 						marginBottom: 10,
 					}}
 				>
-					{this.props.title}
+					{props.title}
 				</Text>
 				<Input
 					center={true}
 					placeholder="Ваше имя"
 					onChangeText={(text) => {
-						this.setState({ name: text });
+						setName(text);
 					}}
-					value={this.state.name}
+					value={name}
 				/>
 				<Input
 					center={true}
 					placeholder="Телефон или E-mail"
 					onChangeText={(text) => {
-						this.setState({ contact: text });
+						setContact(text);
 					}}
-					value={this.state.contact}
+					value={contact}
 				/>
 				<Input
 					center={true}
 					placeholder="Комментарий"
 					onChangeText={(text) => {
-						this.setState({ comment: text });
+						setComment(text);
 					}}
-					value={this.state.comment}
+					value={comment}
 				/>
 				<TouchableOpacity
-					onPress={this.submit}
+					onPress={submit}
 					style={[
 						appStyles.button,
 						{ marginBottom: 20, marginTop: 10 },
@@ -113,12 +97,12 @@ export default class Form extends React.Component<Props, State> {
 				>
 					<Text style={appStyles.buttonText}>Отправить</Text>
 				</TouchableOpacity>
-			</View>,
+			</View>
 			<Modals
 				key="modal"
 				height={270}
-				isOpen={this.state.modalIsOpen}
-				isOpenHendler={this.isOpenHendler}
+				isOpen={modalIsOpen}
+				isOpenHendler={isOpenHendler}
 			>
 				<Text style={appStyles.modalText}>
 					Ваше сообщение отправлено
@@ -126,7 +110,7 @@ export default class Form extends React.Component<Props, State> {
 
 				<TouchableOpacity
 					onPress={() => {
-						this.setState({ modalIsOpen: false });
+						setModalIsOpen(false);
 					}}
 					style={[appStyles.modalButton, { marginTop: 30 }]}
 				>
@@ -136,7 +120,8 @@ export default class Form extends React.Component<Props, State> {
 						Ок
 					</Text>
 				</TouchableOpacity>
-			</Modals>,
-		];
-	}
-}
+			</Modals>
+		</>
+	);
+};
+export default Form;

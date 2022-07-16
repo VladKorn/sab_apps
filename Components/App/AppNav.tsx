@@ -9,12 +9,12 @@ import { fromRight, fromBottom } from "react-navigation-transitions";
 import { Button } from "react-native";
 import HeaderRight from "../Catalog/HeaderRight";
 
-import HomeScreen from "../HomeScreen";
+import { HomeNav } from "../HomeScreen";
 import Catalog from "../Catalog";
-import News from "../News";
-import Stocks from "../Stocks";
-import Order from "../Order";
-import Delivery from "../Delivery";
+import { News } from "../News";
+import { Stocks } from "../Stocks";
+import { OrderNav } from "../Order";
+import { Delivery } from "../Delivery";
 
 import CategorySlider from "../CategorySlider";
 import Sidebar from "../Sidebar";
@@ -24,6 +24,7 @@ import History from "../Order/History";
 import Addresses from "../Addresses";
 import User from "../User";
 import { Info } from "../Info/Info";
+import { HeaderLeft, headerStyles } from "./../../layout/Header";
 
 import { TouchableOpacity, Image } from "react-native";
 
@@ -203,14 +204,14 @@ const AppNav = (_props) => {
 			<Drawer.Navigator
 				initialRouteName="Home"
 				drawerContent={(props) => <Sidebar {...props} />}
-				screenOptions={
-					{
-						// headerBackImage: customHeaderBackImage,
-						// headerBackTitle: null,
-						// headerStyle: appStyles.headerStyle,
-						// headerTitleStyle: appStyles.headerTitle,
-					}
-				}
+				screenOptions={{
+					headerLeft: HeaderLeft,
+					// headerBackImage: customHeaderBackImage,
+					// headerBackTitle: null,
+					headerStyle: headerStyles.headerStyle,
+					headerTitleStyle: headerStyles.headerTitle,
+					// headerStyle: appStyles.headerTitle,
+				}}
 			>
 				<Drawer.Screen
 					name="Home"
@@ -219,27 +220,18 @@ const AppNav = (_props) => {
 						headerShown: false,
 						// headerBackTitle: null,
 					}}
-				>
-					{(props) => <HomeScreen {...props} name={"Home"} />}
-				</Drawer.Screen>
+					component={HomeNav}
+				/>
 				<Drawer.Screen
 					name="Catalog"
+					component={Catalog}
 					options={{
 						headerTitle: "Меню",
 						headerRight: () => {
 							return <HeaderRight />;
 						},
 					}}
-				>
-					{(props) => (
-						<Catalog
-							{...props}
-							name={"Catalog"}
-							// @ts-ignore
-							screenProps={_props.screenProps}
-						/>
-					)}
-				</Drawer.Screen>
+				></Drawer.Screen>
 				<Drawer.Screen
 					name="CategorySlider"
 					options={{
@@ -247,38 +239,25 @@ const AppNav = (_props) => {
 						headerShown: false,
 						// headerBackTitle: null,
 					}}
-				>
-					{(props) => (
-						<CategorySlider
-							{...props}
-							name={"CategorySlider"}
-							screenProps={_props.screenProps}
-						/>
-					)}
-				</Drawer.Screen>
+					component={CategorySlider}
+				></Drawer.Screen>
 				<Drawer.Screen
 					name="News"
 					options={{
 						title: "Новости",
 					}}
-				>
-					{(props) => (
-						<News {...props} screenProps={_props.screenProps} />
-					)}
-				</Drawer.Screen>
-				<Drawer.Screen name="Stocks">
-					{(props) => (
-						<Stocks {...props} screenProps={_props.screenProps} />
-					)}
-				</Drawer.Screen>
+					component={News}
+				></Drawer.Screen>
+				<Drawer.Screen
+					name="Stocks"
+					component={Stocks}
+					options={{ title: "Акции" }}
+				></Drawer.Screen>
 				<Drawer.Screen
 					name="Favorites"
 					options={{ headerTitle: "Избранное" }}
-				>
-					{(props) => (
-						<Catalog {...props} screenProps={_props.screenProps} />
-					)}
-				</Drawer.Screen>
+					component={Catalog}
+				></Drawer.Screen>
 				<Drawer.Screen
 					name="OrderHistory"
 					options={{
@@ -294,12 +273,7 @@ const AppNav = (_props) => {
 					name="Addresses"
 					options={{ headerTitle: "Ареса доставок" }}
 				>
-					{(props) => (
-						<Addresses
-							{...props}
-							screenProps={_props.screenProps}
-						/>
-					)}
+					{(props) => <Addresses {...props} />}
 				</Drawer.Screen>
 				<Drawer.Screen
 					name="User"
@@ -312,9 +286,8 @@ const AppNav = (_props) => {
 				<Drawer.Screen
 					name="Info"
 					options={{ headerTitle: "Информация" }}
-				>
-					{(props) => <Info {...props} />}
-				</Drawer.Screen>
+					component={Info}
+				></Drawer.Screen>
 				<Drawer.Screen
 					name="Contacts"
 					options={{ headerTitle: "Контакты" }}
@@ -331,21 +304,15 @@ const AppNav = (_props) => {
 				<Drawer.Screen
 					name="Order"
 					options={{
-						headerTitle: "Оформление заказа",
+						headerShown: false,
 					}}
-				>
-					{(props) => (
-						<Order {...props} screenProps={_props.screenProps} />
-					)}
-				</Drawer.Screen>
+					component={OrderNav}
+				></Drawer.Screen>
 				<Drawer.Screen
 					name="Delivery"
 					options={{ headerTitle: "Оформление заказа" }}
-				>
-					{(props) => (
-						<Delivery {...props} screenProps={_props.screenProps} />
-					)}
-				</Drawer.Screen>
+					component={Delivery}
+				></Drawer.Screen>
 			</Drawer.Navigator>
 		</>
 	);

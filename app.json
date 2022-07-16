@@ -4,7 +4,7 @@
 		"slug": "Subexpress",
 		"privacy": "public",
 		"platforms": ["ios", "android", "web"],
-		"version": "1.1.4",
+		"version": "1.1.5",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -20,13 +20,13 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.vladkorn.subexpress",
-			"buildNumber": "1.1.4"
+			"buildNumber": "1.1.5"
 		},
 		"android": {
 			"package": "com.vladkorn.subexpress",
 			"googleServicesFile": "./google-services.json",
 			"permissions": [],
-			"versionCode": 21
+			"versionCode": 22
 		},
 		"description": ""
 	}

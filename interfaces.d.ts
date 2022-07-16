@@ -1,16 +1,16 @@
-export interface MakeOrderData{
-    userId?: number;
-    promo: string;
-    comment: string;
-    address:string;
-	deliveryDate : string;
-    products: object;
-    date?:string;
+export interface MakeOrderData {
+	userId?: number;
+	promo: string;
+	comment: string;
+	address: string;
+	deliveryDate: string;
+	products: object;
+	date?: string;
 }
-export interface tsBasketApi{
-    action: actionTypes;
-    params?: {count?: number , productId?: number ,products?: tsBasket};
-    // params?: actionTypesparams;
+export interface tsBasketApi {
+	action: actionTypes;
+	params?: { count?: number; productId?: number; products?: tsBasket };
+	// params?: actionTypesparams;
 }
 export interface LoginData {
 	log: string;
@@ -18,16 +18,28 @@ export interface LoginData {
 	save?: boolean;
 	name?: string;
 	phone?: string;
-    // isSignUp?: false;
-    mode?: "signIn" | "signUp" | "forgot";
+	// isSignUp?: false;
+	mode?: "signIn" | "signUp" | "forgot";
 }
-export interface tsBasket{
-    [id:number]: tsBasketItem
+export interface GetDataActions {
+	orders?: {
+		orderId?: number;
+		userId?: number;
+	};
+	news?: boolean;
+	userupdate?: {
+		userData: {};
+	};
+	stocks?: boolean;
+	catalog?: boolean;
 }
-export interface tsBasketItem{
-        count: number;
-        // afasf: string;
+export interface tsBasket {
+	[id: number]: tsBasketItem;
 }
-type actionTypes = "setProduct" | "clear" |'setBasket';
+export interface tsBasketItem {
+	count: number;
+	// afasf: string;
+}
+type actionTypes = "setProduct" | "clear" | "setBasket";
 
 // export interface MakeOrderData

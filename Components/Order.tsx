@@ -14,14 +14,21 @@ import { BasketContext } from "./Basket/BasketContext";
 import Colors from "../constants/colors";
 
 import Modals from "./Modal";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import appStyles from "./appStyles";
 import { ProductsList } from "./Order/ProductsList";
 import { AuthContext } from "./Login/Login";
-
-export const Order = (props) => {
+import { AppContext } from "./App/Context";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Delivery } from "./Delivery";
+import { defaultOptions } from "./../layout/Header";
+interface Props {}
+export const Order = (props: Props) => {
+	const navigation = useNavigation();
+	const route = useRoute();
 	const basketContext = useContext(BasketContext);
 	const authContext = useContext(AuthContext);
+	const appContext = useContext(AppContext);
 	const [priceTotal, setPriceTotal] = useState(0);
 	const [basePrice, setBasePrice] = useState(0);
 	const [comment, setComment] = useState("");
@@ -31,7 +38,7 @@ export const Order = (props) => {
 
 	useEffect(() => {
 		getTotalPrice();
-		const didBlurSubscription = props.navigation.addListener(
+		const didBlurSubscription = navigation.addListener(
 			"willBlur",
 			(payload) => {
 				//   console.debug('willBlur', payload);
@@ -50,11 +57,10 @@ export const Order = (props) => {
 		getTotalPrice();
 		// getTotalPrice();
 
-		const nav = props.navigation;
-		if (nav && nav.state && nav.state.params && nav.state.params.action) {
+		if (route?.params?.action) {
 			// console.log(props.screenProps.basket)
 			if (
-				nav.state.params.action === "clear" &&
+				route.params.action === "clear" &&
 				Object.keys(basketContext.basket).length > 0
 			) {
 				basketContext.basketApi({ action: "clear" });
@@ -93,8 +99,34 @@ export const Order = (props) => {
 
 	const setDate = (newDate) => {
 		// this.setState({chosenDate: newDate});
-		props.navigation.actions.goBack();
+		navigation.goBack();
 	};
+	const basketEmpty = !(Object.entries(basketContext.basket).length > 0);
+	if (basketEmpty) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<Text style={appStyles.text}>Корзина пуста</Text>
+				<View style={{ marginTop: 20 }}>
+					<TouchableOpacity
+						style={appStyles.button}
+						onPress={() => {
+							navigation.navigate("Catalog");
+						}}
+					>
+						<Text style={appStyles.buttonText}>
+							Посмотреть все товары
+						</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+		);
+	}
 
 	return (
 		<SafeAreaView style={appStyles.page}>
@@ -109,7 +141,7 @@ export const Order = (props) => {
 				}}
 			>
 				<Text style={appStyles.sectTitle}>Ваш заказ</Text>
-				<ProductsList products={props.screenProps.products} />
+				<ProductsList products={appContext.products} />
 
 				<Text style={appStyles.sectTitle}>Комментарий к заказу</Text>
 				<TextInput
@@ -214,7 +246,7 @@ export const Order = (props) => {
 						? setModalFirstIsOpen(true)
 						: priceTotal < 1500
 						? setModalIsOpen(true)
-						: props.navigation.navigate("Delivery");
+						: navigation.navigate("Delivery");
 				}}
 				style={appStyles.buttonBottom}
 			>
@@ -255,7 +287,7 @@ export const Order = (props) => {
 						onPress={() => {
 							setModalIsOpen(false);
 							setTimeout(() => {
-								props.navigation.navigate("Delivery");
+								navigation.navigate("Delivery");
 							}, 500);
 						}}
 						style={appStyles.modalButton}
@@ -303,4 +335,24 @@ export const Order = (props) => {
 		</SafeAreaView>
 	);
 };
-export default Order;
+const Stack = createNativeStackNavigator();
+export const OrderNav = () => {
+	return (
+		<Stack.Navigator
+			screenOptions={{
+				...defaultOptions,
+			}}
+		>
+			<Stack.Screen
+				name="OrderList"
+				options={{ headerTitle: "Оформление заказа" }}
+				component={Order}
+			/>
+			<Stack.Screen
+				name="Delivery"
+				component={Delivery}
+				options={{ headerTitle: "Оформление заказа" }}
+			/>
+		</Stack.Navigator>
+	);
+};

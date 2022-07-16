@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import Colors from "../constants/colors";
 import appStyles from "./appStyles";
-import { DrawerActions } from "react-navigation-drawer";
+// import { DrawerActions } from "react-navigation-drawer";
 
 interface State {
 	data: object;
@@ -73,140 +73,148 @@ export const obj = {
 	},
 };
 
-export default class Sidebar extends React.Component<any, State> {
-	render() {
-		// const routes = this.props.state.routeNames;
-		// console.log("routes", routes);
-
-		// console.log("this.props", this.props);
-		const routes = this.props.state.routeNames.filter((item) => {
-			return (
-				item !== "Home" &&
-				item !== "Order" &&
-				item !== "CategorySlider" &&
-				item !== "Delivery" &&
-				item !== "HistoryDetail"
-			);
-		});
-		const menu = routes.map((route, index) => {
-			const img = obj[route]
-				? obj[route].img
-				: require("../img/ico-menu3.png");
-
-			return (
-				<View
-					key={route}
-					style={{
-						paddingTop: 10,
-						paddingBottom: 10,
-					}}
-				>
-					{route === "Info" ? (
-						<View
-							style={{
-								borderBottomWidth: 1,
-								borderBottomColor: "#E2E2E2",
-								marginTop: 5,
-								marginBottom: 25,
-							}}
-						></View>
-					) : null}
-					<TouchableOpacity
-						onPress={() => {
-							if (route === "Favorites") {
-								this.props.navigation.navigate(route, {
-									isFavorite: true,
-								});
-							} else {
-								this.props.navigation.navigate(route);
-							}
-						}}
-						style={{
-							flexDirection: "row",
-							justifyContent: "flex-start",
-						}}
-					>
-						<View
-							style={{
-								marginRight: 25,
-								alignItems: "center",
-								width: 20,
-							}}
-						>
-							{obj[route] ? (
-								<Image style={obj[route].style} source={img} />
-							) : null}
-						</View>
-						<Text
-							style={{
-								fontFamily: "Neuron-Bold",
-								fontSize: 18,
-								color: Colors.gray,
-							}}
-						>
-							{obj[route] ? obj[route].title : route}
-						</Text>
-					</TouchableOpacity>
-				</View>
-			);
-		});
-		// const Menu = (props) => {
-		// 	console.log("Menu props", props.state.routeNames);
-		// 	return <DrawerItemList {...props} />;
-		// };
+export const Sidebar = (props) => {
+	const routes = props.state.routeNames.filter((item) => {
+		return (
+			item !== "Home" &&
+			item !== "Order" &&
+			item !== "CategorySlider" &&
+			item !== "Delivery" &&
+			item !== "HistoryDetail"
+		);
+	});
+	const menu = routes.map((route, index) => {
+		const img = obj[route]
+			? obj[route].img
+			: require("../img/ico-menu3.png");
 
 		return (
-			<DrawerContentScrollView {...this.props}>
-				<SafeAreaView style={appStyles.page}>
+			<View
+				key={route}
+				style={{
+					paddingTop: 10,
+					paddingBottom: 10,
+				}}
+			>
+				{route === "Info" ? (
 					<View
 						style={{
-							paddingLeft: 30,
-							paddingRight: 30,
-							paddingTop: 30,
+							borderBottomWidth: 1,
+							borderBottomColor: "#E2E2E2",
+							marginTop: 5,
+							marginBottom: 25,
+						}}
+					></View>
+				) : null}
+				<TouchableOpacity
+					onPress={() => {
+						if (route === "Favorites") {
+							props.navigation.navigate(route, {
+								isFavorite: true,
+							});
+						} else {
+							props.navigation.navigate(route);
+						}
+					}}
+					style={{
+						flexDirection: "row",
+						justifyContent: "flex-start",
+					}}
+				>
+					<View
+						style={{
+							marginRight: 25,
+							alignItems: "center",
+							width: 20,
 						}}
 					>
-						<TouchableOpacity
-							onPress={() => {
-								this.props.navigation.closeDrawer();
-							}}
-						>
-							<Image
-								style={{ width: 20.91, height: 18.98 }}
-								source={require("../img/ico-menu-close.png")}
-							/>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => {
-								this.props.navigation.navigate("Home");
-							}}
-							style={{
-								width: "100%",
-								// backgroundColor: 'red',
-								marginBottom: 30,
-								marginTop: 20,
-								alignItems: "center",
-							}}
-						>
-							<Image
-								style={{ width: 176.77, height: 69.27 }}
-								source={require("../img/logo.png")}
-							/>
-						</TouchableOpacity>
-
-						{/* <Menu {...this.props} /> */}
-						{menu}
+						{obj[route] ? (
+							<Image style={obj[route].style} source={img} />
+						) : null}
 					</View>
+					<Text
+						style={{
+							fontFamily: "Neuron-Bold",
+							fontSize: 18,
+							color: Colors.gray,
+						}}
+					>
+						{obj[route] ? obj[route].title : route}
+					</Text>
+				</TouchableOpacity>
+			</View>
+		);
+	});
+	// const Menu = (props) => {
+	// 	console.log("Menu props", props.state.routeNames);
+	// 	return <DrawerItemList {...props} />;
+	// };
+
+	return (
+		<DrawerContentScrollView {...props}>
+			<SafeAreaView style={appStyles.page}>
+				<View
+					style={{
+						paddingLeft: 30,
+						paddingRight: 30,
+						paddingTop: 30,
+					}}
+				>
+					<TouchableOpacity
+						onPress={() => {
+							props.navigation.closeDrawer();
+						}}
+					>
+						<Image
+							style={{ width: 20.91, height: 18.98 }}
+							source={require("../img/ico-menu-close.png")}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							props.navigation.navigate("Home");
+						}}
+						style={{
+							width: "100%",
+							// backgroundColor: 'red',
+							marginBottom: 30,
+							marginTop: 20,
+							alignItems: "center",
+						}}
+					>
+						<Image
+							style={{ width: 176.77, height: 69.27 }}
+							source={require("../img/logo.png")}
+						/>
+					</TouchableOpacity>
+
+					{/* <Menu {...this.props} /> */}
+					{menu}
+				</View>
+				<View
+					style={{
+						display: "flex",
+						marginTop: "auto",
+						height: 100,
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
 					<Text
 						style={{
 							fontSize: 12,
 							marginTop: "auto",
 							textAlign: "center",
+							marginBottom: "auto",
+							justifyContent: "center",
+							alignItems: "center",
 						}}
 					>
-						version: 1.1.4
+						version: 1.1.5
 					</Text>
-				</SafeAreaView>
-			</DrawerContentScrollView>
-		);
-	}
-}
+				</View>
+			</SafeAreaView>
+		</DrawerContentScrollView>
+	);
+};
+export default Sidebar;

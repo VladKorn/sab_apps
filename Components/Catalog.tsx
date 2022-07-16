@@ -13,7 +13,6 @@ import {
 import { AppContext } from "./App/Context";
 
 import CatalogCategories from "./CatalogCategories";
-import CustomHeaderBackImage from "./customHeaderBackImage";
 
 import appStyles from "./appStyles";
 import Basket from "./Basket/Basket";
@@ -22,8 +21,9 @@ interface State {
 	search: string;
 	searchRes: Array<number>;
 }
+interface Props {}
 
-const Catalog = (props) => {
+const Catalog = (props: Props) => {
 	let timer: any = null;
 	const [data, setData] = useState([]);
 	const [searchText, setSearchText] = useState("");

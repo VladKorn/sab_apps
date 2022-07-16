@@ -10,7 +10,7 @@ import {
 import appStyles from "./appStyles";
 import Input from "./Input";
 import { LoginData } from "../interfaces";
-import LoginForm from "./Login/LoginForm";
+import { LoginForm } from "./Login/LoginForm";
 import { AuthContext } from "./Login/Login";
 
 // static navigationOptions = {

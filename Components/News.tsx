@@ -1,32 +1,33 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import { useGetData } from "./../hooks/useGetData";
 import appStyles from "./appStyles";
-interface State {
-	items: object;
-	openedIndex: number;
-}
-export default class News extends React.Component<any, State> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			items: {},
-			openedIndex: 0,
-		};
-		this.renderItems = this.renderItems.bind(this);
-	}
+interface Props {}
+export const News = (props: Props) => {
+	const [items, setItems] = useState({});
+	const [openedIndex, setOpenedIndex] = useState({});
 
-	componentDidMount() {
-		fetch(`https://subexpress.ru/apps_api/?get=news`)
-			.then((res) => res.json())
-			.then((res) => {
-				this.setState({ items: res.news });
-				// console.log('news' , res)
-			});
-	}
-	renderItems() {
-		if (Object.keys(this.state.items).length > 0) {
-			return Object.keys(this.state.items).map((key) => {
-				const item = this.state.items[key];
+	const res = useGetData({ news: true });
+
+	useEffect(() => {
+		if (Object.keys(items).length === 0) {
+			if (res.error) {
+				console.log(res.error);
+				return;
+			}
+			if (res.isDataLoading) {
+				return;
+			}
+			if (res.data) {
+				setItems(res.data.news);
+			}
+		}
+	}, [res.isDataLoading]);
+
+	const renderItems = () => {
+		if (Object.keys(items).length > 0) {
+			return Object.keys(items).map((key) => {
+				const item = items[key];
 				return (
 					<View
 						key={key}
@@ -53,9 +54,7 @@ export default class News extends React.Component<any, State> {
 							</Text>
 							<Text
 								numberOfLines={
-									this.state.openedIndex === parseInt(key)
-										? 100
-										: 4
+									openedIndex === parseInt(key) ? 100 : 4
 								}
 								style={{
 									...appStyles.text,
@@ -78,9 +77,7 @@ export default class News extends React.Component<any, State> {
 						>
 							<TouchableOpacity
 								onPress={() => {
-									this.setState({
-										openedIndex: parseInt(key),
-									});
+									setOpenedIndex(parseInt(key));
 								}}
 							>
 								<Image
@@ -95,17 +92,15 @@ export default class News extends React.Component<any, State> {
 				);
 			});
 		}
-	}
+	};
 
-	render() {
-		return (
-			<ScrollView
-				style={{
-					flex: 1,
-				}}
-			>
-				{this.renderItems()}
-			</ScrollView>
-		);
-	}
-}
+	return (
+		<ScrollView
+			style={{
+				flex: 1,
+			}}
+		>
+			{renderItems()}
+		</ScrollView>
+	);
+};

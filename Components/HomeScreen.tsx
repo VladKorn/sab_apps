@@ -34,7 +34,9 @@ import Catalog from "./Catalog";
 import { OrderHistoryNav } from "./Order/History";
 import { BasketContext } from "./Basket/BasketContext";
 
-const HomeScreen = (props) => {
+interface Props {}
+
+const HomeScreen = (props: Props) => {
 	const appContext = useContext(AppContext);
 	const basketContext = useContext(BasketContext);
 	const navigation = useNavigation();
@@ -232,7 +234,7 @@ const styles = StyleSheet.create({
 });
 
 export const Stack = createNativeStackNavigator();
-const HomeNav = (_props) => {
+export const HomeNav = (_props) => {
 	return (
 		<Stack.Navigator
 			screenOptions={
@@ -248,13 +250,13 @@ const HomeNav = (_props) => {
 			}
 		>
 			<Stack.Screen
-				name="Меню"
+				name="Menu"
 				options={{
 					headerShown: false,
+					headerTitle: "Меню",
 				}}
-			>
-				{(props) => <HomeScreen {...props} />}
-			</Stack.Screen>
+				component={HomeScreen}
+			/>
 			<Stack.Screen
 				name="Cats"
 				component={CategoriesList}
@@ -262,15 +264,14 @@ const HomeNav = (_props) => {
 			/>
 			<Stack.Screen
 				name="Catalog"
+				component={Catalog}
 				options={{
 					headerTitle: "Меню",
 					headerRight: () => {
 						return <HeaderRight />;
 					},
 				}}
-			>
-				{(props) => <Catalog {...props} name={"Catalog"} />}
-			</Stack.Screen>
+			></Stack.Screen>
 			{OrderHistoryNav}
 		</Stack.Navigator>
 	);
