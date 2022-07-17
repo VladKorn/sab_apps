@@ -3,11 +3,17 @@ import Colors from "./../constants/colors";
 
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 
-export const Loading = () => {
-	// return null;
+interface Props {
+	size?: number | "large" | "small";
+	// margins?: boolean;
+}
+export const Loading = (props: Props) => {
 	return (
 		<View style={styles.container}>
-			<ActivityIndicator size="large" color={Colors.assent} />
+			<ActivityIndicator
+				size={props.size || "large"}
+				color={Colors.assent}
+			/>
 		</View>
 	);
 };
@@ -18,7 +24,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		//   backgroundColor: '#fff',
-		paddingVertical: 20,
+		// paddingVertical: 20,
 	},
 
 	circles: {

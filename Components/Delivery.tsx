@@ -21,6 +21,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import appStyles from "./appStyles";
 import { BasketContext } from "./Basket/BasketContext";
 import { AuthContext } from "./Login/Login";
+import { Loading } from "./Loading";
 interface Props {}
 
 export const Delivery = (props: Props) => {
@@ -43,6 +44,7 @@ export const Delivery = (props: Props) => {
 	const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
 	const [isInitial, setIsInitial] = useState(true);
 	const [isSunday, setIsSunday] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		// const date = new Date();
@@ -91,10 +93,12 @@ export const Delivery = (props: Props) => {
 		// props.navigation.actions.goBack();
 	};
 	const makeOrder = async () => {
+		setIsLoading(true);
 		const res = await basketContext.makeOrder({
 			address: address,
 			date: formatDate(date),
 		});
+		setIsLoading(false);
 		console.log("Order makeOrder res", res);
 		if (res.success) {
 			setOrderId(res.orderId);
@@ -110,7 +114,7 @@ export const Delivery = (props: Props) => {
 				</Text>
 				<TouchableOpacity
 					onPress={() => {
-						props.navigation.navigate("User");
+						navigation.navigate("User");
 					}}
 					style={appStyles.button}
 				>
@@ -225,21 +229,25 @@ export const Delivery = (props: Props) => {
 					</TouchableOpacity>
 				</View>
 			</ScrollView>
-			<TouchableOpacity
-				onPress={() => {
-					!isSunday ? makeOrder() : setModalIsOpen(true);
-				}}
-				style={appStyles.buttonBottom}
-			>
-				<Text style={{ color: "white", fontSize: 20 }}>
-					Оформить заказ
-				</Text>
-			</TouchableOpacity>
+			{isLoading ? (
+				<Loading />
+			) : (
+				<TouchableOpacity
+					onPress={() => {
+						!isSunday ? makeOrder() : setModalIsOpen(true);
+					}}
+					style={appStyles.buttonBottom}
+				>
+					<Text style={{ color: "white", fontSize: 20 }}>
+						Оформить заказ
+					</Text>
+				</TouchableOpacity>
+			)}
 			{/*  */}
 			<Modals
 				// height={310}
 				isOpen={modalIsOpen}
-				isOpenHendler={(isOpen) => {}}
+				isOpenHendler={setModalIsOpen}
 			>
 				<Text style={appStyles.modalText}>
 					{isSunday
@@ -284,7 +292,7 @@ export const Delivery = (props: Props) => {
 			<Modals
 				height={250}
 				isOpen={modalOrderIsOpen}
-				isOpenHendler={(isOpen) => {}}
+				isOpenHendler={setModalOrderIsOpen}
 			>
 				<Text style={appStyles.modalText}>
 					Спасибо!{"\n"}Ваш заказ принят

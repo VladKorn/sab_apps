@@ -22,6 +22,7 @@ import { AppContext } from "./App/Context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Delivery } from "./Delivery";
 import { defaultOptions } from "./../layout/Header";
+import { Loading } from "./Loading";
 interface Props {}
 export const Order = (props: Props) => {
 	const navigation = useNavigation();
@@ -35,6 +36,7 @@ export const Order = (props: Props) => {
 	const [promo, setPromo] = useState("");
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [modalFirstIsOpen, setModalFirstIsOpen] = useState(false);
+	const [priceIsLoading, setPriceIsLoading] = useState(false);
 
 	useEffect(() => {
 		getTotalPrice();
@@ -51,10 +53,9 @@ export const Order = (props: Props) => {
 	// componentDidUpdate
 	useEffect(() => {
 		getTotalPrice();
-	}, [basketContext.basket]);
-
+	}, [basketContext.basket, authContext]);
 	useEffect(() => {
-		getTotalPrice();
+		// getTotalPrice();
 		// getTotalPrice();
 
 		if (route?.params?.action) {
@@ -69,6 +70,7 @@ export const Order = (props: Props) => {
 	});
 
 	const getTotalPrice = async () => {
+		setPriceIsLoading(true);
 		let data: any = {};
 		data.products = basketContext.basket;
 		data.userId = authContext.user.id;
@@ -94,6 +96,7 @@ export const Order = (props: Props) => {
 		) {
 			setBasePrice(res.basePrice);
 		}
+		setPriceIsLoading(false);
 		// console.log("getTotalPrice res", res);
 	};
 
@@ -172,7 +175,12 @@ export const Order = (props: Props) => {
 								color: Colors.gray,
 							}}
 						>
-							{priceTotal.toFixed(2)} руб
+							{priceIsLoading ? (
+								<Loading size={10} />
+							) : (
+								priceTotal.toFixed(2)
+							)}{" "}
+							руб
 						</Text>
 					</View>
 					{basePrice !== priceTotal && (
@@ -191,7 +199,13 @@ export const Order = (props: Props) => {
 									color: Colors.gray,
 								}}
 							>
-								{(basePrice - priceTotal).toFixed(2)} руб
+								{/* TODO toFixed */}
+								{priceIsLoading ? (
+									<Loading size={10} />
+								) : (
+									(basePrice - priceTotal).toFixed(0)
+								)}{" "}
+								руб
 							</Text>
 						</View>
 					)}
@@ -210,7 +224,14 @@ export const Order = (props: Props) => {
 								color: Colors.gray,
 							}}
 						>
-							{priceTotal < 1500 ? 150 : 0} руб
+							{priceIsLoading ? (
+								<Loading size={10} />
+							) : priceTotal < 1500 ? (
+								150
+							) : (
+								0
+							)}{" "}
+							руб
 						</Text>
 					</View>
 					<View
@@ -228,9 +249,13 @@ export const Order = (props: Props) => {
 								color: Colors.gray,
 							}}
 						>
-							{priceTotal < 1500
-								? (priceTotal + 150).toFixed(2)
-								: priceTotal.toFixed(2)}{" "}
+							{priceIsLoading ? (
+								<Loading size={10} />
+							) : priceTotal < 1500 ? (
+								(priceTotal + 150).toFixed(2)
+							) : (
+								priceTotal.toFixed(2)
+							)}{" "}
 							руб
 						</Text>
 					</View>

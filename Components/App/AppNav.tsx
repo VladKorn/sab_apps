@@ -205,6 +205,7 @@ const AppNav = (_props) => {
 				initialRouteName="Home"
 				drawerContent={(props) => <Sidebar {...props} />}
 				screenOptions={{
+					swipeEnabled: false,
 					headerLeft: HeaderLeft,
 					// headerBackImage: customHeaderBackImage,
 					// headerBackTitle: null,
@@ -272,9 +273,8 @@ const AppNav = (_props) => {
 				<Drawer.Screen
 					name="Addresses"
 					options={{ headerTitle: "Ареса доставок" }}
-				>
-					{(props) => <Addresses {...props} />}
-				</Drawer.Screen>
+					component={Addresses}
+				/>
 				<Drawer.Screen
 					name="User"
 					options={{ headerTitle: "Пользователь" }}

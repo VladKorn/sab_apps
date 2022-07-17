@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-5529830029204261862-925",
+  "private_key_id": "55f8fbe931004e002e27d9e246a2057051a6a5d5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD71azWKKWIpEZR\nacf+/OIcBQRm4OJpfbliG47WFcOEOVk5pkNpLOV0Jk2ULmY0peegD58MVbnu1LRN\n8ail9YYzZeEF9x7vs1FEeD65xVKCK/H/vSsLOM9ZolQ2y8dIp5j9AFpsChasm63J\nrHk4cO+JXZZR3ephWnWGqPoqv71vjuj2BJhY6Qtcjvn+estdlnOuh8oe/qKn4OFR\nh9trfwm1Yq4+maUPMyYFAEO8jW03raIP3/iBYdTgrxqFMcadxkCoQXf3WC7WXdFV\nMnGbemiz+Pf/Q5KBwQmsKu7y2jg5LUGhVz5S9/3KAM/WNdimBcP19ajsVQM+5ZTh\n08bWs/wDAgMBAAECggEAAI+fTPLWO5GyHmhP67+AeXOBaQFDP9zp1tAc51kxEFBY\nZIp8R/WzpSiYr6XS0Hc2JuMiBZMDUQbkR/Ar4gLEA8VMVQkR5pLNsYtbCGrqHiQe\n6+Tt/Z5ox9hWu7CEhyLoclfX27nCByxpnLNnqbqGrhWpShFmfkUHUf96XzICKAd2\nV8f1uZYiY+Z/3MzSk2bvWYT7jGA24n67UmdM1CGrj5FBQkTfirNNa7Pp7VZaLBDo\nA+oFWUacQ7j5F5L0YB9KAijalajMuaLxtVR/3JOTHMNgjjvNhBgYNZ0WRpaqiwFq\nt0YCaGYf4Q3BpTFzSHZQOq24xFJzv++kVKimwHrwAQKBgQD+9p2kuqKXCrwvjZZL\noOHDZOJKBoNozb0mv9+YytgY+KuUGit/3YOPZROeW3enuwYdAGYVajnoOnj0DNXn\nznA9NYdoFKL40pxk96Q6lmmFyWLbY97in4KyhKPNCgUdlCBBhWdSg32i8f6e4yS6\nHLFbyP8OOdkUmRL6AvImgC8cAQKBgQD8282EMc9DKbAjVyS3c+t64119trSh0Eqg\nB8ys1GFXxc4zhmP02IjM+MM2eSSost98m6/IRNEPIknDUbOhTiuzwd9VH2di1r8Q\ntNzIa8DGROf2ttHWo82WyhOZthXACtHfVkgmtf8gqw7+METjEs3vNBAf4XFJJSLL\ncHJww8aoAwKBgEKAhOHgpGQNMsScg6U6U2ipubRhOoltkHa4+VNbJT5uLiK1KL9z\nQct3K8TUSsN/LrsFzZqsWGpQRhgx+OE7oV71xVnKeC+6j3xuc3Gspd11h8l9pTcr\nL+XsXuUuReNPLZKpfyewkGaeBDHhQUUiEsjEBnLpd8u9mYuIlSyhpqgBAoGBAMIS\n/pmRFXCKRavKTd8UdM+cRPyhR+DOmwhbFCgu1gvlQY/gfUXHELCp2kMsFgv5RnlA\nkVmYIBGKkqz8P2/2LKrKidyuvs5o3rs25iJaOdqztopw5Xvlu30Z2pNm4yjD5TOS\n6Mv1cj0jrd1BNQ5IN5F6F0ow4Z9vhlY5F00fppD7AoGBAKsPh3Mt7Hd2WYwD799z\netFkaFO5doAjxsfiHNKLUKaQStRIPhVkPXa9tu2bNdDUctwe8N4td5ex5RPV+d49\nycmLuHFf69gMDcbEdwtXZ/1tNf/+rURs1viBSO/8OhClFT6M8H4/50Pj2sYUqKiv\nwmlPIYFuvZUCO83sPNS9RFmr\n-----END PRIVATE KEY-----\n",
+  "client_email": "subexpress-expo@pc-api-5529830029204261862-925.iam.gserviceaccount.com",
+  "client_id": "104744019536475636118",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/subexpress-expo%40pc-api-5529830029204261862-925.iam.gserviceaccount.com"
+}

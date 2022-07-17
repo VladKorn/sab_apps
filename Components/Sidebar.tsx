@@ -210,7 +210,7 @@ export const Sidebar = (props) => {
 							alignItems: "center",
 						}}
 					>
-						version: 1.1.5
+						version: 1.1.6
 					</Text>
 				</View>
 			</SafeAreaView>

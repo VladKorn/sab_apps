@@ -9,17 +9,13 @@ import { BlurView } from "expo-blur";
 
 interface Props {
 	isOpen: boolean;
-	isOpenHendler: (boolean) => void;
+	isOpenHendler: any;
 	height?: number;
-}
-interface State {
-	visible: boolean;
-	visibleBlur: boolean;
-	intensity: any;
+	children: any;
 }
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-export const Modals = (props) => {
+export const Modals = (props: Props) => {
 	const [visible, setVisible] = useState(props.isOpen);
 	const [visibleBlur, setVisibleBlur] = useState(props.isOpen);
 	const intensity = useRef(new Animated.Value(0)).current;
@@ -48,6 +44,16 @@ export const Modals = (props) => {
 		// TODO ??
 		props.isOpen ? _blur() : null;
 	}, [props.isOpen]);
+	useEffect(() => {
+		if (props.isOpen) {
+			setTimeout(() => {
+				if (props.isOpen) {
+					props.isOpenHendler(false);
+				}
+			}, 5000);
+		}
+	}, [props.isOpen]);
+
 	return (
 		<>
 			{visibleBlur ? (

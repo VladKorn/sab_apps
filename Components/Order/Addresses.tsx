@@ -8,8 +8,9 @@ interface Props {
 }
 export const Addresses = (props: Props) => {
 	const addresses = props.user.addresses || [];
+	console.log("Addresses props", props);
 	const addressesItems = addresses.map((item) => {
-		const isCurrent = item.address === props.address.address;
+		const isCurrent = item?.address === props?.address?.address;
 		return (
 			<TouchableHighlight
 				key={item.address}

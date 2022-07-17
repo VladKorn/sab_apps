@@ -38,8 +38,8 @@ export const LoginForm = (props: Props) => {
 	let keyboardDidShowListener: any;
 	let keyboardDidHideListener: any;
 	const authContext = useContext(AuthContext);
-	const [log, setLog] = useState("");
-	const [pas, setPas] = useState("");
+	const [log, setLog] = useState(""); //webvladkorn@gmail.com
+	const [pas, setPas] = useState(""); //VwO4VO
 	const [name, setName] = useState(null);
 	const [phone, setPhone] = useState(null);
 	const [save, setSave] = useState(true);
