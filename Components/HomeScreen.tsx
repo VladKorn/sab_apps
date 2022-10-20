@@ -12,8 +12,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import Colors from "../constants/colors";
-import HomeCatalog from "./HomePage/Catalog";
+import { CatalogCats } from "./HomePage/Catalog";
 import appStyles from "./appStyles";
 const screenWidth = Math.round(Dimensions.get("window").width);
 const screenHeight = Math.round(Dimensions.get("window").height);
@@ -33,6 +32,8 @@ import HeaderRight from "./Catalog/HeaderRight";
 import Catalog from "./Catalog";
 import { OrderHistoryNav } from "./Order/History";
 import { BasketContext } from "./Basket/BasketContext";
+import { DeliveryInfoShort } from "./Info/Delivery";
+import { Colors } from "./../constants/colors";
 
 interface Props {}
 
@@ -119,60 +120,29 @@ const HomeScreen = (props: Props) => {
 	// console.log("appContext.products", appContext.products);
 
 	return (
-		<SafeAreaView style={appStyles.page}>
-			<View
-				style={{
-					// flex: 1,
-					flexDirection: "row",
-					alignItems: "center",
-					justifyContent: "space-between",
-					paddingTop: 30,
-					paddingLeft: 40,
-					paddingRight: 40,
-					height: 70,
-				}}
-			>
-				<TouchableOpacity
-					style={{ width: 40, height: 40 }}
-					onPress={navigation.openDrawer}
-				>
-					<Image
-						style={{ width: 22, height: 19 }}
-						source={require("../img/ico-menu.png")}
-					/>
-				</TouchableOpacity>
-				<TouchableOpacity
-					style={{ width: 40, height: 40 }}
-					onPress={() => navigation.navigate("Stocks")}
-				>
-					<Image
-						style={{ width: 24, height: 24 }}
-						source={require("../img/ico-stock.png")}
-					/>
-				</TouchableOpacity>
-				<TouchableOpacity
-					style={{ width: 40, height: 40 }}
-					onPress={() => {
-						navigation.navigate("Order");
+		// <View
+		// 	onLayout={appContext.onLayoutRootView}
+		// 	style={{
+		// 		flex: 1,
+		// 		// alignItems: "center",
+		// 		// justifyContent: "center",
+		// 	}}
+		// >
+		<ScrollView>
+			<SafeAreaView style={appStyles.page}>
+				<View
+					style={{
+						// flex: 1,
+						flexDirection: "row",
+						alignItems: "center",
+						justifyContent: "space-between",
+						paddingTop: 30,
+						paddingLeft: 40,
+						paddingRight: 40,
+						height: 70,
 					}}
-				>
-					<Image
-						style={{ width: 30, height: 24 }}
-						source={require("../img/ico-orders.png")}
-					/>
-					<View style={appStyles.bottonToOrderCount}>
-						<Text style={appStyles.bottonToOrderCountText}>
-							{/* {appContext.basket
-									? Object.entries(
-											appContext.basket
-									  ).length
-									: null} */}
-							{totalProductsCount(basketContext.basket)}
-						</Text>
-					</View>
-				</TouchableOpacity>
-			</View>
-			{/* <View style={{ height: screenHeight > 600 ? 270 : 200 }}>
+				></View>
+				{/* <View style={{ height: screenHeight > 600 ? 270 : 200 }}>
 					<ImageSlider
 						loopBothSides
 						images={sliderImages}
@@ -191,33 +161,38 @@ const HomeScreen = (props: Props) => {
 						customButtons={(position, move) => <View></View>}
 					/>
 				</View> */}
-			<View>
-				<Text
-					style={{
-						...appStyles.sectTitle,
-						paddingLeft: 15,
-						// marginTop: -20,
-					}}
-				>
-					Новинки
-				</Text>
-				<ScrollView
-					style={{ marginRight: 15, marginLeft: 15 }}
-					horizontal={true}
-				>
-					{products}
-				</ScrollView>
-				<Text style={{ ...appStyles.sectTitle, paddingLeft: 15 }}>
-					Меню
-				</Text>
-				<ScrollView
-					style={{ marginRight: 15, marginLeft: 15 }}
-					horizontal={true}
-				>
-					<HomeCatalog />
-				</ScrollView>
-			</View>
-		</SafeAreaView>
+				<View style={{ backgroundColor: Colors.lightgray }}>
+					<DeliveryInfoShort />
+				</View>
+				<View>
+					<Text
+						style={{
+							...appStyles.sectTitle,
+							paddingLeft: 15,
+							// marginTop: -20,
+						}}
+					>
+						Новинки
+					</Text>
+					<ScrollView
+						style={{ marginRight: 15, marginLeft: 15 }}
+						horizontal={true}
+					>
+						{products}
+					</ScrollView>
+					<View style={{ backgroundColor: "white", marginTop: 15 }}>
+						<Text
+							style={{ ...appStyles.sectTitle, paddingLeft: 15 }}
+						>
+							Категории
+						</Text>
+
+						<CatalogCats />
+					</View>
+				</View>
+			</SafeAreaView>
+		</ScrollView>
+		// </View>
 	);
 };
 
@@ -235,6 +210,8 @@ const styles = StyleSheet.create({
 
 export const Stack = createNativeStackNavigator();
 export const HomeNav = (_props) => {
+	// return <Text>test4</Text>;
+
 	return (
 		<Stack.Navigator
 			screenOptions={
@@ -257,11 +234,11 @@ export const HomeNav = (_props) => {
 				}}
 				component={HomeScreen}
 			/>
-			<Stack.Screen
+			{/* <Stack.Screen
 				name="Cats"
 				component={CategoriesList}
 				options={{ headerTitle: "Категории" }}
-			/>
+			/> */}
 			<Stack.Screen
 				name="Catalog"
 				component={Catalog}

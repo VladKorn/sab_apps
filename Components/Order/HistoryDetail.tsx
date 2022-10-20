@@ -50,8 +50,9 @@ const getOrder = async (id: number) => {
 	console.log("getOrders res", res);
 	return res?.order || null;
 };
+interface _Props {}
 
-export const HistoryDetail = (_props) => {
+export const HistoryDetail = (_props: _Props) => {
 	const navigation = useNavigation();
 	const route = useRoute();
 	const basketContext = useContext(BasketContext);

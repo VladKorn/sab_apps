@@ -11,7 +11,9 @@ import HistoryDetail from "./HistoryDetail";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { getOrders } from "./getOrders";
 import { AuthContext } from "./../Login/Login";
-export const SidebarCatalog = (props) => {
+
+interface Props {}
+export const SidebarCatalog = (props: Props) => {
 	const authContext = useContext(AuthContext);
 	const navigation = useNavigation();
 	const [items, setItems] = useState({});
@@ -186,19 +188,22 @@ export const SidebarCatalog = (props) => {
 };
 const Stack = createNativeStackNavigator();
 
-export const OrderHistoryNav = (_props) => {
+interface _Props {}
+
+export const OrderHistoryNav = (_props: _Props) => {
 	return (
 		<>
 			<Stack.Navigator>
-				<Stack.Screen name="main" options={{ headerShown: false }}>
-					{(props) => <SidebarCatalog {..._props} />}
-				</Stack.Screen>
+				<Stack.Screen
+					name="main"
+					options={{ headerShown: false }}
+					component={SidebarCatalog}
+				/>
 				<Stack.Screen
 					name="HistoryDetail"
 					options={{ headerTitle: "Заказ", headerShown: false }}
-				>
-					{(props) => <HistoryDetail {..._props} />}
-				</Stack.Screen>
+					component={HistoryDetail}
+				/>
 			</Stack.Navigator>
 		</>
 	);

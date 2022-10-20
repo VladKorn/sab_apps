@@ -146,22 +146,22 @@ export const CatalogCategories = (props) => {
 					}
 
 					// inner category
-					if (innerCatId && cat?.cats) {
-						// console.log(
-						// 	"innerCatId",
-						// 	innerCatId,
-						// 	cat.cats[innerCatId]
-						// );
-						if (
-							cat?.cats[innerCatId] &&
-							cat.cats[innerCatId]?.products &&
-							!cat.cats[innerCatId].products.includes(
-								parseInt(item.id)
-							)
-						) {
-							isIncludet = false;
-						}
-					}
+					// if (innerCatId && cat?.cats) {
+					// 	// console.log(
+					// 	// 	"innerCatId",
+					// 	// 	innerCatId,
+					// 	// 	cat.cats[innerCatId]
+					// 	// );
+					// 	if (
+					// 		cat?.cats[innerCatId] &&
+					// 		cat.cats[innerCatId]?.products &&
+					// 		!cat.cats[innerCatId].products.includes(
+					// 			parseInt(item.id)
+					// 		)
+					// 	) {
+					// 		isIncludet = false;
+					// 	}
+					// }
 					//   remove an item if it is contained in a nested category
 					if (cat?.cats) {
 						const cats = Object.keys(cat?.cats) || [];
@@ -231,27 +231,26 @@ export const CatalogCategories = (props) => {
 	};
 
 	return (
-		<SectionList
-			// ListHeaderComponent={props.getHeader}
-			ListHeaderComponent={
-				<>
-					<InputSearch
-						initialText={props.searchText}
-						search={props.search}
-					></InputSearch>
-					<CategoriesList mode="horizontal" />
-				</>
-			}
-			sections={_data}
-			keyExtractor={(item: any, index) => item.id + index}
-			stickySectionHeadersEnabled={false}
-			renderItem={renderItem}
-			renderSectionHeader={({ section: { title } }) => (
-				<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
-					{title}
-				</Text>
-			)}
-		/>
+		<>
+			<InputSearch
+				initialText={props.searchText}
+				search={props.search}
+			></InputSearch>
+			<CategoriesList mode="horizontal" />
+			<SectionList
+				// ListHeaderComponent={props.getHeader}
+				// ListHeaderComponent={false}
+				sections={_data}
+				keyExtractor={(item: any, index) => item.id + index}
+				stickySectionHeadersEnabled={false}
+				renderItem={renderItem}
+				renderSectionHeader={({ section: { title } }) => (
+					<Text style={[appStyles.sectTitle, { marginLeft: 25 }]}>
+						{title}
+					</Text>
+				)}
+			/>
+		</>
 	);
 };
 export default CatalogCategories;

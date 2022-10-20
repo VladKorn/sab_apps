@@ -10,8 +10,7 @@ const lightgray = "#F1F1F1";
 const text = "#666774";
 const lightText = "#949494";
 // F2F2F2
-
-export default {
+export const Colors = {
 	assent,
 	assent2,
 	assentSecond,
@@ -23,3 +22,5 @@ export default {
 	assent4,
 	lightText,
 };
+
+export default Colors;

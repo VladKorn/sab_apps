@@ -7,6 +7,7 @@ import {
 	ScrollView,
 	Alert,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import appStyles from "./appStyles";
 import Input from "./Input";
 import { LoginData } from "../interfaces";
@@ -16,8 +17,9 @@ import { AuthContext } from "./Login/Login";
 // static navigationOptions = {
 //     headerTitle: "Учетная запись",
 // };
-
-export const User = (props) => {
+interface Props {}
+export const User = (props: Props) => {
+	const navigation = useNavigation();
 	const authContext = useContext(AuthContext);
 	const [company, setCompany] = useState("");
 	const [name, setName] = useState("");
@@ -43,7 +45,7 @@ export const User = (props) => {
 				// console.log("userupdate res", res);
 				if (res.user && res.user.id && res.user.updated) {
 					if (log === "" && pas === "") {
-						props.screenProps.autoLogin();
+						authContext.autoLogin();
 						Alert.alert("Изменения внесены");
 					} else {
 						const loginData: LoginData = {
@@ -52,11 +54,8 @@ export const User = (props) => {
 						};
 						// Alert.alert("pas "+ loginData.pas);
 
-						props.screenProps.saveLoginData(
-							loginData.log,
-							loginData.pas
-						);
-						props.screenProps.autoLogin();
+						authContext.saveLoginData(loginData.log, loginData.pas);
+						authContext.autoLogin();
 						Alert.alert("Изменения внесены");
 					}
 				}
@@ -64,10 +63,7 @@ export const User = (props) => {
 	};
 
 	if (!authContext.user?.id) {
-		return (
-			// TODO userError
-			<LoginForm login={authContext.login} userError={null} />
-		);
+		return <LoginForm />;
 	}
 	return (
 		<ScrollView contentContainerStyle={{ flex: 1 }} style={[{ flex: 1 }]}>
@@ -148,7 +144,7 @@ export const User = (props) => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => {
-							props.navigation.goBack();
+							navigation.goBack();
 						}}
 						style={[
 							appStyles.button,

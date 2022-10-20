@@ -11,7 +11,8 @@ import Colors from "./../constants/colors";
 import appStyles from "./appStyles";
 import Form from "./Form";
 import { phone, phoneFormated } from "../constants/data.js";
-export const Contacts = (props) => {
+interface Props {}
+export const Contacts = (props: Props) => {
 	return (
 		<ScrollView>
 			<View
@@ -110,8 +111,6 @@ export const Contacts = (props) => {
 				style={{ paddingBottom: 50 }}
 				title="Форма обратной связи"
 				fromPage="С страницы контакты"
-				sendMail={props.screenProps.sendMail}
-				navigation={props.navigation}
 			/>
 		</ScrollView>
 	);

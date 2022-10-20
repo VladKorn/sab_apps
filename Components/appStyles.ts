@@ -6,7 +6,7 @@ console.log({ screenWidth, screenHeight });
 
 const appStyles = StyleSheet.create({
 	borderRadius: {
-		borderRadius: 10,
+		borderRadius: 17,
 	},
 	SafeAreaView: {
 		// flex: 1,

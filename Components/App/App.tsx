@@ -1,7 +1,13 @@
-import { StrictMode, useState, useEffect, useContext } from "react";
+import {
+	StrictMode,
+	useState,
+	useEffect,
+	useContext,
+	useCallback,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-gesture-handler";
-import { View, Alert, StatusBar } from "react-native";
+import { View, Alert, StatusBar, ScrollView } from "react-native";
 import { AppContext } from "./Context";
 
 import * as Font from "expo-font";
@@ -15,6 +21,9 @@ import { AuthContext } from "./../Login/Login";
 import { BasketContainer } from "./../Basket/BasketContext";
 import { useGetData } from "./../../hooks/useGetData";
 
+// import * as SplashScreen from "expo-splash-screen";
+// SplashScreen.preventAutoHideAsync();
+
 export const App = () => {
 	const authContext = useContext(AuthContext);
 	const [catalog, setCatalog] = useState({});
@@ -22,10 +31,6 @@ export const App = () => {
 	const [products, setProducts] = useState({});
 	const [stocks, setStocks] = useState({});
 	const [fontLoaded, setfontLoaded] = useState(false);
-	const [isSavedLoginDataChecked, setIsSavedLoginDataChecked] = useState(
-		false
-	);
-	const [userError, setUserError] = useState({});
 	const res = useGetData({
 		catalog: true,
 		stocks: true,
@@ -43,9 +48,7 @@ export const App = () => {
 					"App useEffect res.isDataLoading",
 					res.isDataLoading
 				);
-				setIsSavedLoginDataChecked(true);
 				// console.log("fetch res stocks", res.stocks);
-				setUserError(res.data.userError);
 				setCatalog(res.data.catalog.cats);
 				setProducts(res.data.catalog.products);
 				setStocks(res.data.stocks);
@@ -63,22 +66,9 @@ export const App = () => {
 		}
 	}, [res.isDataLoading]);
 
-	// useEffect(() => {
-	// 	console.log("App useEffect authContext.user", authContext.user);
-	// 	if (authContext.loginData) {
-	// 		console.log("App authContext.loginData", authContext.loginData);
-	// 		if (authContext.loginData.log && authContext.loginData.pas) {
-	// 			getData(authContext.loginData);
-	// 		}
-	// 	}
-	// }, [authContext.user]);
-
 	useEffect(() => {
 		// basketApi({action:'clear'})
 		loadAssetsAsync();
-		setTimeout(() => {
-			setIsSavedLoginDataChecked(true);
-		}, 5000);
 	}, []);
 
 	const loadAssetsAsync = async () => {
@@ -88,7 +78,6 @@ export const App = () => {
 			"Neuron-Heavy": require("./../../assets/fonts/Neuron-Heavy.otf"),
 			Segoe: require("./../../assets/fonts/segoe-ui.ttf"),
 		});
-
 		setfontLoaded(true);
 	};
 
@@ -152,8 +141,13 @@ export const App = () => {
 			});
 		return success;
 	};
+	// const onLayoutRootView = useCallback(async () => {
+	// 	if (fontLoaded) {
+	// 		await SplashScreen.hideAsync();
+	// 	}
+	// }, [fontLoaded]);
 
-	if (!fontLoaded || !isSavedLoginDataChecked) {
+	if (!fontLoaded) {
 		return (
 			<View style={{ flex: 1, justifyContent: "center" }}>
 				<Loading></Loading>
@@ -176,16 +170,28 @@ export const App = () => {
 		favorite: favorite,
 		addToFavorite: addToFavorite,
 		sendMail: sendMail,
+		// onLayoutRootView,
 	};
 	// console.log("user", user);
 	// console.log("user", user);
 	// console.log("basket ctx", basket);
-
 	if (!fontLoaded) return null;
+
+	// return (
+	// 	<View
+	// 		onLayout={onLayoutRootView}
+	// 		style={{
+	// 			flex: 1,
+	// 			alignItems: "center",
+	// 			justifyContent: "center",
+	// 			backgroundColor: "gray",
+	// 		}}
+	// 	></View>
+	// );
+
 	return (
 		<>
-			<StatusBar barStyle="dark-content" />
-
+			<StatusBar />
 			<NavigationContainer>
 				<AppContext.Provider value={context}>
 					<BasketContainer>

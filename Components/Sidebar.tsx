@@ -1,25 +1,18 @@
-import React from "react";
-import {
-	DrawerContentScrollView,
-	DrawerItem,
-	DrawerItemList,
-} from "@react-navigation/drawer";
+import { useContext } from "react";
+import json from "./../package.json";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
 import {
 	View,
 	Text,
-	ScrollView,
 	SafeAreaView,
 	TouchableOpacity,
 	Image,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/colors";
 import appStyles from "./appStyles";
 // import { DrawerActions } from "react-navigation-drawer";
 
-interface State {
-	data: object;
-	isLoading: boolean;
-}
 export const obj = {
 	Catalog: {
 		title: "Меню",
@@ -73,13 +66,16 @@ export const obj = {
 	},
 };
 
+interface Props {}
 export const Sidebar = (props) => {
+	const navigation = useNavigation();
 	const routes = props.state.routeNames.filter((item) => {
 		return (
 			item !== "Home" &&
 			item !== "Order" &&
 			item !== "CategorySlider" &&
 			item !== "Delivery" &&
+			item !== "DeliveryInfo" &&
 			item !== "HistoryDetail"
 		);
 	});
@@ -109,11 +105,11 @@ export const Sidebar = (props) => {
 				<TouchableOpacity
 					onPress={() => {
 						if (route === "Favorites") {
-							props.navigation.navigate(route, {
+							navigation.navigate(route, {
 								isFavorite: true,
 							});
 						} else {
-							props.navigation.navigate(route);
+							navigation.navigate(route);
 						}
 					}}
 					style={{
@@ -162,7 +158,7 @@ export const Sidebar = (props) => {
 				>
 					<TouchableOpacity
 						onPress={() => {
-							props.navigation.closeDrawer();
+							navigation.closeDrawer();
 						}}
 					>
 						<Image
@@ -172,7 +168,7 @@ export const Sidebar = (props) => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => {
-							props.navigation.navigate("Home");
+							navigation.navigate("Home");
 						}}
 						style={{
 							width: "100%",
@@ -210,7 +206,7 @@ export const Sidebar = (props) => {
 							alignItems: "center",
 						}}
 					>
-						version: 1.1.8
+						version: {json.version}
 					</Text>
 				</View>
 			</SafeAreaView>

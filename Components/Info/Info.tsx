@@ -5,8 +5,12 @@ import {
 	TouchableOpacity,
 	Linking,
 	ScrollView,
+	StyleSheet,
 } from "react-native";
+import { Colors } from "./../../constants/colors";
+
 import appStyles from "./../appStyles";
+import { useNavigation } from "@react-navigation/native";
 
 export const Info = () => {
 	const textStyle = {
